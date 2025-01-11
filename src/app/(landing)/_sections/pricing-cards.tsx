@@ -14,7 +14,7 @@ import Link from "next/link";
 
 export default function PricingCards() {
   return (
-    <div className="flex w-full md:justify-center gap-10 flex-col md:flex-row">
+    <div className="flex w-full items-center md:justify-center gap-10 flex-col md:flex-row">
       {SUBSCRIPTION_PLANS.map((plan, index) => (
         <Card
           key={index}

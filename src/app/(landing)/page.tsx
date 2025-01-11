@@ -25,25 +25,28 @@ export default function Home() {
               <nav className="hidden space-x-6 text-sm dark:text-zinc-200 md:block">
                 <Link
                   href="#features"
-                  className="hover:border-b-2 border-zinc-950"
+                  className="hover:border-b-2 border-zinc-950 dark:border-zinc-100"
                 >
                   Features
                 </Link>
                 <Link
                   href="#pricing"
-                  className="hover:border-b-2 border-zinc-950"
+                  className="hover:border-b-2 border-zinc-950 dark:border-zinc-100"
                 >
                   Pricing
                 </Link>
                 <Link
                   href="#about"
-                  className="hover:border-b-2 border-zinc-950"
+                  className="hover:border-b-2 border-zinc-950 dark:border-zinc-100"
                 >
                   About
                 </Link>
               </nav>
               <Link href="/dashboard">
-                <Button className="dark:bg-white dark:hover:bg-white dark:text-black font-semibold">
+                <Button
+                  size={"default"}
+                  className="h-10 dark:bg-white dark:hover:bg-white dark:text-black font-semibold"
+                >
                   Login
                 </Button>
               </Link>
@@ -51,13 +54,13 @@ export default function Home() {
 
             <div className="mx-auto mt-16 max-w-3xl text-center">
               <h1 className="text-4xl font-bold leading-tight tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-                Empower Your Projects with TaskHive
+                Streamline Your Workflow with TaskHive
               </h1>
 
               <p className="mt-6 text-lg dark:text-zinc-300 text-zinc-800">
-                TaskHive is your all-in-one solution for seamless project
-                management and team collaboration. Organize tasks, track
-                progress, and achieve your goals with ease.
+                TaskHive simplifies project management and enhances team
+                collaboration. Effortlessly organize tasks, monitor progress,
+                and achieve your objectives efficiently.
               </p>
 
               <div className="mt-8 flex justify-center gap-4">
@@ -77,7 +80,7 @@ export default function Home() {
               <Image
                 src="/hero-board-img.png"
                 alt="Community member"
-                className="object-cover w-full"
+                className="object-cover w-full xl:max-w-[90vw] mx-auto"
                 width={1000}
                 height={1000}
               />
