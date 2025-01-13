@@ -1,9 +1,18 @@
 import "server-only";
-import { createSession, generateSessionToken, validateRequest } from "@/auth";
+import {
+  generateSessionIdByToken,
+  generateSessionToken,
+  validateRequest,
+} from "@/auth";
 import { cache } from "react";
 import { cookies } from "next/headers";
 import { UserId } from "@/use-cases/types";
 import { AuthenticationError } from "./errors";
+import {
+  createSessionUseCase,
+  getSessionUseCase,
+  invalidateSessionsUseCase,
+} from "@/use-cases/sessions";
 
 const SESSION_COOKIE_NAME = "session";
 
@@ -56,6 +65,15 @@ export const getCurrentUserUncached = async () => {
 
 export async function setSession(userId: UserId) {
   const token = generateSessionToken();
-  const session = await createSession(token, userId);
+  const session = await createSessionUseCase(token, userId);
   await setSessionTokenCookie(token, session.expiresAt);
+}
+
+export async function logoutUser() {
+  const sessionToken = await getSessionToken();
+  if (!sessionToken) throw new Error("user session not found");
+  const sessionId = generateSessionIdByToken(sessionToken);
+  const sessionInDb = await getSessionUseCase(sessionId);
+  if (!sessionInDb) throw new Error("session not found");
+  await invalidateSessionsUseCase(sessionInDb.id);
 }

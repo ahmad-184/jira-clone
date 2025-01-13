@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import PricingCards from "./_sections/pricing-cards";
+import Navbar from "./_sections/navbar";
 
 export default function Home() {
   return (
@@ -14,43 +15,8 @@ export default function Home() {
           "
         />
         <div className="relative w-full">
-          <div className="px-4 py-8 w-full">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1">
-                <div className="h-8 w-10 rounded-lg dark:bg-white dark:text-black text-white bg-black flex items-center justify-center font-bold">
-                  Task
-                </div>
-                <span className="text-xl font-semibold">Hive</span>
-              </div>
-              <nav className="hidden space-x-6 text-sm dark:text-zinc-200 md:block">
-                <Link
-                  href="#features"
-                  className="hover:border-b-2 border-zinc-950 dark:border-zinc-100"
-                >
-                  Features
-                </Link>
-                <Link
-                  href="#pricing"
-                  className="hover:border-b-2 border-zinc-950 dark:border-zinc-100"
-                >
-                  Pricing
-                </Link>
-                <Link
-                  href="#about"
-                  className="hover:border-b-2 border-zinc-950 dark:border-zinc-100"
-                >
-                  About
-                </Link>
-              </nav>
-              <Link href="/dashboard">
-                <Button
-                  size={"default"}
-                  className="h-10 dark:bg-white dark:hover:bg-white dark:text-black font-semibold"
-                >
-                  Login
-                </Button>
-              </Link>
-            </div>
+          <div className="px-4 py-5 w-full">
+            <Navbar />
 
             <div className="mx-auto mt-16 max-w-3xl text-center">
               <h1 className="text-4xl font-bold leading-tight tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">

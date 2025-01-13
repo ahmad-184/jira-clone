@@ -11,11 +11,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        yellow: "#E1CE26",
-        purple: "#7C21D6",
-        red: "#EB441F",
-        green: "#2FE699",
-        blue: "#3352CC",
+        // yellow: "#E1CE26",
+        // purple: "#7C21D6",
+        // red: "#EB441F",
+        // green: "#2FE699",
+        // blue: "#3352CC",
         "background-90": "#1D1D1D",
         "background-80": "#252525",
         "text-secondary": "#9B9CA0",

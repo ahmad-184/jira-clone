@@ -17,6 +17,9 @@ export const OTP_LENGTH = 6;
 export const OTP_TTL = 1000 * 60 * 10; // 10 min
 export const VERIFY_EMAIL_TTL = 1000 * 60 * 60 * 24 * 7; // 7 days
 
+export const SESSION_REFRESH_INTERVAL_MS = 1000 * 60 * 60 * 24 * 15;
+export const SESSION_MAX_DURATION_MS = SESSION_REFRESH_INTERVAL_MS * 2;
+
 export const MAX_TRIGGER_LIMIT = 10;
 export const MAX_TRIGGER_PRO_LIMIT = 50;
 
