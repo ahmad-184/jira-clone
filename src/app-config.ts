@@ -24,3 +24,10 @@ export const MAX_TRIGGER_LIMIT = 10;
 export const MAX_TRIGGER_PRO_LIMIT = 50;
 
 export const afterLoginUrl = "/dashboard";
+
+export const ACCEPTED_IMAGE_FILE_TYPE = [
+  "image/png",
+  "image/jpg",
+  "image/jpeg",
+  "image/svg",
+];

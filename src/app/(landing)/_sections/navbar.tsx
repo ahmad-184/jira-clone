@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useCurrentUserQuery } from "@/hooks/queries/current-user-query";
+import { useCurrentUserQuery } from "@/hooks/queries/use-current-user-query";
 import Logo from "@/icons/logo";
 import Link from "next/link";
 
@@ -32,17 +32,19 @@ export default function Navbar() {
           About
         </Link>
       </nav>
-      {!!isPending && <Skeleton className="w-16 h-10" />}
-      {!!isFetched && (
-        <Link href="/dashboard">
-          <Button
-            size={"default"}
-            className="h-10 dark:bg-white dark:hover:bg-white dark:text-black font-semibold"
-          >
-            {data?.user?.id ? "Dashboard" : "Login"}
-          </Button>
-        </Link>
-      )}
+      <div className="flex items-center gap-3">
+        {!!isPending && <Skeleton className="w-16 h-10" />}
+        {!!isFetched && (
+          <Link href="/dashboard">
+            <Button
+              size={"default"}
+              className="h-10 dark:bg-white dark:hover:bg-white dark:text-black font-semibold"
+            >
+              {data?.user?.id ? "Dashboard" : "Login"}
+            </Button>
+          </Link>
+        )}
+      </div>
     </div>
   );
 }

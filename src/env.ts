@@ -19,6 +19,10 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_HOST_URL: z.string().min(1),
+    NEXT_PUBLIC_CLOUDINARY_API_KEY: z.string().min(1),
+    NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: z.string().min(1),
+    NEXT_PUBLIC_CLOUDINARY_UPLOAD_FOLDER: z.string().min(1),
+    NEXT_PUBLIC_CLOUDINARY_PRESET: z.string().min(1),
   },
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
@@ -35,5 +39,11 @@ export const env = createEnv({
     EMAIL_SERVER_HOST: process.env.EMAIL_SERVER_HOST,
     EMAIL_SERVER_USER: process.env.EMAIL_SERVER_USER,
     NEXT_PUBLIC_HOST_URL: process.env.NEXT_PUBLIC_HOST_URL,
+    NEXT_PUBLIC_CLOUDINARY_API_KEY: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+    NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME:
+      process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+    NEXT_PUBLIC_CLOUDINARY_UPLOAD_FOLDER:
+      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_FOLDER,
+    NEXT_PUBLIC_CLOUDINARY_PRESET: process.env.NEXT_PUBLIC_CLOUDINARY_PRESET,
   },
 });

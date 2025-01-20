@@ -76,4 +76,5 @@ export async function logoutUser() {
   const sessionInDb = await getSessionUseCase(sessionId);
   if (!sessionInDb) throw new Error("session not found");
   await invalidateSessionsUseCase(sessionInDb.id);
+  await deleteSessionTokenCookie();
 }

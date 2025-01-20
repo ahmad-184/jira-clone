@@ -13,8 +13,9 @@ type AuthAdditionalContext = {
 export const authMiddleware = createMiddleware<AuthAdditionalContext>(
   async (c, next) => {
     const session = await validateRequest();
-    if (!session || session.user)
+    if (!session || !session.user)
       return c.json({ error: AUTHENTICATION_ERROR_MESSAGE }, 401);
+    c.set("user", session.user);
     await next();
   },
 );

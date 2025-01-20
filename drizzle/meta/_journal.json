@@ -8,6 +8,48 @@
       "when": 1736503258651,
       "tag": "0000_violet_thing",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1737021308665,
+      "tag": "0001_abnormal_ma_gnuci",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1737027292853,
+      "tag": "0002_green_mojo",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1737120920458,
+      "tag": "0003_cute_power_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1737121178477,
+      "tag": "0004_overjoyed_thunderbird",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1737121982343,
+      "tag": "0005_familiar_stellaris",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1737299680390,
+      "tag": "0006_last_xorn",
+      "breakpoints": true
     }
   ]
 }

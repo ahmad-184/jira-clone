@@ -11,11 +11,6 @@ export default {
   theme: {
     extend: {
       colors: {
-        // yellow: "#E1CE26",
-        // purple: "#7C21D6",
-        // red: "#EB441F",
-        // green: "#2FE699",
-        // blue: "#3352CC",
         "background-90": "#1D1D1D",
         "background-80": "#252525",
         "text-secondary": "#9B9CA0",
@@ -58,6 +53,16 @@ export default {
           "3": "hsl(var(--chart-3))",
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
+        },
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar-background))",
+          foreground: "hsl(var(--sidebar-foreground))",
+          primary: "hsl(var(--sidebar-primary))",
+          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+          accent: "hsl(var(--sidebar-accent))",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+          border: "hsl(var(--sidebar-border))",
+          ring: "hsl(var(--sidebar-ring))",
         },
       },
       borderRadius: {

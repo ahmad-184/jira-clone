@@ -133,7 +133,9 @@ const app = new Hono()
   .post("/logout", authMiddleware, async c => {
     try {
       await logoutUser();
-      return c.json({ success: true });
+      return c.json({
+        success: true,
+      });
     } catch (err: unknown) {
       console.log(err);
       return returnError(err, c);

@@ -1,3 +1,4 @@
+import { createUUID } from "@/util/uuid";
 import { relations } from "drizzle-orm";
 import {
   index,
@@ -13,10 +14,11 @@ export const accountTypeEnum = pgEnum("account_type", [
   "GOOGLE",
   "GITHUB",
 ]);
+export const memberRoleEnum = pgEnum("member_role", ["ADMIN", "MEMBER"]);
 
 export const users = pgTable("gf_user", {
   id: serial("id").primaryKey(),
-  email: text("email").unique(),
+  email: text("email").unique().notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
     .defaultNow()
@@ -26,7 +28,9 @@ export const users = pgTable("gf_user", {
 export const accounts = pgTable(
   "gf_accounts",
   {
-    id: serial("id").primaryKey(),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createUUID()),
     userId: serial("userId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
@@ -47,7 +51,9 @@ export const accounts = pgTable(
 export const magicLinks = pgTable(
   "gf_magic_links",
   {
-    id: serial("id").primaryKey(),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createUUID()),
     email: text("email").notNull().unique(),
     token: text("token"),
     tokenExpiresAt: timestamp("tokenExpiresAt", { mode: "date" }),
@@ -61,7 +67,9 @@ export const magicLinks = pgTable(
 export const resetTokens = pgTable(
   "gf_reset_tokens",
   {
-    id: serial("id").primaryKey(),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createUUID()),
     userId: serial("userId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" })
@@ -78,7 +86,9 @@ export const resetTokens = pgTable(
 export const verifyEmailTokens = pgTable(
   "gf_verify_email_tokens",
   {
-    id: serial("id").primaryKey(),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createUUID()),
     userId: serial("userId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" })
@@ -95,7 +105,9 @@ export const verifyEmailTokens = pgTable(
 export const verifyEmailOtps = pgTable(
   "gf_verify_email_otps",
   {
-    id: serial("id").primaryKey(),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createUUID()),
     userId: serial("userId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" })
@@ -110,7 +122,9 @@ export const verifyEmailOtps = pgTable(
 );
 
 export const profiles = pgTable("gf_profile", {
-  id: serial("id").primaryKey(),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => createUUID()),
   userId: serial("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" })
@@ -126,7 +140,9 @@ export const profiles = pgTable("gf_profile", {
 export const sessions = pgTable(
   "gf_session",
   {
-    id: text("id").primaryKey(),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createUUID()),
     userId: serial("userId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
@@ -141,20 +157,53 @@ export const sessions = pgTable(
   table => [index("sessions_user_id_idx").on(table.userId)],
 );
 
+export const workspaces = pgTable("gf_workspace", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => createUUID()),
+  userId: serial("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  imageUrl: text("imageUrl"),
+  inviteCode: text("inviteCode").unique().notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
+    .defaultNow()
+    .notNull(),
+});
+
+export const members = pgTable(
+  "gf_member",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createUUID()),
+    userId: serial("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    workspaceId: text("workspaceId")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    role: memberRoleEnum("role").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
+      .defaultNow()
+      .notNull(),
+  },
+  table => [
+    index("members_user_id_workspace_id_idx").on(
+      table.userId,
+      table.workspaceId,
+    ),
+    index("members_workspace_id_idx").on(table.workspaceId),
+  ],
+);
+
 /**
  * RELATIONSHIPS
  *
  * Here you can define drizzle relationships between table which helps improve the type safety
  * in your code.
  **/
-
-export const usersRelations = relations(users, ({ one }) => ({
-  profile: one(profiles),
-  account: one(accounts, {
-    fields: [users.id],
-    references: [accounts.userId],
-  }),
-}));
 
 export const profilesRelations = relations(profiles, ({ one }) => ({
   user: one(users, {
@@ -163,6 +212,41 @@ export const profilesRelations = relations(profiles, ({ one }) => ({
   }),
 }));
 
+export const usersRelations = relations(users, ({ one, many }) => ({
+  profile: one(profiles),
+  account: one(accounts, {
+    fields: [users.id],
+    references: [accounts.userId],
+  }),
+  workspaces: many(workspaces),
+}));
+
+export const workspacesRelations = relations(workspaces, ({ one, many }) => ({
+  owner: one(users, {
+    fields: [workspaces.userId],
+    references: [users.id],
+  }),
+  members: many(members),
+}));
+
+export const membersRelations = relations(members, ({ one }) => ({
+  user: one(users, {
+    fields: [members.userId],
+    references: [users.id],
+  }),
+  workspace: one(workspaces, {
+    fields: [members.workspaceId],
+    references: [workspaces.id],
+  }),
+}));
+
 export type User = typeof users.$inferSelect;
 export type Session = typeof sessions.$inferSelect;
+export type Account = typeof accounts.$inferSelect;
+export type MagicLink = typeof magicLinks.$inferSelect;
+export type ResetToken = typeof resetTokens.$inferSelect;
+export type VerifyEmailToken = typeof verifyEmailTokens.$inferSelect;
+export type VerifyEmailOtp = typeof verifyEmailOtps.$inferSelect;
 export type Profile = typeof profiles.$inferSelect;
+export type Workspace = typeof workspaces.$inferSelect;
+export type Member = typeof members.$inferSelect;

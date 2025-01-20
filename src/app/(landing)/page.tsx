@@ -19,11 +19,11 @@ export default function Home() {
             <Navbar />
 
             <div className="mx-auto mt-16 max-w-3xl text-center">
-              <h1 className="text-4xl font-bold leading-tight tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+              <h1 className="text-3xl font-bold leading-tight tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
                 Streamline Your Workflow with TaskHive
               </h1>
 
-              <p className="mt-6 text-lg dark:text-zinc-300 text-zinc-800">
+              <p className="mt-6 text-sm md:text-lg dark:text-zinc-300 text-zinc-800">
                 TaskHive simplifies project management and enhances team
                 collaboration. Effortlessly organize tasks, monitor progress,
                 and achieve your objectives efficiently.
@@ -57,10 +57,10 @@ export default function Home() {
       <section className="container mx-auto w-full py-12 md:py-24 lg:py-32 bg-background">
         <div className="w-full px-4 md:px-6">
           <div className="flex flex-col mb-10 md:items-center justify-center space-y-4 text-center">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tighter">
               Choose Your Plan
             </h2>
-            <p className="max-w-[900px] text-muted-foreground text-center">
+            <p className="text-sm md:text-lg max-w-[900px] text-muted-foreground text-center">
               Select the perfect plan to boost your project management
             </p>
           </div>

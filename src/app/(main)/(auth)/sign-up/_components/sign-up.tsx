@@ -32,10 +32,7 @@ export default function SignUp() {
       </div>
 
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full flex flex-col gap-3"
-        >
+        <form onSubmit={onSubmit} className="w-full flex flex-col gap-3">
           <FormField
             control={form.control}
             name="email"
