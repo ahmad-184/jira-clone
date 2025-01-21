@@ -20,3 +20,5 @@ export type UploadedFile = {
   width: number;
   tags: string[];
 };
+
+export type FileWithPreview = File & { preview: string };

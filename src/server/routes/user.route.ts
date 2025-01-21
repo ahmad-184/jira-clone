@@ -7,7 +7,7 @@ import { authMiddleware } from "../middlewares/auth.middleware";
 import { getUserProfileUseCase } from "@/use-cases/users";
 
 const app = new Hono()
-  // get current user
+  // GET /current-user get current user
   .get("/current-user", async c => {
     try {
       const user = await getCurrentUserUncached();
@@ -17,7 +17,7 @@ const app = new Hono()
       return returnError(err, c);
     }
   })
-  // get current user profile
+  // GET /current-user-profile get current user profile
   .get("/current-user-profile", authMiddleware, async c => {
     try {
       const user = c.get("user");

@@ -21,10 +21,3 @@ export const imageFileValidation = z.object({
       `File size must be less than ${MAX_UPLOAD_IMAGE_SIZE_IN_MB}MB`,
     ),
 });
-
-export const uuidValidation = z.object({
-  id: z
-    .string()
-    .uuid({ message: "Invalid UUID" })
-    .min(1, { message: "UUID is required" }),
-});

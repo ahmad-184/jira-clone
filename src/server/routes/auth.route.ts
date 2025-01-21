@@ -35,7 +35,7 @@ const forgotPasswordValidator = zValidator("json", forgotPasswordSchema);
 const resetPasswordValidator = zValidator("json", resetPasswordSchema);
 
 const app = new Hono()
-  // sign in with email password
+  // POST /sign-in sign in with email password
   .post("/sign-in", redirectIfAuthenticated, signInValidator, async c => {
     try {
       const { email, password } = c.req.valid("json");
@@ -48,7 +48,7 @@ const app = new Hono()
       return returnError(err, c);
     }
   })
-  // sign up
+  // POST /sign-up sign up
   .post("/sign-up", redirectIfAuthenticated, signUpValidator, async c => {
     try {
       await rateLimitByIp({ key: "register", limit: 3, window: 30000 });
@@ -60,7 +60,7 @@ const app = new Hono()
       return returnError(err, c);
     }
   })
-  // verify email otp
+  // POST /verify-email-otp verify email otp
   .post(
     "/verify-email-otp",
     redirectIfAuthenticated,
@@ -78,7 +78,7 @@ const app = new Hono()
       }
     },
   )
-  // sign in with magic link
+  // POST /send-magic-link sign in with magic link
   .post(
     "/send-magic-link",
     redirectIfAuthenticated,
@@ -95,7 +95,7 @@ const app = new Hono()
       }
     },
   )
-  // send forgot password email
+  // POST /send-forgot-password send forgot password email
   .post(
     "/send-forgot-password",
     redirectIfAuthenticated,
@@ -112,7 +112,7 @@ const app = new Hono()
       }
     },
   )
-  // reset password
+  // POST /reset-password reset password
   .post(
     "/reset-password",
     redirectIfAuthenticated,
@@ -129,7 +129,7 @@ const app = new Hono()
       }
     },
   )
-  // logout user
+  // POST /logout logout user
   .post("/logout", authMiddleware, async c => {
     try {
       await logoutUser();

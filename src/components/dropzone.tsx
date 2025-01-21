@@ -5,13 +5,18 @@ import { imageFileValidation } from "@/validations/index.validation";
 import Image from "next/image";
 import { useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { Button } from "./ui/button";
+import { Trash2Icon } from "lucide-react";
+import { FileWithPreview } from "@/types";
 
 type DropzoneProps = {
-  onDrop?: (files: File[]) => void;
+  onDrop?: (files: FileWithPreview[]) => void;
+  files: FileWithPreview[];
   className?: string;
   maxFiles?: number;
   multiple?: boolean;
-  src?: string;
+  src?: string | null;
+  onRemove?: () => void;
 };
 
 const allowedFileTypes = ACCEPTED_IMAGE_FILE_TYPE.map(
@@ -22,18 +27,17 @@ function getFileSizeInMb(size: number) {
   return (size / (1024 * 1024)).toFixed(2);
 }
 
-type FileWithPreview = File & { preview: string };
-
 export default function Dropzone({
   onDrop,
   className,
   maxFiles = 1,
   multiple = false,
   src,
+  onRemove,
+  files = [],
 }: DropzoneProps) {
-  const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     maxFiles,
     multiple,
     accept: {
@@ -43,17 +47,14 @@ export default function Dropzone({
       const files = acceptedFiles.map(file =>
         Object.assign(file, { preview: URL.createObjectURL(file) }),
       ) as FileWithPreview[];
-      setFiles(files);
       onDrop?.(files);
       setError(null);
     },
     onDragLeave: () => {
-      setFiles([]);
       onDrop?.([]);
       setError(null);
     },
     onDropRejected: () => {
-      setFiles([]);
       onDrop?.([]);
       setError("Invalid file type");
     },
@@ -71,33 +72,46 @@ export default function Dropzone({
     },
   });
 
+  const handleRemove = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    setError(null);
+    onRemove?.();
+  };
+
+  const showRemoveButton = Boolean(!!files.length || !!src);
+  const showUploadLogo = Boolean(!src && !files.length);
+  const showFiles = Boolean(!src && !!files.length);
+  const showImagePreview = Boolean(!!src);
+  const filesExist = Boolean(!!files.length);
+
   return (
     <div
-      className={cn(
-        "w-full border border-dashed hover:cursor-pointer h-fit dark:border-zinc-700 border-zinc-300 rounded-xl",
-        className,
-      )}
+      style={{
+        width: "100%",
+        position: "relative",
+        display: "flex",
+        height: "fit-content",
+        flexGrow: 1,
+      }}
+      {...getRootProps({ className: "dropzone" })}
     >
       <div
-        style={{
-          width: "100%",
-          height: "100%",
-          padding: "20px",
-          minHeight: "200px",
-          position: "relative",
-        }}
-        {...getRootProps({ className: "dropzone" })}
+        className={cn(
+          "w-full border p-5 border-dashed h-fit hover:cursor-pointer dark:border-zinc-700 border-zinc-300 rounded-xl",
+          className,
+        )}
       >
         <input {...getInputProps()} />
-        <div className="w-full h-full absolute top-0 left-0 inset-0">
-          <div className="w-full h-full flex gap-1 flex-col items-center justify-center">
-            {!!src ? (
+        <div className="w-full h-full flex min-h-[200px] items-center justify-center">
+          <div className="w-full py-5 h-full flex gap-1 flex-col items-center justify-center">
+            {!!showImagePreview && (
               <ImageItem
-                src={src}
+                src={src ?? ""}
                 alt="preview"
                 className="w-full h-full object-cover"
               />
-            ) : !!acceptedFiles.length ? (
+            )}
+            {!!showFiles && (
               <div className="w-full flex items-center gap-2 justify-center">
                 {files.map(f => (
                   <ImageItem
@@ -108,12 +122,24 @@ export default function Dropzone({
                   />
                 ))}
               </div>
-            ) : (
+            )}
+            {showUploadLogo && (
               <UploadIcon className="size-20 text-zinc-300 dark:text-zinc-600" />
             )}
-            {!!acceptedFiles.length ? (
+            {showRemoveButton && (
+              <Button
+                variant="outline"
+                size={"sm"}
+                className="text-xs mt-2"
+                type="button"
+                onClick={handleRemove}
+              >
+                <Trash2Icon className="w-4 h-4" /> Remove Images
+              </Button>
+            )}
+            {!!filesExist ? (
               <div className="w-full flex flex-col gap-2 items-center justify-center">
-                {acceptedFiles.map(f => (
+                {files.map(f => (
                   <span
                     key={f.size + Math.random() * 2000}
                     className="text-xs md:text-sm"

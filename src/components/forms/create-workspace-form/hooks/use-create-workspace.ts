@@ -5,9 +5,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useCreateWorkspaceMutation } from "./mutations/use-create-workspace-mutations";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { startUploadImage } from "@/lib/uploader";
 import { useQueryClient } from "@tanstack/react-query";
+import { FileWithPreview } from "@/types";
 
 type Props = {
   userId: UserId;
@@ -15,7 +16,7 @@ type Props = {
 };
 
 export const useCreateWorkspace = ({ userId, isFirstWorkspace }: Props) => {
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageFile, setImageFile] = useState<FileWithPreview | null>(null);
   const [isUploading, setIsUploading] = useState(false);
 
   const queryClient = useQueryClient();
@@ -28,6 +29,10 @@ export const useCreateWorkspace = ({ userId, isFirstWorkspace }: Props) => {
       imageUrl: "",
     },
   });
+
+  const handleChangeImageFile = (file: FileWithPreview | null) => {
+    setImageFile(file);
+  };
 
   const { mutate, isPending } = useCreateWorkspaceMutation({
     onSuccess: async () => {
@@ -45,8 +50,8 @@ export const useCreateWorkspace = ({ userId, isFirstWorkspace }: Props) => {
   });
 
   const onSubmit = form.handleSubmit(async values => {
+    let imageUrl = null;
     try {
-      let imageUrl = "";
       if (imageFile) {
         const file = await startUploadImage({
           files: [imageFile],
@@ -54,11 +59,27 @@ export const useCreateWorkspace = ({ userId, isFirstWorkspace }: Props) => {
         });
         if (file) imageUrl = file[0].file.secure_url;
       }
-      mutate({ json: { ...values, imageUrl } });
     } catch (err) {
       console.log(err);
+      toast.error("Failed to save image.");
     }
+    mutate({
+      json: { ...values, imageUrl },
+    });
   });
 
-  return { form, onSubmit, loading: isPending, setImageFile, isUploading };
+  const disabled = useMemo(() => {
+    if (isPending || isUploading) return true;
+    return !form.formState.isDirty;
+  }, [isPending, isUploading, form.formState.isDirty]);
+
+  return {
+    form,
+    onSubmit,
+    loading: isPending,
+    handleChangeImageFile,
+    imageFile,
+    isUploading,
+    disabled,
+  };
 };

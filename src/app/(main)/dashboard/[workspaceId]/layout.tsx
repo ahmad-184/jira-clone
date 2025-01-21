@@ -48,9 +48,9 @@ export default async function Layout({
       <main className="min-w-screen min-h-screen">
         <SidebarProvider>
           <Sidebar />
-          <main className="flex-1 flex p-4 flex-col gap-5 dark:bg-zinc-900/70">
+          <main className="flex-1 flex p-4 flex-col gap-7 dark:bg-zinc-900/70">
             <Header />
-            <div className="flex-1">{children}</div>
+            <div className="flex-1 pb-5">{children}</div>
           </main>
         </SidebarProvider>
       </main>

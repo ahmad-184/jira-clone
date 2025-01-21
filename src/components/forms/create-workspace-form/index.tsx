@@ -1,3 +1,5 @@
+"use client";
+
 import { UserId } from "@/use-cases/types";
 import { useCreateWorkspace } from "./hooks/use-create-workspace";
 import {
@@ -22,11 +24,20 @@ export default function CreateWorkspaceForm({
   userId,
   isFirstWorkspace,
 }: Props) {
-  const { form, onSubmit, loading, setImageFile, isUploading } =
-    useCreateWorkspace({
-      userId,
-      isFirstWorkspace,
-    });
+  const {
+    form,
+    onSubmit,
+    loading,
+    handleChangeImageFile,
+    isUploading,
+    disabled,
+    imageFile,
+  } = useCreateWorkspace({
+    userId,
+    isFirstWorkspace,
+  });
+
+  const imageUrl = form.watch("imageUrl");
 
   return (
     <Form {...form}>
@@ -51,7 +62,9 @@ export default function CreateWorkspaceForm({
         />
         <div className="w-full flex flex-col">
           <Dropzone
-            onDrop={file => setImageFile(file.length ? file[0] : null)}
+            files={imageFile ? [imageFile] : []}
+            onDrop={file => handleChangeImageFile(file[0] ?? null)}
+            src={imageUrl ?? imageFile?.preview ?? null}
           />
           <FormDescription className="mt-1">
             Workspace logo is optional.
@@ -61,6 +74,7 @@ export default function CreateWorkspaceForm({
         <div className="w-full">
           <LoaderButton
             className="w-full"
+            disabled={disabled}
             isLoading={loading || isUploading}
             type="submit"
             variant="default"
