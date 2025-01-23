@@ -40,3 +40,7 @@ export async function updateWorkspace(
     .set(values)
     .where(eq(workspaces.id, workspaceId));
 }
+
+export async function deleteWorkspace(workspaceId: string) {
+  await database.delete(workspaces).where(eq(workspaces.id, workspaceId));
+}

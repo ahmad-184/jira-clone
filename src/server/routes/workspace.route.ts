@@ -11,14 +11,17 @@ import { returnError } from "../utils";
 import { PublicError } from "@/lib/errors";
 import {
   createWorkspaceUseCase,
+  deleteWorkspaceUseCase,
   getUserWorkspacesUseCase,
   getWorkspaceUseCase,
   updateWorkspaceUseCase,
 } from "@/use-cases/workspaces";
 import { getMemberUseCase } from "@/use-cases/members";
+import { deleteWorkspaceSchema } from "../validations/workspace.validation";
 
 const createWorkspaceValidator = zValidator("json", createWorkspaceSchema);
 const updateWorkspaceValidator = zValidator("json", updateWorkspaceSchema);
+const deleteWorkspaceValidator = zValidator("json", deleteWorkspaceSchema);
 
 const app = new Hono()
   // POST /create create workspace
@@ -82,6 +85,35 @@ const app = new Hono()
         throw new PublicError("You are not allowed to update this workspace.");
       console.log(values);
       await updateWorkspaceUseCase(workspaceId, values);
+
+      return c.json({ id: workspaceId });
+    } catch (err: unknown) {
+      return returnError(err, c);
+    }
+  })
+  // DELETE /delete/:id delete workspace
+  .delete("/delete/:id", authMiddleware, deleteWorkspaceValidator, async c => {
+    try {
+      const user = c.get("user");
+      const { id: workspaceId } = c.req.param();
+
+      const values = c.req.valid("json");
+
+      const member = await getMemberUseCase(user.id, workspaceId);
+
+      if (!member)
+        throw new PublicError("You are not a member of this workspace.");
+      if (member.role !== "ADMIN")
+        throw new PublicError("You are not allowed to delete this workspace.");
+
+      const workspace = await getWorkspaceUseCase(workspaceId);
+
+      if (!workspace) throw new PublicError("Workspace not found.");
+
+      if (workspace.name !== values.workspaceName)
+        throw new PublicError("Workspace name does not match.");
+
+      await deleteWorkspaceUseCase(workspaceId);
 
       return c.json({ id: workspaceId });
     } catch (err: unknown) {

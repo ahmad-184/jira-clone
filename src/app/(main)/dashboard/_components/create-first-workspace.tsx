@@ -18,9 +18,9 @@ type Props = {
 export default function CreateFirstWorkspace({ user }: Props) {
   return (
     <div className="w-full fixed h-screen md:px-5 overflow-auto dark:bg-zinc-900 bg-zinc-100">
-      <div className="px-2 w-full h-full flex gap-3 py-5">
-        <div className="my-auto flex items-center py-10 flex-col flex-1">
-          <div className="md:pt-10 w-full flex justify-center">
+      <div className="px-2 w-full h-full flex gap-3">
+        <div className="my-auto flex items-center flex-col flex-1">
+          <div className="py-10 w-full flex justify-center">
             <Card className="w-full md:w-2/3 bg-white dark:bg-zinc-950/50">
               <CardHeader className="mb-2">
                 <div className="mb-2 w-full flex items-center">

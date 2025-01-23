@@ -1,5 +1,6 @@
 import {
   createWorkspace,
+  deleteWorkspace,
   getUserWorkspaces,
   getWorkspace,
   updateWorkspace,
@@ -36,4 +37,8 @@ export async function updateWorkspaceUseCase(
   values: Partial<Workspace>,
 ) {
   return await updateWorkspace(workspaceId, values);
+}
+
+export async function deleteWorkspaceUseCase(workspaceId: string) {
+  return await deleteWorkspace(workspaceId);
 }

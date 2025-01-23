@@ -1,5 +1,12 @@
+import DeleteWorkspaceForm from "@/components/forms/delete-workspace-form";
 import { buttonVariants } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Workspace } from "@/db/schema";
 import { WarningIconFill } from "@/icons/warning-icon";
 import { cn } from "@/lib/utils";
@@ -11,10 +18,10 @@ type Props = {
 export default function DeleteWorkspace({ workspace }: Props) {
   return (
     <Dialog>
-      <div className="w-full border border-red-800 bg-red-950/20 p-4 rounded-xl">
+      <div className="w-full border border-red-800 dark:bg-red-950/20 bg-red-400/10 p-4 rounded-xl">
         <div className="flex items-start gap-3">
           <div>
-            <div className="p-1 rounded-md bg-red-700">
+            <div className="p-1 rounded-md dark:bg-red-700 bg-red-400">
               <WarningIconFill className="w-4 h-4 text-black" />
             </div>
           </div>
@@ -40,12 +47,24 @@ export default function DeleteWorkspace({ workspace }: Props) {
           </div>
         </div>
       </div>
-      <DialogContent className="max-w-md !px-0 bg-neutral-900">
-        <div className="w-full">
-          <div className="px-5">
-            <h1 className="text-lg font-medium">
+      <DialogContent className="max-w-md py-0 !px-0 dark:bg-neutral-900 bg-neutral-100">
+        <div className="w-full pt-5 pb-4">
+          <div className="px-5 pb-4">
+            <DialogTitle className="text-lg font-medium">
               Confirm deletion of {workspace.name}
-            </h1>
+            </DialogTitle>
+          </div>
+          <div className="px-5 py-5 border-b border-t dark:border-zinc-700 border-zinc-400 bg-background">
+            <DialogDescription className="text-muted-foreground text-sm flex items-center gap-3">
+              <WarningIconFill className="w-5 h-5" /> This will permanently
+              delete the {workspace.name} project and all of its data.
+            </DialogDescription>
+          </div>
+          <div className="py-3 px-5">
+            <DeleteWorkspaceForm
+              workspaceName={workspace.name}
+              workspaceId={workspace.id}
+            />
           </div>
         </div>
       </DialogContent>

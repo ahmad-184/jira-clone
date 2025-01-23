@@ -19,13 +19,13 @@ export default function WorkspaceSettings({ workspaceId }: Props) {
     <div className="flex w-full max-w-6xl flex-col gap-16">
       <div className="w-full flex flex-col gap-6">
         <h1 className="text-lg font-semibold">Workspace Settings</h1>
-        <div className="p-7 rounded-xl bg-zinc-900">
+        <div className="p-7 rounded-xl dark:bg-zinc-900 bg-zinc-100">
           <UpdateWorkspaceForm workspace={data.workspace} />
         </div>
       </div>
       <div className="w-full flex flex-col gap-6">
         <h1 className="text-lg font-semibold">Delete Workspace</h1>
-        <div className="p-7 rounded-xl bg-zinc-900">
+        <div className="p-7 rounded-xl dark:bg-zinc-900 bg-zinc-100">
           <DeleteWorkspace workspace={data.workspace} />
         </div>
       </div>

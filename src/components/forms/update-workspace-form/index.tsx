@@ -47,7 +47,7 @@ export default function UpdateWorkspaceForm({ workspace }: Props) {
               <FormControl>
                 <Input
                   {...field}
-                  className="w-full !bg-zinc-950/20"
+                  className="w-full !bg-zinc-50 dark:!bg-zinc-950/20"
                   placeholder="Enter workspace name"
                   type="text"
                 />
@@ -72,7 +72,7 @@ export default function UpdateWorkspaceForm({ workspace }: Props) {
                   }}
                   files={imageFile ? [imageFile] : []}
                   src={imageUrl ?? imageFile?.preview ?? null}
-                  className="!bg-zinc-950/20"
+                  className="!bg-zinc-50 dark:!bg-zinc-950/20"
                 />
               </FormControl>
               <FormMessage />

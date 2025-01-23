@@ -1,3 +1,11 @@
+import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
+import * as schema from "@/db/schema";
+
+declare global {
+  // eslint-disable-next-line no-var, no-unused-vars
+  var cachedDrizzle: PostgresJsDatabase<typeof schema>;
+}
+
 export type UploadedFile = {
   asset_id: string;
   bytes: number;
