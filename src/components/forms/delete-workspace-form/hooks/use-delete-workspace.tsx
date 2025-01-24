@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useDeleteWorkspaceMutation } from "./mutations/use-delete-workspace-mutation";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 type Props = {
   workspaceName: string;
@@ -29,6 +30,8 @@ const validationSchema = (workspaceName: string) => {
 export const useDeleteWorkspace = ({ workspaceName, workspaceId }: Props) => {
   const [error, setError] = useState<string | null>(null);
 
+  const queryClient = useQueryClient();
+
   const validation = validationSchema(workspaceName);
 
   const form = useForm<z.infer<typeof validation>>({
@@ -40,8 +43,10 @@ export const useDeleteWorkspace = ({ workspaceName, workspaceId }: Props) => {
   });
 
   const { mutate, isPending } = useDeleteWorkspaceMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Workspace deleted successfully");
+      await queryClient.removeQueries({ queryKey: ["workspaces"] });
+      await queryClient.removeQueries({ queryKey: ["workspace", workspaceId] });
       window.location.href = "/dashboard";
     },
     onError: error => {

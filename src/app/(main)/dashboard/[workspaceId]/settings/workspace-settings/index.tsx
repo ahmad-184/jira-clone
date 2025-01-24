@@ -3,6 +3,7 @@
 import UpdateWorkspaceForm from "@/components/forms/update-workspace-form";
 import { useGetWorkspaceQuery } from "@/hooks/queries/use-get-workspace";
 import DeleteWorkspace from "./delete-workspace";
+import ResetInviteCode from "./reset-invite-code";
 
 type Props = {
   workspaceId: string;
@@ -21,6 +22,11 @@ export default function WorkspaceSettings({ workspaceId }: Props) {
         <h1 className="text-lg font-semibold">Workspace Settings</h1>
         <div className="p-7 rounded-xl dark:bg-zinc-900 bg-zinc-100">
           <UpdateWorkspaceForm workspace={data.workspace} />
+        </div>
+      </div>
+      <div className="w-full flex flex-col gap-6">
+        <div className="p-7 rounded-xl dark:bg-zinc-900 bg-zinc-100">
+          <ResetInviteCode workspace={data.workspace} />
         </div>
       </div>
       <div className="w-full flex flex-col gap-6">

@@ -14,26 +14,36 @@ import {
   deleteWorkspaceUseCase,
   getUserWorkspacesUseCase,
   getWorkspaceUseCase,
+  resetWorkspaceInviteCodeUseCase,
   updateWorkspaceUseCase,
 } from "@/use-cases/workspaces";
 import { getMemberUseCase } from "@/use-cases/members";
-import { deleteWorkspaceSchema } from "../validations/workspace.validation";
+import {
+  deleteWorkspaceSchema,
+  resetInviteCodeSchema,
+} from "../validations/workspace.validation";
+import { hasPermission } from "@/lib/permission-system";
 
 const createWorkspaceValidator = zValidator("json", createWorkspaceSchema);
 const updateWorkspaceValidator = zValidator("json", updateWorkspaceSchema);
 const deleteWorkspaceValidator = zValidator("json", deleteWorkspaceSchema);
+const resetInviteCodeValidator = zValidator("param", resetInviteCodeSchema);
 
 const app = new Hono()
   // POST /create create workspace
   .post("/create", authMiddleware, createWorkspaceValidator, async c => {
     try {
       const user = c.get("user");
+
       const data = c.req.valid("json");
+
       if (user.id !== data.userId)
         throw new PublicError(
           "You are not allowed to create workspace for other users",
         );
+
       const workspace = await createWorkspaceUseCase(data);
+
       return c.json({ workspace });
     } catch (err: unknown) {
       return returnError(err, c);
@@ -55,13 +65,27 @@ const app = new Hono()
   .get("/:id", authMiddleware, async c => {
     try {
       const user = c.get("user");
+
       const { id: workspaceId } = c.req.param();
 
+      const workspace = await getWorkspaceUseCase(workspaceId);
+
+      if (!workspace) throw new PublicError("Workspace not found.");
+
       const member = await getMemberUseCase(user.id, workspaceId);
+
       if (!member)
         throw new PublicError("You are not a member of this workspace.");
 
-      const workspace = await getWorkspaceUseCase(workspaceId);
+      const canViewWorkspace = hasPermission(
+        member,
+        "workspaces",
+        "view",
+        workspace,
+      );
+
+      if (!canViewWorkspace)
+        throw new PublicError("You are not allowed to view this workspace.");
 
       return c.json({ workspace });
     } catch (err: unknown) {
@@ -74,16 +98,28 @@ const app = new Hono()
       const user = c.get("user");
 
       const values = c.req.valid("json");
+
       const { id: workspaceId } = c.req.param();
+
+      const workspace = await getWorkspaceUseCase(workspaceId);
+
+      if (!workspace) throw new PublicError("Workspace not found.");
 
       const member = await getMemberUseCase(user.id, workspaceId);
 
       if (!member)
         throw new PublicError("You are not a member of this workspace.");
 
-      if (member.role !== "ADMIN")
+      const canUpdateWorkspace = hasPermission(
+        member,
+        "workspaces",
+        "update",
+        workspace,
+      );
+
+      if (!canUpdateWorkspace)
         throw new PublicError("You are not allowed to update this workspace.");
-      console.log(values);
+
       await updateWorkspaceUseCase(workspaceId, values);
 
       return c.json({ id: workspaceId });
@@ -95,23 +131,31 @@ const app = new Hono()
   .delete("/delete/:id", authMiddleware, deleteWorkspaceValidator, async c => {
     try {
       const user = c.get("user");
+
       const { id: workspaceId } = c.req.param();
 
       const values = c.req.valid("json");
+
+      const workspace = await getWorkspaceUseCase(workspaceId);
+
+      if (!workspace) throw new PublicError("Workspace not found.");
+      if (workspace.name !== values.workspaceName)
+        throw new PublicError("Workspace name does not match.");
 
       const member = await getMemberUseCase(user.id, workspaceId);
 
       if (!member)
         throw new PublicError("You are not a member of this workspace.");
-      if (member.role !== "ADMIN")
+
+      const canDeleteWorkspace = hasPermission(
+        member,
+        "workspaces",
+        "delete",
+        workspace,
+      );
+
+      if (!canDeleteWorkspace)
         throw new PublicError("You are not allowed to delete this workspace.");
-
-      const workspace = await getWorkspaceUseCase(workspaceId);
-
-      if (!workspace) throw new PublicError("Workspace not found.");
-
-      if (workspace.name !== values.workspaceName)
-        throw new PublicError("Workspace name does not match.");
 
       await deleteWorkspaceUseCase(workspaceId);
 
@@ -119,6 +163,44 @@ const app = new Hono()
     } catch (err: unknown) {
       return returnError(err, c);
     }
-  });
+  })
+  // POST /reset-invite-code/:id reset invite code
+  .put(
+    "/reset-invite-code/:id",
+    authMiddleware,
+    resetInviteCodeValidator,
+    async c => {
+      try {
+        const user = c.get("user");
+
+        const { id: workspaceId } = c.req.valid("param");
+
+        const workspace = await getWorkspaceUseCase(workspaceId);
+
+        if (!workspace) throw new PublicError("Workspace not found.");
+
+        const member = await getMemberUseCase(user.id, workspaceId);
+
+        if (!member)
+          throw new PublicError("You are not a member of this workspace.");
+
+        const canResetInviteCode = hasPermission(
+          member,
+          "workspaces",
+          "update",
+          workspace,
+        );
+
+        if (!canResetInviteCode)
+          throw new PublicError("You are not allowed to reset invite code.");
+
+        await resetWorkspaceInviteCodeUseCase(workspaceId);
+
+        return c.json({ id: workspaceId });
+      } catch (err: unknown) {
+        return returnError(err, c);
+      }
+    },
+  );
 
 export default app;

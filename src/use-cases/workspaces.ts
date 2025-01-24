@@ -13,7 +13,8 @@ import { generateUniqueCode } from "./utils";
 export async function createWorkspaceUseCase(
   values: Omit<Workspace, "id" | "createdAt" | "inviteCode">,
 ) {
-  const data = { ...values, inviteCode: generateUniqueCode() };
+  const inviteCode = generateUniqueCode();
+  const data = { ...values, inviteCode };
   const workspace = await createWorkspace(data);
   if (!workspace) throw new PublicError("Failed to create workspace");
   await createMemberUseCase({
@@ -41,4 +42,9 @@ export async function updateWorkspaceUseCase(
 
 export async function deleteWorkspaceUseCase(workspaceId: string) {
   return await deleteWorkspace(workspaceId);
+}
+
+export async function resetWorkspaceInviteCodeUseCase(workspaceId: string) {
+  const newInviteCode = generateUniqueCode();
+  return await updateWorkspace(workspaceId, { inviteCode: newInviteCode });
 }

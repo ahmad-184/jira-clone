@@ -10,3 +10,5 @@ export const updateWorkspaceSchema = z.object({
   name: z.string().min(1),
   imageUrl: z.string().nullable(),
 });
+
+export const workspaceIdSchema = z.string().min(1);
