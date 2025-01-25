@@ -29,8 +29,12 @@ import { useTheme } from "next-themes";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function UserButton() {
-  const { data, isPending, isFetching, isFetched } =
-    useCurrentUserProfileQuery();
+  const {
+    data: profile,
+    isPending,
+    isFetching,
+    isFetched,
+  } = useCurrentUserProfileQuery();
   const { data: user } = useCurrentUserQuery();
 
   const queryClient = useQueryClient();
@@ -57,9 +61,7 @@ export default function UserButton() {
       </div>
     );
 
-  if (!data?.profile || (isFetched && !data?.profile)) return null;
-
-  const { profile } = data;
+  if (!profile || (isFetched && !profile)) return null;
 
   return (
     <DropdownMenu modal={false}>
@@ -78,7 +80,7 @@ export default function UserButton() {
             <div className="flex flex-col items-center justify-center gap-">
               <p className="text-sm font-medium">{profile.displayName}</p>
               <p className="text-sm truncate max-w-[95%] text-muted-foreground">
-                {user?.user?.email ?? "No email"}
+                {user?.email ?? "No email"}
               </p>
             </div>
           </div>

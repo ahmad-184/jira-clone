@@ -19,9 +19,9 @@ import {
 } from "@/components/ui/select";
 import { SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
+import WorkspaceIcon from "@/components/workspace/workspace-icon";
 import { User, Workspace } from "@/db/schema";
 import { PlusIconFill } from "@/icons/plus-icon";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -73,22 +73,7 @@ export default function WorkspacesSwitcher({
                   {workspaces?.map(workspace => (
                     <SelectItem key={workspace.id} value={workspace.id}>
                       <div className="flex items-center flex-row gap-2">
-                        {!!workspace.imageUrl ? (
-                          <div className="w-9 h-9 relative rounded-lg overflow-hidden">
-                            <Image
-                              alt={workspace.name}
-                              src={workspace.imageUrl}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                        ) : (
-                          <div className="w-9 h-9 rounded-lg bg-blue-500 overflow-hidden flex items-center justify-center">
-                            <p className="text-sm uppercase font-semibold dark:text-black">
-                              {workspace.name.charAt(0)}
-                            </p>
-                          </div>
-                        )}
+                        <WorkspaceIcon workspace={workspace} />
                         <p>{workspace.name}</p>
                       </div>
                     </SelectItem>

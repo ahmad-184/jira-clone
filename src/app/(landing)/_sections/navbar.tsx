@@ -7,7 +7,7 @@ import Logo from "@/icons/logo";
 import Link from "next/link";
 
 export default function Navbar() {
-  const { data, isPending, isFetched } = useCurrentUserQuery();
+  const { data: user, isPending, isFetched } = useCurrentUserQuery();
 
   return (
     <div className="flex items-center justify-between">
@@ -40,7 +40,7 @@ export default function Navbar() {
               size={"default"}
               className="h-10 dark:bg-white dark:hover:bg-white dark:text-black font-semibold"
             >
-              {data?.user?.id ? "Dashboard" : "Login"}
+              {user?.id ? "Dashboard" : "Login"}
             </Button>
           </Link>
         )}

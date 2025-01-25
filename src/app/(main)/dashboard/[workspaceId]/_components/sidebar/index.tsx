@@ -50,7 +50,7 @@ export function Sidebar() {
             workspaces={workspaces}
             isFetching={isPending}
             defaultWorkspaceId={params.workspaceId ?? ""}
-            user={user?.user}
+            user={user}
           />
         </SidebarGroup>
         <SidebarGroup>

@@ -43,6 +43,7 @@ export const useUpdateWorkspace = ({ workspace }: Props) => {
     });
     setIsStateChanged(false);
     handleChangeImageFile(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspace]);
 
   const { mutate, isPending } = useUpdateWorkspaceMutation({

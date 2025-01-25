@@ -13,7 +13,7 @@ async function main() {
     .onConflictDoNothing()
     .returning();
 
-  const [account] = await database
+  await database
     .insert(accounts)
     .values({
       accountType: "EMAIL",
@@ -27,7 +27,7 @@ async function main() {
     .onConflictDoNothing()
     .returning();
 
-  const [profile] = await database
+  await database
     .insert(profiles)
     .values({
       userId: user.id,

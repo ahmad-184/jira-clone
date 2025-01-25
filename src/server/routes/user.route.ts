@@ -1,6 +1,6 @@
 "server-only";
 
-import { getCurrentUserUncached } from "@/lib/session";
+import { getCurrentUser } from "@/lib/session";
 import { Hono } from "hono";
 import { returnError } from "../utils";
 import { authMiddleware } from "../middlewares/auth.middleware";
@@ -10,7 +10,7 @@ const app = new Hono()
   // GET /current-user get current user
   .get("/current-user", async c => {
     try {
-      const user = await getCurrentUserUncached();
+      const user = await getCurrentUser();
       return c.json({ user });
     } catch (err: unknown) {
       console.log(err);

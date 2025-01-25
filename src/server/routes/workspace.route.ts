@@ -17,10 +17,12 @@ import {
   resetWorkspaceInviteCodeUseCase,
   updateWorkspaceUseCase,
 } from "@/use-cases/workspaces";
-import { getMemberUseCase } from "@/use-cases/members";
+import { createMemberUseCase, getMemberUseCase } from "@/use-cases/members";
 import {
   deleteWorkspaceSchema,
+  joinWorkspaceParamsSchema,
   resetInviteCodeSchema,
+  joinWorkspaceBodySchema,
 } from "../validations/workspace.validation";
 import { hasPermission } from "@/lib/permission-system";
 
@@ -28,6 +30,11 @@ const createWorkspaceValidator = zValidator("json", createWorkspaceSchema);
 const updateWorkspaceValidator = zValidator("json", updateWorkspaceSchema);
 const deleteWorkspaceValidator = zValidator("json", deleteWorkspaceSchema);
 const resetInviteCodeValidator = zValidator("param", resetInviteCodeSchema);
+const joinWorkspaceParamsValidator = zValidator(
+  "param",
+  joinWorkspaceParamsSchema,
+);
+const joinWorkspaceBodyValidator = zValidator("json", joinWorkspaceBodySchema);
 
 const app = new Hono()
   // POST /create create workspace
@@ -195,6 +202,44 @@ const app = new Hono()
           throw new PublicError("You are not allowed to reset invite code.");
 
         await resetWorkspaceInviteCodeUseCase(workspaceId);
+
+        return c.json({ id: workspaceId });
+      } catch (err: unknown) {
+        return returnError(err, c);
+      }
+    },
+  )
+  // POST /:id/join join workspace
+  .post(
+    "/:id/join",
+    authMiddleware,
+    joinWorkspaceParamsValidator,
+    joinWorkspaceBodyValidator,
+    async c => {
+      try {
+        const user = c.get("user");
+
+        const { id: workspaceId } = c.req.valid("param");
+
+        const { inviteCode } = c.req.valid("json");
+
+        const workspace = await getWorkspaceUseCase(workspaceId);
+
+        if (!workspace) throw new PublicError("Workspace not found.");
+
+        if (String(workspace.inviteCode) !== String(inviteCode))
+          throw new PublicError("Invite code does not match.");
+
+        const member = await getMemberUseCase(user.id, workspaceId);
+
+        if (member)
+          throw new PublicError("You are already a member of this workspace.");
+
+        await createMemberUseCase({
+          userId: user.id,
+          workspaceId,
+          role: "MEMBER",
+        });
 
         return c.json({ id: workspaceId });
       } catch (err: unknown) {

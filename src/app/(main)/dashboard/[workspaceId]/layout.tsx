@@ -1,5 +1,5 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { getCurrentUserUncached } from "@/lib/session";
+import { getCurrentUser } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { Sidebar } from "./_components/sidebar";
 import Header from "./_components/header";
@@ -7,8 +7,9 @@ import { findUserFirstWorkspaceMembershipUseCase } from "@/use-cases/members";
 import { getUserWorkspacesUseCase } from "@/use-cases/workspaces";
 import { makeQueryClient } from "@/lib/react-query";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { getUserProfileUseCase } from "@/use-cases/users";
 
-const queryClient = makeQueryClient();
+export const revalidate = 60; // 1 minute
 
 export default async function Layout({
   children,
@@ -17,7 +18,9 @@ export default async function Layout({
   children: React.ReactNode;
   params: Promise<{ workspaceId: string }>;
 }) {
-  const user = await getCurrentUserUncached();
+  const queryClient = makeQueryClient();
+
+  const user = await getCurrentUser();
 
   const { workspaceId } = await params;
 
@@ -39,6 +42,16 @@ export default async function Layout({
   await queryClient.prefetchQuery({
     queryKey: ["workspaces"],
     queryFn: () => workspaces,
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: ["current-user"],
+    queryFn: () => user,
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: ["current-user-profile"],
+    queryFn: () => getUserProfileUseCase(user.id),
   });
 
   const dehydratedState = dehydrate(queryClient);

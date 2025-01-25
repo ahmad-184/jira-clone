@@ -11,17 +11,15 @@ export const useCurrentUserQuery = () => {
         "error" in response ? response.error : "Something went wrong";
       if (!res.ok) throw new Error(error);
       if ("error" in response) throw new Error(error);
-      return {
-        user: response.user
-          ? {
-              ...response.user,
-              createdAt: new Date(response.user?.createdAt ?? Date.now()),
-              emailVerified: response.user?.emailVerified
-                ? new Date(response.user?.emailVerified ?? Date.now())
-                : null,
-            }
-          : undefined,
-      };
+      return response.user
+        ? {
+            ...response.user,
+            createdAt: new Date(response.user?.createdAt ?? Date.now()),
+            emailVerified: response.user?.emailVerified
+              ? new Date(response.user?.emailVerified ?? Date.now())
+              : null,
+          }
+        : undefined;
     },
   });
 };
