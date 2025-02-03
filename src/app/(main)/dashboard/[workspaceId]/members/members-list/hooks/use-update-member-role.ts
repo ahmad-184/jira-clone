@@ -1,0 +1,66 @@
+import { useEffect, useState } from "react";
+import { useUpdateMemberMutation } from "./mutations/use-update-member-mutation";
+import { useForm } from "react-hook-form";
+import { updateMemberSchema } from "@/validations/member.validation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { useWorkspace } from "@/hooks/workspace-provider";
+import { Role } from "@/db/schema";
+
+type Props = {
+  memberId: string;
+  role: Exclude<Role, "OWNER">;
+};
+
+export const useUpdateMemberRole = ({ memberId, role }: Props) => {
+  const [error, setError] = useState<string | undefined>();
+
+  const { workspaceId } = useWorkspace();
+
+  const queryClient = useQueryClient();
+
+  const { setValue, handleSubmit } = useForm<
+    z.infer<typeof updateMemberSchema>
+  >({
+    resolver: zodResolver(updateMemberSchema),
+    defaultValues: {
+      role,
+    },
+  });
+
+  const { mutate, isPending } = useUpdateMemberMutation({
+    onSuccess: async () => {
+      toast.success("Member role updated");
+      await queryClient.invalidateQueries({
+        queryKey: ["workspace-members", workspaceId],
+      });
+    },
+    onMutate: () => {
+      setError(undefined);
+    },
+    onError: error => {
+      setError(error.message);
+    },
+  });
+
+  const onSubmit = handleSubmit(values => {
+    mutate({
+      param: {
+        memberId,
+      },
+      json: values,
+    });
+  });
+
+  useEffect(() => {
+    setValue("role", role);
+  }, [role, setValue]);
+
+  return {
+    error,
+    onSubmit,
+    loading: isPending,
+  };
+};
