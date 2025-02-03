@@ -40,6 +40,7 @@ import { deleteSessionForUser } from "@/data-access/sessions";
 import { render } from "@react-email/components";
 import { VerifyEmailOTP } from "@/emails/verify-email-otp";
 import { GitHubUser, GoogleUser } from "@/types/auth";
+import { Profile, User } from "@/db/schema";
 
 export async function getUserUseCase(userId: number) {
   const user = await getUser(userId);
@@ -57,14 +58,14 @@ export async function deleteUserUseCase(
   await deleteUser(userToDeleteId);
 }
 
-export async function getUserProfileUseCase(userId: UserId) {
-  const profile = await getProfile(userId);
+export async function getProfileWithUserEmailUseCase(userId: UserId) {
+  const userWithProfile = await getProfile(userId, {
+    with: { user: { columns: { email: true } } },
+  });
 
-  if (!profile) {
-    throw new PublicError("User not found");
-  }
-
-  return profile;
+  return userWithProfile as
+    | (Profile & { user: Pick<User, "email"> })
+    | undefined;
 }
 
 export async function registerUserUseCase(email: string, password: string) {
@@ -161,6 +162,8 @@ export async function createGithubUserUseCase(githubUser: GitHubUser) {
     existingUser = await createUser(githubUser.email);
   }
 
+  await updateUser(existingUser.id, { emailVerified: new Date() });
+
   await createAccountViaGithub(existingUser.id, githubUser.id);
 
   await createProfile(existingUser.id, githubUser.login, githubUser.avatar_url);
@@ -174,6 +177,8 @@ export async function createGoogleUserUseCase(googleUser: GoogleUser) {
   if (!existingUser) {
     existingUser = await createUser(googleUser.email);
   }
+
+  await updateUser(existingUser.id, { emailVerified: new Date() });
 
   await createAccountViaGoogle(existingUser.id, googleUser.sub);
 

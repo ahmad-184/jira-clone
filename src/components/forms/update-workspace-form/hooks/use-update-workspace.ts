@@ -9,20 +9,27 @@ import { useUpdateWorkspaceMutation } from "./mutations/use-update-workspace-mut
 import { toast } from "sonner";
 import { useEffect, useMemo, useState } from "react";
 import { startUploadImage } from "@/lib/uploader";
-import { useQueryClient } from "@tanstack/react-query";
-import { Workspace } from "@/db/schema";
+import { Member, Workspace } from "@/db/schema";
 import { FileWithPreview } from "@/types";
+import { usePermission } from "@/hooks/use-permission";
 
 type Props = {
   workspace: Workspace;
+  currentMember: Member;
 };
 
-export const useUpdateWorkspace = ({ workspace }: Props) => {
+export const useUpdateWorkspace = ({ workspace, currentMember }: Props) => {
+  const [error, setError] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<FileWithPreview | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isStateChanged, setIsStateChanged] = useState(false);
 
-  const queryClient = useQueryClient();
+  const canUpdateWorkspace = usePermission(
+    currentMember.role,
+    "workspaces",
+    "update",
+    undefined,
+  );
 
   const form = useForm<z.infer<typeof updateWorkspaceSchema>>({
     resolver: zodResolver(updateWorkspaceSchema),
@@ -50,19 +57,17 @@ export const useUpdateWorkspace = ({ workspace }: Props) => {
     onSuccess: async () => {
       setIsStateChanged(false);
       handleChangeImageFile(null);
-      await queryClient.invalidateQueries({
-        queryKey: ["workspace", workspace.id],
-      });
-      await queryClient.invalidateQueries({ queryKey: ["workspaces"] });
       toast.success("Successfully updated.");
     },
     onError: err => {
-      toast.error(err.message);
+      setError(err.message);
+    },
+    onMutate: () => {
+      setError(null);
     },
   });
 
   const onSubmit = form.handleSubmit(async values => {
-    console.log(values);
     if (!workspace) return;
     let imageUrl = values.imageUrl ?? null;
     try {
@@ -136,5 +141,7 @@ export const useUpdateWorkspace = ({ workspace }: Props) => {
     isUploading,
     disabled,
     handleUndoChanges,
+    error,
+    havePermission: canUpdateWorkspace.permission,
   };
 };

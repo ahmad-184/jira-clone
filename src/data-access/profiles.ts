@@ -2,6 +2,7 @@ import { database } from "@/db";
 import { Profile, profiles } from "@/db/schema";
 import { UserId } from "@/use-cases/types";
 import { eq } from "drizzle-orm";
+import { GetProfilePropsTypes } from "./type";
 
 export async function createProfile(
   userId: UserId,
@@ -30,9 +31,13 @@ export async function updateProfile(
     .where(eq(profiles.userId, userId));
 }
 
-export async function getProfile(userId: UserId) {
+export async function getProfile(
+  userId: UserId,
+  props: GetProfilePropsTypes = {},
+) {
   const profile = await database.query.profiles.findFirst({
     where: eq(profiles.userId, userId),
+    ...props,
   });
 
   return profile;

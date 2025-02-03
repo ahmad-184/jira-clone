@@ -1,6 +1,7 @@
 import { database } from "@/db";
-import { members, Workspace, workspaces } from "@/db/schema";
+import { Workspace, workspaces } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { GetWorkspacePropsType } from "./type";
 
 export async function createWorkspace(
   values: Omit<Workspace, "id" | "createdAt">,
@@ -13,22 +14,16 @@ export async function createWorkspace(
   return workspace;
 }
 
-export async function getWorkspace(workspaceId: string) {
+export async function getWorkspace(
+  workspaceId: string,
+  props: GetWorkspacePropsType = {},
+) {
   const workspace = await database.query.workspaces.findFirst({
     where: eq(workspaces.id, workspaceId),
+    ...props,
   });
 
   return workspace;
-}
-
-export async function getUserWorkspaces(userId: number) {
-  const workspaces = await database.query.members.findMany({
-    where: eq(members.userId, userId),
-    with: { workspace: true },
-    columns: {},
-  });
-
-  return workspaces.map(e => e.workspace);
 }
 
 export async function updateWorkspace(

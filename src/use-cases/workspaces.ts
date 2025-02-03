@@ -1,27 +1,36 @@
 import {
   createWorkspace,
   deleteWorkspace,
-  getUserWorkspaces,
   getWorkspace,
   updateWorkspace,
 } from "@/data-access/workspaces";
-import { Workspace } from "@/db/schema";
+import { Member, Profile, User, Workspace } from "@/db/schema";
 import { PublicError } from "@/lib/errors";
 import { createMemberUseCase } from "./members";
 import { generateUniqueCode } from "./utils";
+import {
+  getMembersByUserId,
+  getMembersByWorkspaceId,
+} from "@/data-access/members";
+import { GetMemberPropsType } from "@/data-access/type";
 
 export async function createWorkspaceUseCase(
   values: Omit<Workspace, "id" | "createdAt" | "inviteCode">,
 ) {
   const inviteCode = generateUniqueCode();
+
   const data = { ...values, inviteCode };
+
   const workspace = await createWorkspace(data);
+
   if (!workspace) throw new PublicError("Failed to create workspace");
+
   await createMemberUseCase({
-    userId: data.userId,
+    userId: data.ownerId,
     workspaceId: workspace.id,
-    role: "ADMIN",
+    role: "OWNER",
   });
+
   return workspace;
 }
 
@@ -30,7 +39,11 @@ export async function getWorkspaceUseCase(workspaceId: string) {
 }
 
 export async function getUserWorkspacesUseCase(userId: number) {
-  return await getUserWorkspaces(userId);
+  const members = (await getMembersByUserId(userId, {
+    with: { workspace: true },
+  })) as (Member & { workspace: Workspace })[];
+
+  return members.map(m => m.workspace);
 }
 
 export async function updateWorkspaceUseCase(
@@ -47,4 +60,38 @@ export async function deleteWorkspaceUseCase(workspaceId: string) {
 export async function resetWorkspaceInviteCodeUseCase(workspaceId: string) {
   const newInviteCode = generateUniqueCode();
   return await updateWorkspace(workspaceId, { inviteCode: newInviteCode });
+}
+
+export async function getWorkspaceMembersUseCase(workspaceId: string) {
+  return await getMembersByWorkspaceId(workspaceId);
+}
+
+export async function getWorkspaceMembersProfileUseCase(workspaceId: string) {
+  const opts: GetMemberPropsType = {
+    with: {
+      user: {
+        columns: { email: true },
+        with: {
+          profile: {
+            columns: {
+              image: true,
+              displayName: true,
+              bio: true,
+            },
+          },
+        },
+      },
+    },
+  };
+
+  const members = await getMembersByWorkspaceId(workspaceId, opts);
+
+  return members as
+    | (Member & {
+        user: {
+          email: User["email"];
+          profile: Pick<Profile, "image" | "displayName" | "bio">;
+        };
+      })[]
+    | undefined;
 }

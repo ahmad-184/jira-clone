@@ -1,5 +1,5 @@
 import DeleteWorkspaceForm from "@/components/forms/delete-workspace-form";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,15 +7,24 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Workspace } from "@/db/schema";
+import { Member, Workspace } from "@/db/schema";
+import { usePermission } from "@/hooks/use-permission";
 import { WarningIconFill } from "@/icons/warning-icon";
 import { cn } from "@/lib/utils";
 
 type Props = {
   workspace: Workspace;
+  currentMember: Member;
 };
 
-export default function DeleteWorkspace({ workspace }: Props) {
+export default function DeleteWorkspace({ workspace, currentMember }: Props) {
+  const canDeleteWorkspace = usePermission(
+    currentMember.role,
+    "workspaces",
+    "delete",
+    undefined,
+  );
+
   return (
     <Dialog>
       <div className="w-full border border-red-800 dark:bg-red-950/20 bg-red-400/10 p-4 rounded-xl">
@@ -32,18 +41,25 @@ export default function DeleteWorkspace({ workspace }: Props) {
             <p className="text-sm text-muted-foreground">
               Make sure you have made a backup if you want to keep your data.
             </p>
-            <DialogTrigger asChild>
-              <div
-                className={cn(
-                  buttonVariants({
-                    variant: "destructive",
-                    className: "mt-3 w-fit cursor-pointer",
-                  }),
-                )}
-              >
+            {!canDeleteWorkspace.permission ? (
+              <Button variant={"destructive"} className="mt-3 w-fit" disabled>
                 Delete Workspace
-              </div>
-            </DialogTrigger>
+              </Button>
+            ) : (
+              <DialogTrigger asChild>
+                <div
+                  className={cn(
+                    buttonVariants({
+                      variant: "destructive",
+                      className: "mt-3 w-fit cursor-pointer",
+                    }),
+                    !canDeleteWorkspace.permission && "opacity-50 select-none",
+                  )}
+                >
+                  Delete Workspace
+                </div>
+              </DialogTrigger>
+            )}
           </div>
         </div>
       </div>

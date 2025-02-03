@@ -1,0 +1,1 @@
+ALTER TYPE "public"."member_role" ADD VALUE 'OWNER' BEFORE 'ADMIN';

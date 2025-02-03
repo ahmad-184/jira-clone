@@ -7,7 +7,7 @@ export default function Avatar({
   alt,
   className,
 }: {
-  profile: Profile;
+  profile: Pick<Profile, "image" | "displayName">;
   alt: string;
   className?: string;
 }) {
@@ -21,7 +21,10 @@ export default function Avatar({
       <Image
         className="w-full h-full object-cover"
         alt={alt}
-        src={profile.image ?? "https://avatar.iran.liara.run/public"}
+        src={
+          profile.image ??
+          `https://avatar.iran.liara.run/username?username=${profile.displayName}`
+        }
         fill
       />
     </div>

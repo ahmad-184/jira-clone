@@ -1,7 +1,5 @@
-import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/session";
-
-export const revalidate = 60; // 1 minute
+import { redirect } from "next/navigation";
 
 export default async function Page() {
   const user = await getCurrentUser();

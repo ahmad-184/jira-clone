@@ -14,7 +14,12 @@ export const accountTypeEnum = pgEnum("account_type", [
   "GOOGLE",
   "GITHUB",
 ]);
-export const memberRoleEnum = pgEnum("member_role", ["ADMIN", "MEMBER"]);
+
+export const memberRoleEnum = pgEnum("member_role", [
+  "OWNER",
+  "ADMIN",
+  "MEMBER",
+]);
 
 export const users = pgTable("gf_user", {
   id: serial("id").primaryKey(),
@@ -121,21 +126,25 @@ export const verifyEmailOtps = pgTable(
   table => [index("verify_email_otps_otp_idx").on(table.otp)],
 );
 
-export const profiles = pgTable("gf_profile", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => createUUID()),
-  userId: serial("userId")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" })
-    .unique(),
-  displayName: text("displayName"),
-  image: text("image"),
-  bio: text("bio").notNull().default(""),
-  createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
-    .defaultNow()
-    .notNull(),
-});
+export const profiles = pgTable(
+  "gf_profile",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createUUID()),
+    userId: serial("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" })
+      .unique(),
+    displayName: text("displayName"),
+    image: text("image"),
+    bio: text("bio").notNull().default(""),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
+      .defaultNow()
+      .notNull(),
+  },
+  table => [index("profiles_user_id_idx").on(table.userId)],
+);
 
 export const sessions = pgTable(
   "gf_session",
@@ -161,7 +170,7 @@ export const workspaces = pgTable("gf_workspace", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => createUUID()),
-  userId: serial("userId")
+  ownerId: serial("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
@@ -205,13 +214,6 @@ export const members = pgTable(
  * in your code.
  **/
 
-export const profilesRelations = relations(profiles, ({ one }) => ({
-  user: one(users, {
-    fields: [profiles.userId],
-    references: [users.id],
-  }),
-}));
-
 export const usersRelations = relations(users, ({ one, many }) => ({
   profile: one(profiles),
   account: one(accounts, {
@@ -219,11 +221,19 @@ export const usersRelations = relations(users, ({ one, many }) => ({
     references: [accounts.userId],
   }),
   workspaces: many(workspaces),
+  members: many(members),
+}));
+
+export const profilesRelations = relations(profiles, ({ one }) => ({
+  user: one(users, {
+    fields: [profiles.userId],
+    references: [users.id],
+  }),
 }));
 
 export const workspacesRelations = relations(workspaces, ({ one, many }) => ({
   owner: one(users, {
-    fields: [workspaces.userId],
+    fields: [workspaces.ownerId],
     references: [users.id],
   }),
   members: many(members),
@@ -250,3 +260,6 @@ export type VerifyEmailOtp = typeof verifyEmailOtps.$inferSelect;
 export type Profile = typeof profiles.$inferSelect;
 export type Workspace = typeof workspaces.$inferSelect;
 export type Member = typeof members.$inferSelect;
+
+export type Role = (typeof memberRoleEnum.enumValues)[number];
+export type AccountType = (typeof accountTypeEnum.enumValues)[number];

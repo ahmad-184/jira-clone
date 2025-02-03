@@ -35,12 +35,13 @@ export const useCreateWorkspace = ({ userId, isFirstWorkspace }: Props) => {
   };
 
   const { mutate, isPending } = useCreateWorkspaceMutation({
-    onSuccess: async () => {
+    onSuccess: async ({ workspace }) => {
       toast.success("Workspace created successfully");
       if (isFirstWorkspace) {
         setTimeout(() => (window.location.href = "/dashboard"), 2000);
       } else {
         await queryClient.invalidateQueries({ queryKey: ["workspaces"] });
+        window.location.href = `/dashboard/${workspace.id}`;
       }
       form.reset({ userId });
     },

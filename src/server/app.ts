@@ -5,6 +5,7 @@ import { handle } from "hono/vercel";
 import authRoutes from "./routes/auth.route";
 import userRoutes from "./routes/user.route";
 import workspaceRoutes from "./routes/workspace.route";
+import memberRoutes from "./routes/member.route";
 
 export const app = new Hono().basePath("/api");
 
@@ -14,7 +15,9 @@ export const routes = app
   // user routes
   .route("/user", userRoutes)
   // workspace routes
-  .route("/workspace", workspaceRoutes);
+  .route("/workspace", workspaceRoutes)
+  // member routes
+  .route("/member", memberRoutes);
 
 export const METHODS = {
   GET: handle(app),

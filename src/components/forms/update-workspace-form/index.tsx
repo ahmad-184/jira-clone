@@ -12,15 +12,20 @@ import { Input } from "@/components/ui/input";
 import { LoaderButton } from "@/components/loader-button";
 import Dropzone from "@/components/dropzone";
 import { useUpdateWorkspace } from "./hooks/use-update-workspace";
-import { Workspace } from "@/db/schema";
+import { Member, Workspace } from "@/db/schema";
 import { Button } from "@/components/ui/button";
 import { Undo2Icon } from "lucide-react";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 type Props = {
   workspace: Workspace;
+  currentMember: Member;
 };
 
-export default function UpdateWorkspaceForm({ workspace }: Props) {
+export default function UpdateWorkspaceForm({
+  workspace,
+  currentMember,
+}: Props) {
   const {
     form,
     onSubmit,
@@ -31,16 +36,22 @@ export default function UpdateWorkspaceForm({ workspace }: Props) {
     disabled,
     imageFile,
     imageUrl,
+    error,
+    havePermission,
   } = useUpdateWorkspace({
     workspace,
+    currentMember,
   });
+
+  const [animated] = useAutoAnimate();
 
   return (
     <Form {...form}>
-      <form onSubmit={onSubmit} className="flex flex-col gap-4">
+      <form ref={animated} onSubmit={onSubmit} className="flex flex-col gap-4">
         <FormField
           control={form.control}
           name="name"
+          disabled={!havePermission}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Workspace name</FormLabel>
@@ -50,6 +61,7 @@ export default function UpdateWorkspaceForm({ workspace }: Props) {
                   className="w-full !bg-zinc-50 dark:!bg-zinc-950/20"
                   placeholder="Enter workspace name"
                   type="text"
+                  {...(!havePermission && { readOnly: true })}
                 />
               </FormControl>
               <FormMessage />
@@ -58,11 +70,13 @@ export default function UpdateWorkspaceForm({ workspace }: Props) {
         />
         <FormField
           control={form.control}
+          disabled={!havePermission}
           name="imageUrl"
           render={() => (
             <FormItem>
               <FormControl>
                 <Dropzone
+                  disabled={!havePermission}
                   onDrop={file => {
                     handleChangeImageFile(file.length ? file[0] : null);
                   }}
@@ -80,21 +94,24 @@ export default function UpdateWorkspaceForm({ workspace }: Props) {
           )}
         />
         <div className="h-1" />
+        {error && <p className="text-red-500 text-sm">{error}</p>}
         <div className="w-full flex justify-end">
           <Button
             variant="secondary"
             type="button"
             className="mr-4"
             onClick={handleUndoChanges}
-            disabled={disabled}
+            disabled={!havePermission || disabled}
+            size={"sm"}
           >
             <Undo2Icon className="w-4 h-4" /> Undo
           </Button>
           <LoaderButton
             isLoading={loading || isUploading}
-            disabled={disabled}
+            disabled={!havePermission || disabled}
             type="submit"
             variant="default"
+            size={"sm"}
           >
             {isUploading ? "Uploading..." : "Update"}
           </LoaderButton>

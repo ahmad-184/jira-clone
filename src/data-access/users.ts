@@ -4,14 +4,16 @@ import { eq } from "drizzle-orm";
 import { UserId } from "@/use-cases/types";
 import { getAccountByUserId } from "./accounts";
 import { hashPassword } from "./utils";
+import { GetUserPropsType } from "./type";
 
 export async function deleteUser(userId: UserId) {
   await database.delete(users).where(eq(users.id, userId));
 }
 
-export async function getUser(userId: UserId) {
+export async function getUser(userId: UserId, props: GetUserPropsType = {}) {
   const user = await database.query.users.findFirst({
     where: eq(users.id, userId),
+    ...props,
   });
 
   return user;
@@ -71,17 +73,25 @@ export async function verifyPassword(email: string, plainTextPassword: string) {
   return account.password == hash;
 }
 
-export async function getUserByEmail(email: string) {
+export async function getUserByEmail(
+  email: string,
+  props: GetUserPropsType = {},
+) {
   const user = await database.query.users.findFirst({
     where: eq(users.email, email),
+    ...props,
   });
 
   return user;
 }
 
-export async function getMagicUserAccountByEmail(email: string) {
+export async function getMagicUserAccountByEmail(
+  email: string,
+  props: GetUserPropsType = {},
+) {
   const user = await database.query.users.findFirst({
     where: eq(users.email, email),
+    ...props,
   });
 
   return user;

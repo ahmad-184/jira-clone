@@ -23,7 +23,6 @@ import {
 } from "./ui/dropdown-menu";
 import { useCurrentUserProfileQuery } from "@/hooks/queries/use-current-user-profile-query ";
 import Avatar from "./avatar";
-import { useCurrentUserQuery } from "@/hooks/queries/use-current-user-query";
 import { useLogOutMutation } from "@/hooks/mutations/use-log-out-mutation";
 import { useTheme } from "next-themes";
 import { useQueryClient } from "@tanstack/react-query";
@@ -35,7 +34,6 @@ export default function UserButton() {
     isFetching,
     isFetched,
   } = useCurrentUserProfileQuery();
-  const { data: user } = useCurrentUserQuery();
 
   const queryClient = useQueryClient();
 
@@ -48,7 +46,7 @@ export default function UserButton() {
   });
 
   const onLogout = async () => {
-    await queryClient.removeQueries({ queryKey: ["workspaces"] });
+    queryClient.removeQueries({ queryKey: ["workspaces"] });
     logOut({});
   };
 
@@ -80,7 +78,7 @@ export default function UserButton() {
             <div className="flex flex-col items-center justify-center gap-">
               <p className="text-sm font-medium">{profile.displayName}</p>
               <p className="text-sm truncate max-w-[95%] text-muted-foreground">
-                {user?.email ?? "No email"}
+                {profile.user?.email ?? "No email"}
               </p>
             </div>
           </div>

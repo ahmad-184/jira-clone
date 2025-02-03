@@ -10,19 +10,29 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Workspace } from "@/db/schema";
+import { Member, Workspace } from "@/db/schema";
 import { env } from "@/env";
+import { usePermission } from "@/hooks/use-permission";
 import { WarningIconFill } from "@/icons/warning-icon";
+import { cn } from "@/lib/utils";
 import { CopyIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 type Props = {
   workspace: Workspace;
+  currentMember: Member;
 };
 
-export default function ResetInviteCode({ workspace }: Props) {
+export default function ResetInviteCode({ workspace, currentMember }: Props) {
   const [open, setOpen] = useState(false);
+
+  const canResetInviteLink = usePermission(
+    currentMember.role,
+    "workspaces",
+    "update",
+    undefined,
+  );
 
   const inviteLink = `${env.NEXT_PUBLIC_HOST_URL}/workspaces/${workspace.id}/join/${workspace.inviteCode}`;
 
@@ -48,23 +58,31 @@ export default function ResetInviteCode({ workspace }: Props) {
           />
           <Button
             variant={"ghost"}
-            className="!h-14 border"
+            className="border !h-11 !bg-zinc-50 dark:!bg-zinc-950/20"
             onClick={handleCopy}
           >
             <CopyIcon className="w-4 h-4" />
           </Button>
         </div>
-        <div className="w-full flex justify-end">
-          <DialogTrigger>
-            <div
-              className={buttonVariants({
-                variant: "destructive",
-                className: "h-9 text-sm",
-              })}
-            >
+        <div className="w-full flex">
+          {!canResetInviteLink.permission ? (
+            <Button variant={"destructive"} className="h-9 text-sm" disabled>
               Reset Invite Link
-            </div>
-          </DialogTrigger>
+            </Button>
+          ) : (
+            <DialogTrigger disabled={!canResetInviteLink.permission}>
+              <div
+                className={cn(
+                  buttonVariants({
+                    variant: "destructive",
+                    className: "h-9 text-sm",
+                  }),
+                )}
+              >
+                Reset Invite Link
+              </div>
+            </DialogTrigger>
+          )}
         </div>
       </div>
       <DialogContent className="max-w-md py-0 !px-0 dark:bg-neutral-900 bg-neutral-100">

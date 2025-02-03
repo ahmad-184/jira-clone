@@ -30,7 +30,7 @@ export default function WorkspaceIcon({ workspace, className }: Props) {
       )}
     >
       <p className="text-sm uppercase font-semibold dark:text-black">
-        {workspace.name.charAt(0)}
+        {workspace.name?.charAt(0)}
       </p>
     </div>
   );

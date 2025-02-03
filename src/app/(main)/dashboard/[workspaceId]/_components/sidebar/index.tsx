@@ -22,14 +22,18 @@ import { SIDEBAR_OPTIONS } from "@/constants/sidebar";
 import Link from "next/link";
 import CustomTooltip from "@/components/custom/tooltip";
 import { PlusIconFill } from "@/icons/plus-icon";
+import { useWorkspaceRealtime } from "@/hooks/workspace/use-workspace-realtime";
 
 export function Sidebar() {
   const { data: workspaces, isPending } = useUserWorkspacesQuery();
   const { data: user } = useCurrentUserQuery();
 
+  const params = useParams<{ workspaceId: string }>();
+
+  useWorkspaceRealtime(params.workspaceId);
+
   const { setOpenMobile } = useSidebar();
 
-  const params = useParams<{ workspaceId: string }>();
   const pathname = usePathname();
 
   const options = SIDEBAR_OPTIONS(params.workspaceId);

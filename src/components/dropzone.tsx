@@ -17,6 +17,7 @@ type DropzoneProps = {
   multiple?: boolean;
   src?: string | null;
   onRemove?: () => void;
+  disabled?: boolean;
 };
 
 const allowedFileTypes = ACCEPTED_IMAGE_FILE_TYPE.map(
@@ -35,11 +36,13 @@ export default function Dropzone({
   src,
   onRemove,
   files = [],
+  disabled = false,
 }: DropzoneProps) {
   const [error, setError] = useState<string | null>(null);
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles,
     multiple,
+    disabled,
     accept: {
       "image/*": allowedFileTypes,
     },

@@ -1,4 +1,4 @@
-"server-only";
+import "server-only";
 
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
@@ -39,9 +39,13 @@ const app = new Hono()
   .post("/sign-in", redirectIfAuthenticated, signInValidator, async c => {
     try {
       const { email, password } = c.req.valid("json");
+
       await rateLimitByKey({ key: email, limit: 3, window: 30000 });
+
       const result = await signInUseCase(email, password);
+
       await setSession(result.id);
+
       return c.json({ id: result.id });
     } catch (err: unknown) {
       console.log(err);
@@ -53,7 +57,9 @@ const app = new Hono()
     try {
       await rateLimitByIp({ key: "register", limit: 3, window: 30000 });
       const { email, password } = c.req.valid("json");
+
       const user = await registerUserUseCase(email, password);
+
       return c.json({ id: user.id });
     } catch (err: unknown) {
       console.log(err);
@@ -68,9 +74,13 @@ const app = new Hono()
     async c => {
       try {
         const { otp, userId } = c.req.valid("json");
+
         const id = await verifyEmailOtpUseCase(otp);
+
         if (!id || id !== userId) throw new PublicError("Invalid OTP");
+
         await setSession(userId);
+
         return c.json({ id });
       } catch (err: unknown) {
         console.log(err);
@@ -86,8 +96,11 @@ const app = new Hono()
     async c => {
       try {
         const { email } = c.req.valid("json");
+
         await rateLimitByKey({ key: email, limit: 1, window: 30000 });
+
         await sendMagicLinkUseCase(email);
+
         return c.json({ email });
       } catch (err: unknown) {
         console.log(err);
@@ -103,8 +116,11 @@ const app = new Hono()
     async c => {
       try {
         const { email } = c.req.valid("json");
+
         await rateLimitByKey({ key: email, limit: 3, window: 30000 });
+
         await resetPasswordUseCase(email);
+
         return c.json({ email });
       } catch (err: unknown) {
         console.log(err);
@@ -120,8 +136,11 @@ const app = new Hono()
     async c => {
       try {
         const { password, token } = c.req.valid("json");
+
         await rateLimitByIp({ limit: 1, window: 30000 });
+
         await changePasswordUseCase(token, password);
+
         return c.json({ success: true });
       } catch (err: unknown) {
         console.log(err);
@@ -133,6 +152,7 @@ const app = new Hono()
   .post("/logout", authMiddleware, async c => {
     try {
       await logoutUser();
+
       return c.json({
         success: true,
       });

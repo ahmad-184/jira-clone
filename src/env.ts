@@ -16,8 +16,6 @@ export const env = createEnv({
     EMAIL_SERVER_USER: z.string().min(1),
     EMAIL_SERVER_PASSWORD: z.string().min(1),
     EMAIL_SERVER: z.string().min(1),
-    SUPABASE_URL: z.string().min(1),
-    SUPABASE_API_KEY: z.string().min(1),
     SUPABASE_DATABASE_PASSWORD: z.string().min(1),
     SUPABASE_DATABASE_URL: z.string().min(1),
   },
@@ -27,6 +25,8 @@ export const env = createEnv({
     NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: z.string().min(1),
     NEXT_PUBLIC_CLOUDINARY_UPLOAD_FOLDER: z.string().min(1),
     NEXT_PUBLIC_CLOUDINARY_PRESET: z.string().min(1),
+    NEXT_PUBLIC_SUPABASE_URL: z.string().min(1),
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
   },
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
@@ -49,8 +49,8 @@ export const env = createEnv({
     NEXT_PUBLIC_CLOUDINARY_UPLOAD_FOLDER:
       process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_FOLDER,
     NEXT_PUBLIC_CLOUDINARY_PRESET: process.env.NEXT_PUBLIC_CLOUDINARY_PRESET,
-    SUPABASE_URL: process.env.SUPABASE_URL,
-    SUPABASE_API_KEY: process.env.SUPABASE_API_KEY,
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     SUPABASE_DATABASE_PASSWORD: process.env.SUPABASE_DATABASE_PASSWORD,
     SUPABASE_DATABASE_URL: process.env.SUPABASE_DATABASE_URL,
   },
