@@ -4,7 +4,7 @@ import {
   getWorkspace,
   updateWorkspace,
 } from "@/data-access/workspaces";
-import { Member, Profile, User, Workspace } from "@/db/schema";
+import { Member, Workspace } from "@/db/schema";
 import { PublicError } from "@/lib/errors";
 import { createMemberUseCase } from "./members";
 import { generateUniqueCode } from "./utils";
@@ -13,6 +13,8 @@ import {
   getMembersByWorkspaceId,
 } from "@/data-access/members";
 import { GetMemberPropsType } from "@/data-access/type";
+import { getProjectsByWorkspaceId } from "@/data-access/projects";
+import { GetWorkspaceMembersProfileUseCaseReturnType } from "./types";
 
 export async function createWorkspaceUseCase(
   values: Omit<Workspace, "id" | "createdAt" | "inviteCode">,
@@ -86,12 +88,9 @@ export async function getWorkspaceMembersProfileUseCase(workspaceId: string) {
 
   const members = await getMembersByWorkspaceId(workspaceId, opts);
 
-  return members as
-    | (Member & {
-        user: {
-          email: User["email"];
-          profile: Pick<Profile, "image" | "displayName" | "bio">;
-        };
-      })[]
-    | undefined;
+  return members as GetWorkspaceMembersProfileUseCaseReturnType;
+}
+
+export async function getWorkspaceProjectsUseCase(workspaceId: string) {
+  return await getProjectsByWorkspaceId(workspaceId);
 }

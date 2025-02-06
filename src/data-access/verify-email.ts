@@ -1,3 +1,5 @@
+import "server-only";
+
 import { OTP_LENGTH, OTP_TTL, TOKEN_LENGTH, TOKEN_TTL } from "@/app-config";
 import { generateRandomOtp, generateRandomToken } from "./utils";
 import { database } from "@/db";

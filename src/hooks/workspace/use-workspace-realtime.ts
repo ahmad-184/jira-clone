@@ -6,11 +6,12 @@ import {
   RealtimePostgresUpdatePayload,
 } from "@supabase/supabase-js";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { validate } from "uuid";
 import { useUserWorkspacesQuery } from "../queries/use-user-workspaces-query";
 import { toast } from "sonner";
 import useInternetConnection from "../use-connection";
+import { useWorkspace } from "../workspace-provider";
 
 type DeletePayloadType = RealtimePostgresDeletePayload<{
   id: string;
@@ -18,8 +19,12 @@ type DeletePayloadType = RealtimePostgresDeletePayload<{
 type UpdatePayloadType = RealtimePostgresUpdatePayload<Workspace>;
 
 // workspace changes will show up in realtime for all users
-export const useWorkspaceRealtime = (workspaceId: string) => {
+export const useWorkspaceRealtime = () => {
   const queryClient = useQueryClient();
+
+  const { workspaceId } = useWorkspace();
+
+  const timeOutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { data: workspaces } = useUserWorkspacesQuery();
 
@@ -32,7 +37,13 @@ export const useWorkspaceRealtime = (workspaceId: string) => {
       toast(
         "This workspace is deleted. You will redirect to another workspace.",
       );
-      setTimeout(() => (window.location.href = "/dashboard"), 3000);
+
+      if (timeOutRef.current) clearTimeout(timeOutRef.current);
+
+      timeOutRef.current = setTimeout(
+        () => (window.location.href = "/dashboard"),
+        3000,
+      );
 
       return;
     }
@@ -42,7 +53,7 @@ export const useWorkspaceRealtime = (workspaceId: string) => {
     }
   };
 
-  const onpdate = async (payload: UpdatePayloadType) => {
+  const onUpdate = async (payload: UpdatePayloadType) => {
     if (!payload.new.id) return;
 
     if (payload.new.id === workspaceId)
@@ -69,7 +80,7 @@ export const useWorkspaceRealtime = (workspaceId: string) => {
           if (payload.eventType === "DELETE")
             return onDelete(payload as DeletePayloadType);
           if (payload.eventType === "UPDATE")
-            return onpdate(payload as UpdatePayloadType);
+            return onUpdate(payload as UpdatePayloadType);
         },
       )
       .subscribe();

@@ -16,29 +16,33 @@ import {
 import SidebarHeader from "./sidebar-header";
 import { useUserWorkspacesQuery } from "@/hooks/queries/use-user-workspaces-query";
 import { useCurrentUserQuery } from "@/hooks/queries/use-current-user-query";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import WorkspacesSwitcher from "./workspaces-switcher";
 import { SIDEBAR_OPTIONS } from "@/constants/sidebar";
 import Link from "next/link";
-import CustomTooltip from "@/components/custom/tooltip";
-import { PlusIconFill } from "@/icons/plus-icon";
 import { useWorkspaceRealtime } from "@/hooks/workspace/use-workspace-realtime";
+import ProjectsMenu from "./projects-menu";
+import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member";
+import { useProjectRealtime } from "@/hooks/project/use-project-realtime";
+import { useWorkspace } from "@/hooks/workspace-provider";
 
 export function Sidebar() {
+  const { workspaceId } = useWorkspace();
+
   const { data: workspaces, isPending } = useUserWorkspacesQuery();
   const { data: user } = useCurrentUserQuery();
+  const { data: currentMember } = useGetCurrentMemberQuery(workspaceId);
 
-  const params = useParams<{ workspaceId: string }>();
-
-  useWorkspaceRealtime(params.workspaceId);
+  useWorkspaceRealtime();
+  useProjectRealtime();
 
   const { setOpenMobile } = useSidebar();
 
   const pathname = usePathname();
 
-  const options = SIDEBAR_OPTIONS(params.workspaceId);
+  const options = SIDEBAR_OPTIONS(workspaceId);
 
-  const currentPath = pathname.split(params.workspaceId)[1];
+  const currentPath = pathname.split(workspaceId)[1];
 
   const activePath =
     !currentPath || currentPath === "" || currentPath === null
@@ -53,7 +57,7 @@ export function Sidebar() {
           <WorkspacesSwitcher
             workspaces={workspaces}
             isFetching={isPending}
-            defaultWorkspaceId={params.workspaceId ?? ""}
+            defaultWorkspaceId={workspaceId ?? ""}
             user={user}
           />
         </SidebarGroup>
@@ -85,14 +89,7 @@ export function Sidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <div className="w-full flex items-center justify-between">
-            <SidebarGroupLabel className="!text-xs select-none text-uppercase text-muted-foreground px-0 !font-normal">
-              Projects
-            </SidebarGroupLabel>
-            <CustomTooltip content={"Create New Project"}>
-              <PlusIconFill className="w-4 h-4 text-muted-foreground hover:text-primary" />
-            </CustomTooltip>
-          </div>
+          {!!currentMember && <ProjectsMenu currentMember={currentMember} />}
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter />

@@ -15,3 +15,7 @@ export type GetUserPropsType = Parameters<
 export type GetWorkspacePropsType = Parameters<
   typeof database.query.workspaces.findFirst
 >[0];
+
+export type GetProjectPropsType = Parameters<
+  typeof database.query.projects.findFirst
+>[0];

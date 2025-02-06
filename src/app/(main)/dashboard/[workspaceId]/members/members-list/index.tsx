@@ -7,6 +7,7 @@ import Member from "./member";
 import { useCurrentUserQuery } from "@/hooks/queries/use-current-user-query";
 import { Separator } from "@/components/ui/separator";
 import { useWorkspace } from "@/hooks/workspace-provider";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function MembersList() {
   const { workspaceId } = useWorkspace();
@@ -15,12 +16,7 @@ export default function MembersList() {
   const { data: currentMember } = useGetCurrentMemberQuery(workspaceId);
   const { data: currentUser } = useCurrentUserQuery();
 
-  if (isPending)
-    return (
-      <div>
-        <p className="w-full max-w-2xl">loading...</p>
-      </div>
-    );
+  if (isPending) return <LoadingSkeleton />;
 
   if (!currentMember?.id) return null;
 
@@ -39,6 +35,42 @@ export default function MembersList() {
             {i !== members.length - 1 && <Separator className="w-full" />}
           </Fragment>
         ))}
+      </div>
+    </div>
+  );
+}
+
+function LoadingSkeleton() {
+  const skeletons = ["skeleton-1", "skeleton-2", "skeleton-3"];
+
+  return (
+    <div className="w-full max-w-6xl">
+      <div className="w-full flex flex-col gap-2">
+        {skeletons.map((skeleton, i) => (
+          <Fragment key={skeleton}>
+            <SingleSkeleton />
+            {i !== skeletons.length - 1 && <Separator className="w-full" />}
+          </Fragment>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SingleSkeleton() {
+  return (
+    <div className={"w-full flex items-center gap-5 justify-between py-2"}>
+      <div className="flex items-center flex-1 gap-2">
+        <div>
+          <Skeleton className="w-28 h-28 border rounded-full" />
+        </div>
+        <div className="flex flex-col gap-3">
+          <Skeleton className="w-11 rounded-md h-3" />
+          <div className="flex flex-col gap-2">
+            <Skeleton className="w-20 rounded-md h-4" />
+            <Skeleton className="w-32 rounded-md h-3" />
+          </div>
+        </div>
       </div>
     </div>
   );

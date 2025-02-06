@@ -1,3 +1,5 @@
+import "server-only";
+
 import { database } from "@/db";
 import { Profile, profiles } from "@/db/schema";
 import { UserId } from "@/use-cases/types";

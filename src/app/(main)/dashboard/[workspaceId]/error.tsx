@@ -15,7 +15,7 @@ export default function ErrorPage({
   );
 
   return (
-    <div className="container mx-auto py-12 min-h-screen space-y-8">
+    <div className="container mx-auto bg-rose-800/10 rounded-xl py-12 h-full flex-1 space-y-8">
       {isAuthenticationError ? (
         <div className="w-full flex items-center justify-center h-full flex-col gap-1 flex-1">
           <div className="mb-2">
@@ -49,20 +49,14 @@ export default function ErrorPage({
             Try reload th page to resolve the error, If the error resist, <br />
             please call our support team.
           </p>
-          <div className="mt-2 flex justify-center items-center gap-2">
-            <Button
-              size={"sm"}
-              onClick={() => window.location.reload()}
-              variant={"outline"}
-            >
-              Reload page
-            </Button>
-            <Link href={"/"}>
-              <Button size={"sm"} variant={"secondary"}>
-                Home
-              </Button>
-            </Link>
-          </div>
+          <Button
+            onClick={() => window.location.reload()}
+            className="mt-2"
+            size={"sm"}
+            variant={"outline"}
+          >
+            Reload page
+          </Button>
         </div>
       )}
     </div>

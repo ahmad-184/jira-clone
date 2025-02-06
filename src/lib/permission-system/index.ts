@@ -24,9 +24,15 @@ type MemberPermission = {
   dataType: { member: Member; user: User };
 };
 
+type ProjectPermission = {
+  action: "create" | "view" | "update" | "delete";
+  dataType: undefined;
+};
+
 export type Permissions = {
   workspaces: WorkspacePermission;
   members: MemberPermission;
+  projects: ProjectPermission;
 };
 
 const ROLES = {
@@ -61,6 +67,12 @@ const ROLES = {
 
         return { permission: true };
       },
+    },
+    projects: {
+      create: { permission: true },
+      view: { permission: true },
+      update: { permission: true },
+      delete: { permission: true },
     },
   },
   ADMIN: {
@@ -111,6 +123,12 @@ const ROLES = {
         return { permission: true };
       },
     },
+    projects: {
+      create: { permission: true },
+      view: { permission: true },
+      update: { permission: true },
+      delete: { permission: true },
+    },
   },
   MEMBER: {
     workspaces: {
@@ -144,6 +162,12 @@ const ROLES = {
         // Members can delete themselves
         return { permission: true };
       },
+    },
+    projects: {
+      create: { permission: false },
+      view: { permission: true },
+      update: { permission: false },
+      delete: { permission: false },
     },
   },
 } as const satisfies RolesWithPermissions;

@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.route";
 import userRoutes from "./routes/user.route";
 import workspaceRoutes from "./routes/workspace.route";
 import memberRoutes from "./routes/member.route";
+import projectRoutes from "./routes/project.route";
 
 export const app = new Hono().basePath("/api");
 
@@ -17,7 +18,9 @@ export const routes = app
   // workspace routes
   .route("/workspace", workspaceRoutes)
   // member routes
-  .route("/member", memberRoutes);
+  .route("/member", memberRoutes)
+  // project routes
+  .route("/project", projectRoutes);
 
 export const METHODS = {
   GET: handle(app),

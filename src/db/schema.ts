@@ -207,6 +207,24 @@ export const members = pgTable(
   ],
 );
 
+export const projects = pgTable(
+  "gf_project",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createUUID()),
+    name: text("name").notNull(),
+    imageUrl: text("imageUrl"),
+    workspaceId: text("workspaceId")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
+      .defaultNow()
+      .notNull(),
+  },
+  table => [index("projects_workspace_id_idx").on(table.workspaceId)],
+);
+
 /**
  * RELATIONSHIPS
  *
@@ -237,6 +255,7 @@ export const workspacesRelations = relations(workspaces, ({ one, many }) => ({
     references: [users.id],
   }),
   members: many(members),
+  projects: many(projects),
 }));
 
 export const membersRelations = relations(members, ({ one }) => ({
@@ -246,6 +265,13 @@ export const membersRelations = relations(members, ({ one }) => ({
   }),
   workspace: one(workspaces, {
     fields: [members.workspaceId],
+    references: [workspaces.id],
+  }),
+}));
+
+export const projectsRelations = relations(projects, ({ one }) => ({
+  workspace: one(workspaces, {
+    fields: [projects.workspaceId],
     references: [workspaces.id],
   }),
 }));
@@ -260,6 +286,7 @@ export type VerifyEmailOtp = typeof verifyEmailOtps.$inferSelect;
 export type Profile = typeof profiles.$inferSelect;
 export type Workspace = typeof workspaces.$inferSelect;
 export type Member = typeof members.$inferSelect;
+export type Project = typeof projects.$inferSelect;
 
 export type Role = (typeof memberRoleEnum.enumValues)[number];
 export type AccountType = (typeof accountTypeEnum.enumValues)[number];
