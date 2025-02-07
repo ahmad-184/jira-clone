@@ -41,27 +41,27 @@ export default function VerifyEmail() {
                     <InputOTPGroup className="w-full flex justify-center gap-3">
                       <InputOTPSlot
                         index={0}
-                        className="border h-12 w-12 dark:bg-zinc-900 bg-zinc-100"
+                        className="border h-12 w-12 dark:bg-gray-900 bg-gray-100"
                       />
                       <InputOTPSlot
                         index={1}
-                        className="border h-12 w-12 dark:bg-zinc-900 bg-zinc-100"
+                        className="border h-12 w-12 dark:bg-gray-900 bg-gray-100"
                       />
                       <InputOTPSlot
                         index={2}
-                        className="border h-12 w-12 dark:bg-zinc-900 bg-zinc-100"
+                        className="border h-12 w-12 dark:bg-gray-900 bg-gray-100"
                       />
                       <InputOTPSlot
                         index={3}
-                        className="border h-12 w-12 dark:bg-zinc-900 bg-zinc-100"
+                        className="border h-12 w-12 dark:bg-gray-900 bg-gray-100"
                       />
                       <InputOTPSlot
                         index={4}
-                        className="border h-12 w-12 dark:bg-zinc-900 bg-zinc-100"
+                        className="border h-12 w-12 dark:bg-gray-900 bg-gray-100"
                       />
                       <InputOTPSlot
                         index={5}
-                        className="border h-12 w-12 dark:bg-zinc-900 bg-zinc-100"
+                        className="border h-12 w-12 dark:bg-gray-900 bg-gray-100"
                       />
                     </InputOTPGroup>
                   </InputOTP>

@@ -12,22 +12,22 @@ export default function Navbar() {
   return (
     <div className="flex items-center justify-between">
       <Logo />
-      <nav className="hidden space-x-6 text-sm dark:text-zinc-200 md:block">
+      <nav className="hidden space-x-6 text-sm dark:text-gray-200 md:block">
         <Link
           href="#features"
-          className="hover:border-b-2 border-zinc-950 dark:border-zinc-100"
+          className="hover:border-b-2 border-gray-950 dark:border-gray-100"
         >
           Features
         </Link>
         <Link
           href="#pricing"
-          className="hover:border-b-2 border-zinc-950 dark:border-zinc-100"
+          className="hover:border-b-2 border-gray-950 dark:border-gray-100"
         >
           Pricing
         </Link>
         <Link
           href="#about"
-          className="hover:border-b-2 border-zinc-950 dark:border-zinc-100"
+          className="hover:border-b-2 border-gray-950 dark:border-gray-100"
         >
           About
         </Link>

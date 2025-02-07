@@ -72,7 +72,7 @@ export default function ProjectsMenu({ currentMember }: Props) {
           </div>
         )}
         {noProjects && (
-          <div className="w-full text-xs mt-6  text-center text-muted-foreground dark:text-zinc-500">
+          <div className="w-full text-xs mt-6  text-center text-muted-foreground dark:text-gray-500">
             - No projects -
           </div>
         )}

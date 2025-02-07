@@ -27,7 +27,7 @@ export default function ErrorPage({
           <h1 className="text-lg text-red-500">
             Oops! You Need to Be Logged In
           </h1>
-          <p className="text-sm text-center dark:text-zinc-300 text-zinc-700">
+          <p className="text-sm text-center dark:text-gray-300 text-gray-700">
             To access this page, please log in first.
           </p>
           <Link href="/sign-in">
@@ -45,7 +45,7 @@ export default function ErrorPage({
             />
           </div>
           <h1 className="text-lg text-red-500">Oops! Something went wrong</h1>
-          <p className="text-sm text-center dark:text-zinc-300 text-zinc-700">
+          <p className="text-sm text-center dark:text-gray-300 text-gray-700">
             Try reload th page to resolve the error, If the error resist, <br />
             please call our support team.
           </p>

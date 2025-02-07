@@ -5,6 +5,7 @@ import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member
 import { useGetProjectQuery } from "@/hooks/queries/use-get-project";
 import { useWorkspace } from "@/hooks/workspace-provider";
 import DeleteProject from "./delete-project";
+import { Card } from "@/components/ui/card";
 
 type Props = {
   projectId: string;
@@ -23,15 +24,15 @@ export default function ProjectSettings({ projectId }: Props) {
     <div className="flex w-full max-w-6xl flex-col gap-16">
       <div className="w-full flex flex-col gap-3">
         <h1 className="text-lg font-semibold">Project Settings</h1>
-        <div className="p-7 rounded-xl dark:bg-zinc-900 bg-zinc-100">
+        <Card className="p-7 rounded-xl shadow-none">
           <UpdateProjectForm project={project} currentMember={currentMember} />
-        </div>
+        </Card>
       </div>
       <div className="w-full flex flex-col gap-3">
         <h1 className="text-lg font-semibold">Delete Project</h1>
-        <div className="p-7 rounded-xl dark:bg-zinc-900 bg-zinc-100">
+        <Card className="p-7 rounded-xl shadow-none">
           <DeleteProject project={project} currentMember={currentMember} />
-        </div>
+        </Card>
       </div>
     </div>
   );

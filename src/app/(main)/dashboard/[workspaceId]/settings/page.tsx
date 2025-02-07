@@ -9,7 +9,7 @@ export default async function Page() {
   if (!user) return redirect("/sign-in");
 
   return (
-    <div className="w-full h-full flex flex-col gap-10">
+    <div className="w-full h-full max-w-6xl flex flex-col gap-10">
       <div>
         <h1 className="text-4xl font-bold mb-1">Settings</h1>
         <p className="text-sm text-muted-foreground">

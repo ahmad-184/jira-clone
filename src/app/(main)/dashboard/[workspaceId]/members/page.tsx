@@ -20,7 +20,7 @@ export default async function Page({
   if (!currentMember) return redirect("/dashboard");
 
   return (
-    <div className="w-full h-full flex flex-col gap-10">
+    <div className="w-full h-full max-w-6xl flex flex-col gap-10">
       <div>
         <h1 className="text-4xl font-bold mb-1">Members</h1>
         <p className="text-sm text-muted-foreground max-w-xl">

@@ -11,8 +11,8 @@ export default function Header() {
         <SidebarTrigger />
         <Separator orientation="vertical" />
         <div className="max-w-md flex-1">
-          <div className="rounded-xl px-4 flex items-center border dark:border-zinc-700 gap-4">
-            <SearchIcon className="w-5 h-5 text-zinc-400" />
+          <div className="rounded-xl px-4 flex items-center border dark:border-gray-700 gap-4">
+            <SearchIcon className="w-5 h-5 text-gray-400" />
             <Input
               placeholder="Search..."
               className="h-full flex-1 !bg-transparent border-none py-3 !ring-0 !px-0"

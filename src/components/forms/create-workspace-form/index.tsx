@@ -65,6 +65,7 @@ export default function CreateWorkspaceForm({
             files={imageFile ? [imageFile] : []}
             onDrop={file => handleChangeImageFile(file[0] ?? null)}
             src={imageUrl ?? imageFile?.preview ?? null}
+            className="dark:!bg-gray-900/40 bg-gray-50"
           />
           <FormDescription className="mt-1">
             Workspace logo is optional.

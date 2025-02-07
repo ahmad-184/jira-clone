@@ -21,13 +21,13 @@ export default function SignIn() {
       <div className="flex flex-col w-full gap-3">
         <div className="flex gap-3 w-full items-center">
           <Link href="/api/login/google" className="flex-1">
-            <Button variant={"outline"} className="w-full">
+            <Button variant={"secondary"} className="w-full">
               <GoogleIcon className="w-4 h-4" />
               Google
             </Button>
           </Link>
           <Link href="/api/login/github" className="flex-1">
-            <Button variant={"outline"} className="w-full">
+            <Button variant={"secondary"} className="w-full">
               <GithubIcon className="w-4 h-4" />
               Github
             </Button>
@@ -35,7 +35,7 @@ export default function SignIn() {
         </div>
         <div className="w-full">
           <Link href="/sign-in/magic-link" className="flex-1">
-            <Button variant={"outline"} className="w-full items-center">
+            <Button variant={"secondary"} className="w-full items-center">
               <div>
                 <MailIcon />
               </div>

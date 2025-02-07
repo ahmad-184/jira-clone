@@ -21,7 +21,7 @@ export default function CreateFirstWorkspace({ user }: Props) {
       <div className="px-2 w-full h-full flex gap-3">
         <div className="my-auto flex items-center flex-col flex-1">
           <div className="py-10 w-full flex justify-center">
-            <Card className="w-full md:w-2/3 bg-white dark:bg-zinc-950/50">
+            <Card className="w-full md:w-2/3">
               <CardHeader className="mb-2">
                 <div className="mb-2 w-full flex items-center">
                   <Logo />

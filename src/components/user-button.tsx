@@ -54,7 +54,7 @@ export default function UserButton() {
 
   if (isPending || isFetching)
     return (
-      <div className="size-10 rounded-full bg-zinc-200 animate-pulse flex items-center justify-center">
+      <div className="size-10 rounded-full bg-gray-200 animate-pulse flex items-center justify-center">
         <LoaderIcon className="size-4 animate-spin text-muted-foreground" />
       </div>
     );

@@ -56,13 +56,15 @@ export const useWorkspaceRealtime = () => {
   const onUpdate = async (payload: UpdatePayloadType) => {
     if (!payload.new.id) return;
 
-    if (payload.new.id === workspaceId)
+    if (payload.new.id === workspaceId) {
       await queryClient.invalidateQueries({
         queryKey: ["workspace", payload.new.id],
       });
+    }
 
-    if (workspaces?.some(w => w.id === payload.old.id))
+    if (workspaces?.some(w => w.id === payload.old.id)) {
       await queryClient.invalidateQueries({ queryKey: ["workspaces"] });
+    }
   };
 
   useEffect(() => {

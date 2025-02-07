@@ -50,7 +50,7 @@ export function Sidebar() {
       : options.find(item => currentPath.replace("/", "") === item.id);
 
   return (
-    <AppSidebar>
+    <AppSidebar className="dark:[&>div]:!bg-gray-900/60">
       <SidebarHeader />
       <SidebarContent className="px-2">
         <SidebarGroup>

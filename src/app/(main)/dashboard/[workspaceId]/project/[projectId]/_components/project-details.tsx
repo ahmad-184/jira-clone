@@ -13,7 +13,8 @@ type Props = {
   projectId: string;
 };
 
-export default function Project({ projectId }: Props) {
+// view project details, tasks.
+export default function ProjectDetails({ projectId }: Props) {
   const { data: project, isPending } = useGetProjectQuery(projectId);
 
   if (isPending) return <LoadingSkeleton />;

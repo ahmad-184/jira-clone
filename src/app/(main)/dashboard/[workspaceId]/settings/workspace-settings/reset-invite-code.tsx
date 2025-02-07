@@ -51,16 +51,8 @@ export default function ResetInviteCode({ workspace, currentMember }: Props) {
           </p>
         </div>
         <div className="w-full flex gap-2 items-center">
-          <Input
-            value={inviteLink}
-            readOnly
-            className="w-full !bg-zinc-50 dark:!bg-zinc-950/20"
-          />
-          <Button
-            variant={"ghost"}
-            className="border !h-11 !bg-zinc-50 dark:!bg-zinc-950/20"
-            onClick={handleCopy}
-          >
+          <Input value={inviteLink} readOnly className="w-full" />
+          <Button variant={"secondary"} className="!h-11" onClick={handleCopy}>
             <CopyIcon className="w-4 h-4" />
           </Button>
         </div>
@@ -92,7 +84,7 @@ export default function ResetInviteCode({ workspace, currentMember }: Props) {
               Reset Invite Link
             </DialogTitle>
           </div>
-          <div className="px-5 py-5 border-b border-t dark:border-zinc-700 border-zinc-400 bg-background">
+          <div className="px-5 py-5 border-b border-t dark:border-gray-700 border-gray-400 bg-background">
             <DialogDescription className="text-muted-foreground text-sm flex items-center gap-3">
               <WarningIconFill className="w-5 h-5" /> By doing this, current
               invite link will be invalidated.

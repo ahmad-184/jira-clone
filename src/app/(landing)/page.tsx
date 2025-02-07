@@ -7,7 +7,7 @@ import Navbar from "./_sections/navbar";
 export default function Home() {
   return (
     <main className="bg-background">
-      <section className="relative bg-gradient-to-b dark:from-zinc-800 dark:via-zinc-900 dark:to-background">
+      <section className="relative bg-gradient-to-b dark:from-gray-800 dark:via-gray-900 dark:to-background">
         <div
           className="absolute inset-0 
             dark:bg-[linear-gradient(to_right,#09090b_1px,transparent_1px),linear-gradient(to_bottom,#09090b_1px,transparent_1px)] dark:bg-[size:4rem_4rem] dark:[mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]
@@ -23,7 +23,7 @@ export default function Home() {
                 Streamline Your Workflow with TaskHive
               </h1>
 
-              <p className="mt-6 text-sm md:text-lg dark:text-zinc-300 text-zinc-800">
+              <p className="mt-6 text-sm md:text-lg dark:text-gray-300 text-gray-800">
                 TaskHive simplifies project management and enhances team
                 collaboration. Effortlessly organize tasks, monitor progress,
                 and achieve your objectives efficiently.
@@ -36,7 +36,7 @@ export default function Home() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-zinc-600 dark:hover:bg-zinc-900/50 hover:bg-zinc-900/70 hover:text-white"
+                  className="border-gray-600 dark:hover:bg-gray-900/50 hover:bg-gray-900/70 hover:text-white"
                 >
                   Learn More
                 </Button>
