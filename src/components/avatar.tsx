@@ -14,7 +14,7 @@ export default function Avatar({
   return (
     <div
       className={cn(
-        "size-10 relative overflow-hidden border rounded-full bg-gray-200 dark:bg-muted",
+        "size-10 relative overflow-hidden border rounded-full bg-shark-200 dark:bg-muted",
         className,
       )}
     >

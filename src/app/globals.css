@@ -97,7 +97,7 @@
     --ring: 240 4.9% 83.9%; */
 
     /* gray theme */
-    --background: 224 71.4% 4.1%;
+    /* --background: 224 71.4% 4.1%;
     --foreground: 210 20% 98%;
 
     --card: 224 71.4% 4.1%;
@@ -140,6 +140,53 @@
     --sidebar-accent: 215 27.9% 16.9%;
     --sidebar-accent-foreground: 220 14.3% 95.9%;
     --sidebar-border: 215 27.9% 16.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%; */
+
+    /* shark theme  */
+    --background: 216 12% 8%; /* shark 950  */
+    --foreground: 180 9% 98%; /* shark 50  */
+
+    --card: 216 12% 8%; /* shark 950  */
+    --card-foreground: 180 9% 98%; /* shark 50  */
+
+    --popover: 216 12% 8%; /* shark 950  */
+    --popover-foreground: 180 9% 98%; /* shark 50  */
+
+    --primary: 210 13% 94%;
+    --primary-foreground: 220.9 39.3% 11%;
+
+    --secondary: 210 12% 20%; /* shark 800  */
+    --secondary-foreground: 180 9% 98%; /* shark 50  */
+
+    --muted: 210 12% 20%; /* shark 800  */
+    --muted-foreground: 209 12% 63%; /* shark 400  */
+
+    --accent: 210 12% 20%; /* shark 800  */
+    --accent-foreground: 180 9% 98%; /* shark 50  */
+
+    --destructive: 0 70% 35.3%;
+    --destructive-foreground: 0 46% 100%;
+
+    --border: 210 12% 20%; /* shark 800  */
+    --input: 210 12% 20%; /* shark 800  */
+    --ring: 212 12% 79%; /* shark 300  */
+
+    --success: 112.7 59.6% 69.8%;
+    --success-foreground: 0 0% 0%;
+
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+
+    --sidebar-background: 206 11% 12%; /* shark 900  */
+    --sidebar-foreground: 210 13% 94%; /* shark 100  */
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 180 9% 98%; /* shark 50  */
+    --sidebar-accent: 210 12% 20%; /* shark 800  */
+    --sidebar-accent-foreground: 210 13% 94%; /* shark 100  */
+    --sidebar-border: 210 12% 20%; /* shark 800  */
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
@@ -181,5 +228,12 @@
 }
 
 .icon-task {
-  @apply bg-gray-950 text-white dark:bg-white dark:!text-black;
+  @apply bg-shark-950 text-white dark:bg-shark-300 dark:!text-shark-900;
+}
+.icon-task-hive {
+  @apply dark:text-shark-200;
+}
+
+::selection {
+  @apply !bg-shark-600 text-white;
 }

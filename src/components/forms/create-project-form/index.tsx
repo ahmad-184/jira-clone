@@ -63,7 +63,7 @@ const CreateProjectForm = ({ workspaceId, setOpen }: Props) => {
             files={imageFile ? [imageFile] : []}
             onDrop={file => handleChangeImageFile(file[0] ?? null)}
             src={imageUrl ?? imageFile?.preview ?? null}
-            className="dark:!bg-gray-900/40 bg-gray-50"
+            className="dark:!bg-shark-900/40 bg-shark-50"
           />
           <FormDescription className="mt-1">
             Project image is optional.

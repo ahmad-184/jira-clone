@@ -25,6 +25,7 @@ import ProjectsMenu from "./projects-menu";
 import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member";
 import { useProjectRealtime } from "@/hooks/project/use-project-realtime";
 import { useWorkspace } from "@/hooks/workspace-provider";
+import { cn } from "@/lib/utils";
 
 export function Sidebar() {
   const { workspaceId } = useWorkspace();
@@ -50,7 +51,7 @@ export function Sidebar() {
       : options.find(item => currentPath.replace("/", "") === item.id);
 
   return (
-    <AppSidebar className="dark:[&>div]:!bg-gray-900/60">
+    <AppSidebar className="dark:[&>div]:!bg-shark-900">
       <SidebarHeader />
       <SidebarContent className="px-2">
         <SidebarGroup>
@@ -67,24 +68,47 @@ export function Sidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="gap-1">
-              {options.map(item => (
-                <SidebarMenuItem key={item.label}>
-                  <Link href={item.href} onClick={() => setOpenMobile(false)}>
-                    <SidebarMenuButton
-                      asChild
-                      className="h-11 rounded-xl"
-                      isActive={activePath?.id === item.id}
-                    >
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        {activePath?.id === item.id
-                          ? item.active_icon
-                          : item.icon}
-                        {item.label}
-                      </div>
-                    </SidebarMenuButton>
-                  </Link>
-                </SidebarMenuItem>
-              ))}
+              {options.map(item => {
+                const isActive = Boolean(activePath?.id === item.id);
+
+                return (
+                  <SidebarMenuItem key={item.label}>
+                    <Link href={item.href} onClick={() => setOpenMobile(false)}>
+                      <SidebarMenuButton
+                        asChild
+                        className={cn(
+                          "relative h-11 rounded-sm data-[active=true]:!bg-blue-900/70",
+                        )}
+                        isActive={isActive}
+                      >
+                        <div
+                          className={cn(
+                            "relative flex items-center gap-2 text-muted-foreground",
+                          )}
+                        >
+                          {!!isActive && (
+                            <div className="absolute left-0 top-1/2 rounded-e-xl -translate-y-[50%] bg-blue-500 w-1 h-[20px]" />
+                          )}
+                          <span
+                            className={cn("ml-0 transition-all", {
+                              "ml-1": !!isActive,
+                            })}
+                          >
+                            {!!isActive ? item.active_icon : item.icon}
+                          </span>
+                          <span
+                            className={cn({
+                              "!text-blue-300": isActive,
+                            })}
+                          >
+                            {item.label}
+                          </span>
+                        </div>
+                      </SidebarMenuButton>
+                    </Link>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

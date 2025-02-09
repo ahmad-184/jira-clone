@@ -51,7 +51,7 @@ export default function UpdateProjectForm({ project, currentMember }: Props) {
           disabled={!havePermission}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Project name</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -83,7 +83,7 @@ export default function UpdateProjectForm({ project, currentMember }: Props) {
                   }}
                   files={imageFile ? [imageFile] : []}
                   src={imageUrl ?? imageFile?.preview ?? null}
-                  className="!bg-gray-50 dark:!bg-gray-900/60"
+                  className="!bg-shark-50 dark:!bg-shark-900/60"
                 />
               </FormControl>
               <FormMessage />

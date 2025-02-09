@@ -5,7 +5,7 @@ export function HomeIcon({ className }: { className?: string }) {
     <div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        fill="none"
+        fill={"none"}
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
@@ -21,13 +21,19 @@ export function HomeIcon({ className }: { className?: string }) {
   );
 }
 
-export function HomeIconFill({ className }: { className?: string }) {
+export function HomeIconFill({
+  className,
+  fill,
+}: {
+  className?: string;
+  fill?: string;
+}) {
   return (
     <div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
-        fill="currentColor"
+        fill={fill ? fill : "currentColor"}
         className={cn("w-5", className)}
       >
         <path d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z" />

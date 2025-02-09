@@ -34,7 +34,7 @@ export default function DeleteProjectForm({ projectName, projectId }: Props) {
             <FormItem>
               <FormLabel className="text-muted-foreground">
                 Type{" "}
-                <span className="dark:text-gray-300 text-gray-700">
+                <span className="dark:text-shark-300 text-shark-700">
                   {projectName}
                 </span>{" "}
                 to confirm.
@@ -42,7 +42,7 @@ export default function DeleteProjectForm({ projectName, projectId }: Props) {
               <FormControl>
                 <Input
                   placeholder="Type the workspace name here"
-                  className="bg-gray-50"
+                  className="bg-shark-50"
                   autoComplete="off"
                   {...field}
                 />

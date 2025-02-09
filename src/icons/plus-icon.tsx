@@ -1,11 +1,17 @@
 import { cn } from "@/lib/utils";
 
-export function PlusIconFill({ className }: { className?: string }) {
+export function PlusIconFill({
+  className,
+  fill,
+}: {
+  className?: string;
+  fill?: string;
+}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      fill="currentColor"
+      fill={fill || "currentColor"}
       className={cn("size-6", className)}
     >
       <path

@@ -81,7 +81,7 @@ export default function WorkspacesSwitcher({
                 </SelectGroup>
                 <SelectGroup>
                   <DialogTrigger asChild>
-                    <div className="flex cursor-pointer hover:text-primary group items-center bg-muted/60 gap-2 hover:bg-muted px-2 py-2 rounded-lg text-xs text-muted-foreground">
+                    <div className="flex cursor-pointer hover:text-primary group items-center bg-muted/60 gap-2 hover:bg-muted px-2 py-2 rounded-sm text-xs text-muted-foreground">
                       <CustomTooltip content={"Create New Workspace"}>
                         <PlusIconFill className="w-4 h-4 text-muted-foreground group-hover:text-primary" />
                       </CustomTooltip>
@@ -107,7 +107,7 @@ export default function WorkspacesSwitcher({
               </SelectContent>
             </Select>
           )}
-          {!!isFetching && <Skeleton className="w-full h-12 rounded-xl" />}
+          {!!isFetching && <Skeleton className="w-full h-12 rounded-sm" />}
         </SidebarMenuItem>
       </SidebarMenu>
     </Dialog>

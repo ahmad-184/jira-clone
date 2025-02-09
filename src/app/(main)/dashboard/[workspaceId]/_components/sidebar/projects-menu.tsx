@@ -13,6 +13,7 @@ import { Member } from "@/db/schema";
 import { useGetWorkspaceProjectsQuery } from "@/hooks/queries/use-get-workspace-projects";
 import { usePermission } from "@/hooks/use-permission";
 import { PlusIconFill } from "@/icons/plus-icon";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
@@ -67,32 +68,46 @@ export default function ProjectsMenu({ currentMember }: Props) {
       <SidebarMenu className="gap-1">
         {isFetchingProjects && (
           <div className="flex flex-col gap-2">
-            <Skeleton className="rounded-lg h-7 w-full" />
-            <Skeleton className="rounded-lg h-7 w-full" />
+            <Skeleton className="rounded-sm h-7 w-full" />
+            <Skeleton className="rounded-sm h-7 w-full" />
           </div>
         )}
         {noProjects && (
-          <div className="w-full text-xs mt-6  text-center text-muted-foreground dark:text-gray-500">
+          <div className="w-full text-xs mt-6  text-center text-muted-foreground dark:text-shark-500">
             - No projects -
           </div>
         )}
         {thereIsProjects &&
           data?.projects?.map(project => {
             const href = `/dashboard/${params.workspaceId}/project/${project.id}`;
+            const isActive = Boolean(href === pathname);
 
             return (
               <SidebarMenuItem key={project.id}>
                 <Link href={href} onClick={() => setOpenMobile(false)}>
                   <SidebarMenuButton
                     asChild
-                    className="h-9 rounded-lg"
-                    isActive={href === pathname}
+                    className="h-9 rounded-sm data-[active=true]:!bg-blue-900/70"
+                    isActive={isActive}
                   >
                     <div className="flex items-center gap-2 text-muted-foreground">
-                      <div>
+                      {!!isActive && (
+                        <div className="absolute left-0 top-1/2 rounded-e-xl -translate-y-[50%] bg-blue-500 w-1 h-[20px]" />
+                      )}
+                      <div
+                        className={cn("ml-0 transition-all", {
+                          "ml-1": !!isActive,
+                        })}
+                      >
                         <ProjectIcon project={project} />
                       </div>
-                      <p className="truncate flex-1">{project.name}</p>
+                      <p
+                        className={cn("truncate flex-1", {
+                          "!text-blue-300": !!isActive,
+                        })}
+                      >
+                        {project.name}
+                      </p>
                     </div>
                   </SidebarMenuButton>
                 </Link>

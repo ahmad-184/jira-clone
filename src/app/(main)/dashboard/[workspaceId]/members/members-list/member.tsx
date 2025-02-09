@@ -67,7 +67,7 @@ export default function Member({ member, currentMember, user }: Props) {
               },
             )}
           >
-            {member.role === "OWNER" ? "Prime" : member.role.toLowerCase()}
+            {member.role === "OWNER" ? "Creator" : member.role.toLowerCase()}
           </p>
           <div className="flex flex-col">
             <p className="text-sm font-medium">

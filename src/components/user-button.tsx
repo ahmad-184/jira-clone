@@ -1,31 +1,13 @@
 "use client";
-
-import {
-  LoaderIcon,
-  LogOutIcon,
-  MonitorCheckIcon,
-  MoonIcon,
-  PaletteIcon,
-  SettingsIcon,
-  SunIcon,
-} from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+import { LoaderIcon, LogOutIcon } from "lucide-react";
 import { useCurrentUserProfileQuery } from "@/hooks/queries/use-current-user-profile-query ";
 import Avatar from "./avatar";
 import { useLogOutMutation } from "@/hooks/mutations/use-log-out-mutation";
-import { useTheme } from "next-themes";
 import { useQueryClient } from "@tanstack/react-query";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Separator } from "./ui/separator";
+import { Button } from "./ui/button";
+import { SettingIconFill } from "@/icons/setting-icon";
 
 export default function UserButton() {
   const {
@@ -50,11 +32,9 @@ export default function UserButton() {
     logOut({});
   };
 
-  const { setTheme } = useTheme();
-
   if (isPending || isFetching)
     return (
-      <div className="size-10 rounded-full bg-gray-200 animate-pulse flex items-center justify-center">
+      <div className="size-10 rounded-full bg-shark-200 animate-pulse flex items-center justify-center">
         <LoaderIcon className="size-4 animate-spin text-muted-foreground" />
       </div>
     );
@@ -62,66 +42,53 @@ export default function UserButton() {
   if (!profile || (isFetched && !profile)) return null;
 
   return (
-    <DropdownMenu modal={false}>
-      <DropdownMenuTrigger className="focus-visible:outline-none">
+    <Popover modal={false}>
+      <PopoverTrigger className="focus-visible:outline-none">
         <Avatar profile={profile} alt="user profile" />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
+      </PopoverTrigger>
+      <PopoverContent
         align="end"
         side="bottom"
         sideOffset={10}
-        className="!p-0"
+        className="!p-0 rounded-sm overflow-hidden"
       >
-        <div className="min-w-[250px]">
-          <div className="flex flex-col items-center justify-center gap-2 px-2.5 py-2">
-            <Avatar profile={profile} alt="user profile" className="size-16" />
-            <div className="flex flex-col items-center justify-center gap-">
-              <p className="text-sm font-medium">{profile.displayName}</p>
-              <p className="text-sm truncate max-w-[95%] text-muted-foreground">
-                {profile.user?.email ?? "No email"}
-              </p>
+        <div className="min-w-[250px] bg-shark-800">
+          <div className="flex flex-col p-3 items-center justify-center gap-2">
+            <div className="w-full flex gap-2 items-center">
+              <div>
+                <Avatar
+                  profile={profile}
+                  alt="user profile"
+                  className="size-16"
+                />
+              </div>
+              <div className="flex flex-col gap-0 truncate">
+                <p className="text-sm font-medium">{profile.displayName}</p>
+                <p className="text-sm truncate max-w-[95%] text-shark-300">
+                  {profile.user?.email ?? "No email"}
+                </p>
+              </div>
             </div>
           </div>
-          <DropdownMenuSeparator />
-          <div className="flex w-full flex-col py-1 pb-2 pt-2 gap-1">
-            <DropdownMenuGroup className="px-2.5 !pb-1">
-              <DropdownMenuItem>
-                <SettingsIcon className="size-4" />
-                <p>Settings</p>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={onLogout}
-                className="hover:!bg-destructive/20 dark:hover:!bg-destructive/40"
+          <Separator className="bg-shark-600" />
+          <div className="p-3">
+            <div className="w-full flex flex-wrap gap-3">
+              <Button
+                variant={"secondary"}
+                className="bg-shark-700 hover:bg-shark-700/80"
+                size="sm"
               >
-                <LogOutIcon className="size-4" />
-                <p>Log out</p>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup className="px-2.5">
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger>
-                  <PaletteIcon className="size-4" />
-                  <p>Theme</p>
-                </DropdownMenuSubTrigger>
-                <DropdownMenuPortal>
-                  <DropdownMenuSubContent>
-                    <DropdownMenuItem onClick={() => setTheme("light")}>
-                      <SunIcon className="size-4" /> Light
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setTheme("dark")}>
-                      <MoonIcon className="size-4" /> Dark
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setTheme("system")}>
-                      <MonitorCheckIcon className="size-4" /> System
-                    </DropdownMenuItem>
-                  </DropdownMenuSubContent>
-                </DropdownMenuPortal>
-              </DropdownMenuSub>
-            </DropdownMenuGroup>
+                <SettingIconFill />
+                Settings
+              </Button>
+              <Button onClick={onLogout} variant={"destructive"} size="sm">
+                <LogOutIcon />
+                Log Out
+              </Button>
+            </div>
           </div>
         </div>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </PopoverContent>
+    </Popover>
   );
 }

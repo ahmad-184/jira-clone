@@ -26,7 +26,7 @@ export default function ProjectDetails({ projectId }: Props) {
         <div>
           <ProjectIcon
             project={project}
-            className="rounded-xl size-16 !text-xl"
+            className="rounded-sm size-16 !text-xl"
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -58,15 +58,15 @@ function LoadingSkeleton() {
     <div className="w-full flex items-center gap-5 justify-between">
       <div className="flex items-center gap-4">
         <div>
-          <Skeleton className="rounded-xl size-16" />
+          <Skeleton className="rounded-sm size-16" />
         </div>
         <div className="flex flex-col gap-2">
-          <Skeleton className="rounded-lg w-28 h-5" />
-          <Skeleton className="rounded-md w-40 h-4" />
+          <Skeleton className="rounded-sm w-28 h-5" />
+          <Skeleton className="rounded-sm w-40 h-4" />
         </div>
       </div>
       <div>
-        <Skeleton className="rounded-xl w-[160px] h-11" />
+        <Skeleton className="rounded-sm w-[160px] h-11" />
       </div>
     </div>
   );

@@ -1,4 +1,10 @@
-export default function GoogleIcon({ className }: { className: string }) {
+export default function GoogleIcon({
+  className,
+  fill,
+}: {
+  className?: string;
+  fill?: string;
+}) {
   return (
     <div className={className}>
       <svg
@@ -8,6 +14,7 @@ export default function GoogleIcon({ className }: { className: string }) {
         width="100"
         height="100"
         viewBox="0 0 48 48"
+        {...(fill && { fill: fill })}
       >
         <path
           fill="#FFC107"

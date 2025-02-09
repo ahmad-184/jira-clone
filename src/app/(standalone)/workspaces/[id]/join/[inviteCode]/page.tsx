@@ -52,12 +52,12 @@ export default async function Page({ params }: Props) {
     );
 
   return (
-    <Card className="w-full md:max-w-lg bg-white dark:bg-gray-950/50">
+    <Card className="w-full md:max-w-lg bg-white dark:bg-shark-950/50">
       <CardHeader>
         <CardTitle className="text-xl">Join workspace</CardTitle>
         <CardDescription className="text-base">
           You are invited to join{" "}
-          <span className="dark:text-gray-300 text-gray-800 font-semibold">
+          <span className="dark:text-shark-300 text-shark-800 font-semibold">
             {workspace.name}
           </span>{" "}
           workspace.

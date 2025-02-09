@@ -54,7 +54,7 @@ export default function UpdateWorkspaceForm({
           disabled={!havePermission}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Workspace name</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -86,7 +86,7 @@ export default function UpdateWorkspaceForm({
                   }}
                   files={imageFile ? [imageFile] : []}
                   src={imageUrl ?? imageFile?.preview ?? null}
-                  className="!bg-gray-50 dark:!bg-gray-900/60"
+                  className="!bg-shark-50 dark:!bg-shark-900/60"
                 />
               </FormControl>
               <FormMessage />

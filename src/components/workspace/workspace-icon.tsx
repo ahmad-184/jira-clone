@@ -11,7 +11,7 @@ export default function WorkspaceIcon({ workspace, className }: Props) {
   if (workspace.imageUrl)
     return (
       <div
-        className={cn("w-9 h-9 relative rounded-lg overflow-hidden", className)}
+        className={cn("w-9 h-9 relative rounded-sm overflow-hidden", className)}
       >
         <Image
           alt={workspace.name}
@@ -25,7 +25,7 @@ export default function WorkspaceIcon({ workspace, className }: Props) {
   return (
     <div
       className={cn(
-        "w-9 h-9 rounded-lg bg-blue-500 overflow-hidden flex items-center justify-center",
+        "w-9 h-9 rounded-sm bg-blue-500 overflow-hidden flex items-center justify-center",
         className,
       )}
     >

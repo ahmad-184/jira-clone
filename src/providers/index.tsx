@@ -12,8 +12,9 @@ const Providers = ({ children }: Props) => {
     <ReactQueryProvider>
       <ThemeProvider
         attribute="class"
-        defaultTheme="system"
-        enableSystem
+        defaultTheme="dark"
+        themes={["dark"]}
+        // enableSystem
         disableTransitionOnChange
       >
         {children}

@@ -5,7 +5,7 @@ export function CheckIcon({ className }: { className?: string }) {
     <div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        fill="none"
+        fill={"none"}
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
@@ -21,13 +21,19 @@ export function CheckIcon({ className }: { className?: string }) {
   );
 }
 
-export function CheckIconFill({ className }: { className?: string }) {
+export function CheckIconFill({
+  className,
+  fill,
+}: {
+  className?: string;
+  fill?: string;
+}) {
   return (
     <div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
-        fill="currentColor"
+        fill={fill ? fill : "currentColor"}
         className={cn("w-5", className)}
       >
         <path

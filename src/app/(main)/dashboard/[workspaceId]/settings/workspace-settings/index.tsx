@@ -23,12 +23,18 @@ export default function WorkspaceSettings() {
   return (
     <div className="flex w-full max-w-6xl flex-col gap-16">
       <div className="w-full flex flex-col gap-3">
-        <h1 className="text-lg font-semibold">Workspace Settings</h1>
-        <Card className="p-7 rounded-xl shadow-none">
-          <UpdateWorkspaceForm
-            workspace={data.workspace}
-            currentMember={currentMember}
-          />
+        <Card className="p-7 shadow-none">
+          <div className="w-full flex flex-col gap-7 lg:!flex-row lg:!gap-16">
+            <div className="flex-1 lg:max-w-[23%]">
+              <p className="text-base font-medium">General settings</p>
+            </div>
+            <div className="flex-1">
+              <UpdateWorkspaceForm
+                workspace={data.workspace}
+                currentMember={currentMember}
+              />
+            </div>
+          </div>
         </Card>
       </div>
       <div className="w-full flex flex-col gap-6">

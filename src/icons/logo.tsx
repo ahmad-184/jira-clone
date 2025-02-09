@@ -9,7 +9,7 @@ export default function Logo() {
       <span className="h-8 w-10 rounded-lg icon-task flex items-center justify-center font-bold">
         Task
       </span>
-      <span className="text-xl font-semibold">Hive</span>
+      <span className="text-xl icon-task-hive font-semibold">Hive</span>
     </div>
   );
 }

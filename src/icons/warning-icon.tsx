@@ -21,13 +21,19 @@ export function WarningIcon({ className }: { className?: string }) {
   );
 }
 
-export function WarningIconFill({ className }: { className?: string }) {
+export function WarningIconFill({
+  className,
+  fill,
+}: {
+  className?: string;
+  fill?: string;
+}) {
   return (
     <div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
-        fill="currentColor"
+        fill={fill || "currentColor"}
         className={cn("w-5", className)}
       >
         <path

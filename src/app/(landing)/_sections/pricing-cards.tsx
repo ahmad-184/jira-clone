@@ -48,9 +48,8 @@ export default function PricingCards() {
             <Link href="/dashboard" className="w-full">
               <Button
                 className={cn("w-full", {
-                  "bg-gray-800 hover:bg-gray-700 text-white":
+                  "bg-shark-800 hover:bg-shark-700 text-white":
                     plan.type === "FREE",
-                  "bg-primary hover:bg-primary/90": plan.type === "PRO",
                 })}
               >
                 {plan.cta}

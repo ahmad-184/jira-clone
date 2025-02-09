@@ -37,7 +37,7 @@ export default function DeleteWorkspaceForm({
             <FormItem>
               <FormLabel className="text-muted-foreground">
                 Type{" "}
-                <span className="dark:text-gray-300 text-gray-700">
+                <span className="dark:text-shark-300 text-shark-700">
                   {workspaceName}
                 </span>{" "}
                 to confirm.
@@ -45,7 +45,7 @@ export default function DeleteWorkspaceForm({
               <FormControl>
                 <Input
                   placeholder="Type the workspace name here"
-                  className="dark:bg-gray-950 bg-gray-50"
+                  className="dark:bg-shark-950 bg-shark-50"
                   autoComplete="off"
                   {...field}
                 />

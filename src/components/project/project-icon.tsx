@@ -11,7 +11,7 @@ export default function ProjectIcon({ project, className }: Props) {
   if (project.imageUrl)
     return (
       <div
-        className={cn("w-5 h-5 relative rounded-md overflow-hidden", className)}
+        className={cn("w-5 h-5 relative rounded-sm overflow-hidden", className)}
       >
         <Image
           alt={project.name}
@@ -25,7 +25,7 @@ export default function ProjectIcon({ project, className }: Props) {
   return (
     <div
       className={cn(
-        "w-5 h-5 text-sm rounded-md bg-purple-500 overflow-hidden flex items-center justify-center",
+        "w-5 h-5 text-sm rounded-sm bg-purple-500 overflow-hidden flex items-center justify-center",
         className,
       )}
     >

@@ -100,7 +100,7 @@ export default function Dropzone({
     >
       <div
         className={cn(
-          "w-full border p-5 border-dashed h-fit hover:cursor-pointer dark:border-gray-700 border-gray-300 rounded-xl",
+          "w-full border p-5 border-dashed h-fit hover:cursor-pointer dark:border-shark-700 border-shark-300 rounded-sm",
           className,
         )}
       >
@@ -127,7 +127,7 @@ export default function Dropzone({
               </div>
             )}
             {showUploadLogo && (
-              <UploadIcon className="size-20 text-gray-300 dark:text-gray-600" />
+              <UploadIcon className="size-20 text-shark-300 dark:text-shark-600" />
             )}
             {showRemoveButton && (
               <Button
@@ -178,7 +178,7 @@ function ImageItem({
   className: string;
 }) {
   return (
-    <div className="w-[100px] border dark:border-gray-600 border-gray-400 h-[100px] rounded-xl overflow-hidden">
+    <div className="w-[100px] border dark:border-shark-600 border-shark-400 h-[100px] rounded-xl overflow-hidden">
       <Image
         src={src}
         alt={alt}
