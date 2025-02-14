@@ -58,7 +58,7 @@ const app = new Hono()
       const member = await getMemberUseCase(user.id, project.workspaceId);
 
       if (!member)
-        throw new PublicError("You are not a member of this project.");
+        throw new PublicError("You are not a member of this workspace.");
 
       const canViewThisProject = hasPermission(
         member.role,

@@ -11,6 +11,7 @@ import {
 } from "../ui/dialog";
 import CreateProjectForm from "../forms/create-project-form";
 import { useState } from "react";
+import { DottedSeparator } from "../ui/dotted-separator";
 
 type Props = {
   children: React.ReactNode;
@@ -30,6 +31,7 @@ export default function CreateProjectModal({ children }: Props) {
             Create a new project to start tracking your time.
           </DialogDescription>
         </DialogHeader>
+        <DottedSeparator />
         <CreateProjectForm workspaceId={workspaceId} setOpen={setOpen} />
       </DialogContent>
     </Dialog>

@@ -19,3 +19,7 @@ export type GetWorkspacePropsType = Parameters<
 export type GetProjectPropsType = Parameters<
   typeof database.query.projects.findFirst
 >[0];
+
+export type GetTaskPropsType = Parameters<
+  typeof database.query.tasks.findFirst
+>[0];

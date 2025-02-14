@@ -68,8 +68,8 @@ export default function ProjectsMenu({ currentMember }: Props) {
       <SidebarMenu className="gap-1">
         {isFetchingProjects && (
           <div className="flex flex-col gap-2">
-            <Skeleton className="rounded-sm h-7 w-full" />
-            <Skeleton className="rounded-sm h-7 w-full" />
+            <Skeleton className="h-7 w-full" />
+            <Skeleton className="h-7 w-full" />
           </div>
         )}
         {noProjects && (
@@ -92,7 +92,7 @@ export default function ProjectsMenu({ currentMember }: Props) {
                   >
                     <div className="flex items-center gap-2 text-muted-foreground">
                       {!!isActive && (
-                        <div className="absolute left-0 top-1/2 rounded-e-xl -translate-y-[50%] bg-blue-500 w-1 h-[20px]" />
+                        <div className="absolute left-0 top-1/2 rounded-e-xl -translate-y-[50%] bg-blue-500 w-1 h-[16px]" />
                       )}
                       <div
                         className={cn("ml-0 transition-all", {

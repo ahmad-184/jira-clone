@@ -1,4 +1,4 @@
-import { Member, Role, User } from "@/db/schema";
+import { Member, Role, Task, User } from "@/db/schema";
 
 type PermissionResult = { permission: boolean; message?: string };
 
@@ -29,10 +29,21 @@ type ProjectPermission = {
   dataType: undefined;
 };
 
+type TaskPermission = {
+  action: "create" | "view" | "update" | "delete";
+  dataType: {
+    task: Task & {
+      createdBy: Member;
+    };
+    member: Member;
+  };
+};
+
 export type Permissions = {
   workspaces: WorkspacePermission;
   members: MemberPermission;
   projects: ProjectPermission;
+  tasks: TaskPermission;
 };
 
 const ROLES = {
@@ -69,6 +80,12 @@ const ROLES = {
       },
     },
     projects: {
+      create: { permission: true },
+      view: { permission: true },
+      update: { permission: true },
+      delete: { permission: true },
+    },
+    tasks: {
       create: { permission: true },
       view: { permission: true },
       update: { permission: true },
@@ -129,6 +146,42 @@ const ROLES = {
       update: { permission: true },
       delete: { permission: true },
     },
+    tasks: {
+      create: { permission: true },
+      view: { permission: true },
+      update: ({ member, task }) => {
+        // Allow if task is assigned to current member
+        if (member.id === task.assignedToMemberId) return { permission: true };
+
+        // Deny if task was created by owner or another admin
+        if (
+          task.createdBy.role === "OWNER" ||
+          (task.createdBy.role === "ADMIN" &&
+            task.createdBy.userId !== member.userId)
+        ) {
+          return { permission: false, message: "Access denied." };
+        }
+
+        // Allow if task was created by self or a member
+        return { permission: true };
+      },
+      delete: ({ member, task }) => {
+        // Allow if task is assigned to current member
+        if (member.id === task.assignedToMemberId) return { permission: true };
+
+        // Deny if task was created by owner or another admin
+        if (
+          task.createdBy.role === "OWNER" ||
+          (task.createdBy.role === "ADMIN" &&
+            task.createdBy.userId !== member.userId)
+        ) {
+          return { permission: false, message: "Access denied." };
+        }
+
+        // Allow if task was created by self or a member
+        return { permission: true };
+      },
+    },
   },
   MEMBER: {
     workspaces: {
@@ -168,6 +221,42 @@ const ROLES = {
       view: { permission: true },
       update: { permission: false },
       delete: { permission: false },
+    },
+    tasks: {
+      create: { permission: true },
+      view: { permission: true },
+      update: ({ member, task }) => {
+        // Members can update tasks that assigned to self.
+        if (member.id === task.assignedToMemberId) return { permission: true };
+
+        // Members can not update a task that created by Owner, Admins or another member.
+        if (
+          task.createdBy.role === "OWNER" ||
+          task.createdBy.role === "ADMIN" ||
+          (task.createdBy.role === "MEMBER" &&
+            task.createdBy.userId !== member.userId)
+        )
+          return { permission: false, message: "Access denied." };
+
+        // Members can update a task that created by self.
+        return { permission: true };
+      },
+      delete: ({ member, task }) => {
+        // Members can delete tasks that assigned to self.
+        if (member.id === task.assignedToMemberId) return { permission: true };
+
+        // Members can not delete a task that created by Owner, Admins or another member.
+        if (
+          task.createdBy.role === "OWNER" ||
+          task.createdBy.role === "ADMIN" ||
+          (task.createdBy.role === "MEMBER" &&
+            task.createdBy.userId !== member.userId)
+        )
+          return { permission: false, message: "Access denied." };
+
+        // Members can delete a task that created by self.
+        return { permission: true };
+      },
     },
   },
 } as const satisfies RolesWithPermissions;

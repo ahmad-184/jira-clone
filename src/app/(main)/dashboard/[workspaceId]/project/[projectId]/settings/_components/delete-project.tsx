@@ -27,7 +27,7 @@ export default function DeleteProject({ project, currentMember }: Props) {
 
   return (
     <Dialog>
-      <div className="w-full border border-red-800 dark:bg-red-950/20 bg-red-400/10 p-4 rounded-xl">
+      <div className="w-full border border-red-800 dark:bg-red-950/20 bg-red-400/10 p-4 rounded-lg">
         <div className="flex items-start gap-3">
           <div>
             <div className="p-1 rounded-md dark:bg-red-700 bg-red-400">

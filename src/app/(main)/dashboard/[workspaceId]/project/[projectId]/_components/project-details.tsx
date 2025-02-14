@@ -26,13 +26,13 @@ export default function ProjectDetails({ projectId }: Props) {
         <div>
           <ProjectIcon
             project={project}
-            className="rounded-sm size-16 !text-xl"
+            className="rounded-lg size-12 !text-xl"
           />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
           <h2 className="text-lg font-semibold">{project.name}</h2>
           <p className="text-sm text-muted-foreground">
-            Create at {fDate(project.createdAt ?? new Date(Date.now()))}
+            Created at {fDate(project.createdAt ?? new Date(Date.now()))}
           </p>
         </div>
       </div>
@@ -58,15 +58,15 @@ function LoadingSkeleton() {
     <div className="w-full flex items-center gap-5 justify-between">
       <div className="flex items-center gap-4">
         <div>
-          <Skeleton className="rounded-sm size-16" />
+          <Skeleton className="size-[52px]" />
         </div>
         <div className="flex flex-col gap-2">
-          <Skeleton className="rounded-sm w-28 h-5" />
-          <Skeleton className="rounded-sm w-40 h-4" />
+          <Skeleton className="w-28 h-5" />
+          <Skeleton className="w-40 h-4" />
         </div>
       </div>
       <div>
-        <Skeleton className="rounded-sm w-[160px] h-11" />
+        <Skeleton className="w-[160px] h-11" />
       </div>
     </div>
   );

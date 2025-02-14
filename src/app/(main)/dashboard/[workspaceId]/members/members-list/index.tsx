@@ -49,9 +49,7 @@ function LoadingSkeleton() {
         {skeletons.map((skeleton, i) => (
           <Fragment key={skeleton}>
             <SingleSkeleton />
-            {i !== skeletons.length - 1 && (
-              <Separator className="w-full rounded-sm" />
-            )}
+            {i !== skeletons.length - 1 && <Separator className="w-full" />}
           </Fragment>
         ))}
       </div>
@@ -67,10 +65,10 @@ function SingleSkeleton() {
           <Skeleton className="w-28 h-28 border rounded-full" />
         </div>
         <div className="flex flex-col gap-3">
-          <Skeleton className="w-11 rounded-sm h-3" />
+          <Skeleton className="w-11 h-3" />
           <div className="flex flex-col gap-2">
-            <Skeleton className="w-20 rounded-sm h-4" />
-            <Skeleton className="w-32 rounded-sm h-3" />
+            <Skeleton className="w-20 h-4" />
+            <Skeleton className="w-32 h-3" />
           </div>
         </div>
       </div>

@@ -7,7 +7,11 @@ import {
   updateUser,
   verifyPassword,
 } from "@/data-access/users";
-import { UserId, UserSession } from "@/use-cases/types";
+import {
+  GetProfileWithUserEmailUseCaseReturn,
+  UserId,
+  UserSession,
+} from "@/use-cases/types";
 import {
   createAccount,
   createAccountViaGithub,
@@ -40,7 +44,6 @@ import { deleteSessionForUser } from "@/data-access/sessions";
 import { render } from "@react-email/components";
 import { VerifyEmailOTP } from "@/emails/verify-email-otp";
 import { GitHubUser, GoogleUser } from "@/types/auth";
-import { Profile, User } from "@/db/schema";
 
 export async function getUserUseCase(userId: number) {
   const user = await getUser(userId);
@@ -63,9 +66,7 @@ export async function getProfileWithUserEmailUseCase(userId: UserId) {
     with: { user: { columns: { email: true } } },
   });
 
-  return userWithProfile as
-    | (Profile & { user: Pick<User, "email"> })
-    | undefined;
+  return userWithProfile as GetProfileWithUserEmailUseCaseReturn;
 }
 
 export async function registerUserUseCase(email: string, password: string) {

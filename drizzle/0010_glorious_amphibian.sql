@@ -1,0 +1,1 @@
+ALTER TABLE "gf_member" ADD CONSTRAINT "members_user_id_workspace_id_unique" UNIQUE("userId","workspaceId");

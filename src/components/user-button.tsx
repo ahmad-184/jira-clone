@@ -1,5 +1,5 @@
 "use client";
-import { LoaderIcon, LogOutIcon } from "lucide-react";
+import { LogOutIcon } from "lucide-react";
 import { useCurrentUserProfileQuery } from "@/hooks/queries/use-current-user-profile-query ";
 import Avatar from "./avatar";
 import { useLogOutMutation } from "@/hooks/mutations/use-log-out-mutation";
@@ -8,6 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
 import { SettingIconFill } from "@/icons/setting-icon";
+import LoaderIcon from "./loader-icon";
 
 export default function UserButton() {
   const {
@@ -34,8 +35,8 @@ export default function UserButton() {
 
   if (isPending || isFetching)
     return (
-      <div className="size-10 rounded-full bg-shark-200 animate-pulse flex items-center justify-center">
-        <LoaderIcon className="size-4 animate-spin text-muted-foreground" />
+      <div className="size-10 rounded-full !bg-shark-300 animate-pulse flex items-center justify-center">
+        <LoaderIcon />
       </div>
     );
 
@@ -50,7 +51,7 @@ export default function UserButton() {
         align="end"
         side="bottom"
         sideOffset={10}
-        className="!p-0 rounded-sm overflow-hidden"
+        className="!p-0 rounded-lg overflow-hidden"
       >
         <div className="min-w-[250px] bg-shark-800">
           <div className="flex flex-col p-3 items-center justify-center gap-2">

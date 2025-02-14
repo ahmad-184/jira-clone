@@ -2,11 +2,13 @@ import { createUUID } from "@/util/uuid";
 import { relations } from "drizzle-orm";
 import {
   index,
+  integer,
   pgEnum,
   pgTable,
   serial,
   text,
   timestamp,
+  unique,
 } from "drizzle-orm/pg-core";
 
 export const accountTypeEnum = pgEnum("account_type", [
@@ -19,6 +21,14 @@ export const memberRoleEnum = pgEnum("member_role", [
   "OWNER",
   "ADMIN",
   "MEMBER",
+]);
+
+export const taskStatusEnum = pgEnum("task-status", [
+  "BACKLOG",
+  "TODO",
+  "IN_PROGRESS",
+  "IN_REVIEW",
+  "DONE",
 ]);
 
 export const users = pgTable("gf_user", {
@@ -204,6 +214,10 @@ export const members = pgTable(
       table.workspaceId,
     ),
     index("members_workspace_id_idx").on(table.workspaceId),
+    unique("members_user_id_workspace_id_unique").on(
+      table.userId,
+      table.workspaceId,
+    ),
   ],
 );
 
@@ -223,6 +237,44 @@ export const projects = pgTable(
       .notNull(),
   },
   table => [index("projects_workspace_id_idx").on(table.workspaceId)],
+);
+
+export const tasks = pgTable(
+  "gf_task",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createUUID()),
+    name: text("name").notNull(),
+    createdById: text("createdById")
+      .notNull()
+      .references(() => members.id, { onDelete: "cascade" }),
+    workspaceId: text("workspaceId")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    projectId: text("projectId")
+      .notNull()
+      .references(() => projects.id, { onDelete: "cascade" }),
+    assignedToMemberId: text("assignedToMemberId")
+      .notNull()
+      .references(() => members.id, { onDelete: "cascade" }),
+    description: text("description"),
+    dueDate: timestamp("dueDate", {
+      withTimezone: true,
+      mode: "date",
+    }),
+    status: taskStatusEnum("taskStatus").notNull(),
+    position: integer("position").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
+      .defaultNow()
+      .notNull(),
+  },
+  table => [
+    index("tasks_project_id_idx").on(table.projectId),
+    index("tasks_workspace_id_idx").on(table.workspaceId),
+    index("tasks_member_created_id_idx").on(table.createdById),
+    index("tasks_member_assigned_to_id_idx").on(table.assignedToMemberId),
+  ],
 );
 
 /**
@@ -276,6 +328,25 @@ export const projectsRelations = relations(projects, ({ one }) => ({
   }),
 }));
 
+export const tasksRelations = relations(tasks, ({ one }) => ({
+  workspace: one(workspaces, {
+    fields: [tasks.workspaceId],
+    references: [workspaces.id],
+  }),
+  project: one(projects, {
+    fields: [tasks.projectId],
+    references: [projects.id],
+  }),
+  createdBy: one(members, {
+    fields: [tasks.createdById],
+    references: [members.id],
+  }),
+  assignedTo: one(members, {
+    fields: [tasks.assignedToMemberId],
+    references: [members.id],
+  }),
+}));
+
 export type User = typeof users.$inferSelect;
 export type Session = typeof sessions.$inferSelect;
 export type Account = typeof accounts.$inferSelect;
@@ -287,6 +358,8 @@ export type Profile = typeof profiles.$inferSelect;
 export type Workspace = typeof workspaces.$inferSelect;
 export type Member = typeof members.$inferSelect;
 export type Project = typeof projects.$inferSelect;
+export type Task = typeof tasks.$inferSelect;
 
 export type Role = (typeof memberRoleEnum.enumValues)[number];
 export type AccountType = (typeof accountTypeEnum.enumValues)[number];
+export type TaskStatus = (typeof taskStatusEnum.enumValues)[number];

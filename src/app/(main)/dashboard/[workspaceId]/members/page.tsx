@@ -1,4 +1,3 @@
-import { Separator } from "@/components/ui/separator";
 import { getCurrentUser } from "@/lib/session";
 import { getMemberUseCase } from "@/use-cases/members";
 import { redirect } from "next/navigation";
@@ -22,13 +21,12 @@ export default async function Page({
   return (
     <div className="w-full h-full max-w-6xl flex flex-col gap-10">
       <div>
-        <h1 className="text-4xl font-bold mb-1">Members</h1>
+        <h1 className="text-3xl font-bold mb-1">Members</h1>
         <p className="text-sm text-muted-foreground max-w-xl">
           {currentMember.role === "MEMBER"
             ? "See all members of workspace."
             : `Manage and view all members of this workspace. Control access levels and permissions for collaborative work.`}
         </p>
-        <Separator className="mt-4" />
       </div>
       <div>
         <MembersList />

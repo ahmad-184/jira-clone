@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { DottedSeparator } from "@/components/ui/dotted-separator";
 import { User } from "@/db/schema";
 import Logo from "@/icons/logo";
 
@@ -22,7 +23,7 @@ export default function CreateFirstWorkspace({ user }: Props) {
         <div className="my-auto flex items-center flex-col flex-1">
           <div className="py-10 w-full flex justify-center">
             <Card className="w-full md:w-2/3">
-              <CardHeader className="mb-2">
+              <CardHeader>
                 <div className="mb-2 w-full flex items-center">
                   <Logo />
                 </div>
@@ -32,9 +33,9 @@ export default function CreateFirstWorkspace({ user }: Props) {
                 </CardTitle>
                 <CardDescription className="text-xs md:text-sm">
                   Get started by creating a workspace to organize your projects
-                  <br />
                   and collaborate with your team.
                 </CardDescription>
+                <DottedSeparator className="pt-5" />
               </CardHeader>
               <CardContent>
                 <CreateWorkspaceForm userId={user.id} isFirstWorkspace={true} />

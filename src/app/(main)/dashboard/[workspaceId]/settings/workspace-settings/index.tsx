@@ -26,7 +26,7 @@ export default function WorkspaceSettings() {
         <Card className="p-7 shadow-none">
           <div className="w-full flex flex-col gap-7 lg:!flex-row lg:!gap-16">
             <div className="flex-1 lg:max-w-[23%]">
-              <p className="text-base font-medium">General settings</p>
+              <p className="text-sm font-semibold">General settings</p>
             </div>
             <div className="flex-1">
               <UpdateWorkspaceForm
