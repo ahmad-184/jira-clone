@@ -1,8 +1,7 @@
 "use client";
 
 import { useLocalStorage } from "usehooks-ts";
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -10,6 +9,10 @@ import { useGetProjectQuery } from "@/hooks/queries/use-get-project";
 import { Skeleton } from "../ui/skeleton";
 import CreateTaskModal from "./create-task-modal";
 import TaskDataFilter from "./task-data-filter";
+import { useGetTasksQuery } from "@/hooks/queries/use-get-tasks";
+import { useTaskFilters } from "./hooks/use-task-filters";
+import { useWorkspace } from "@/hooks/workspace-provider";
+import LoaderIcon from "../loader-icon";
 
 const TABS = [
   {
@@ -27,12 +30,31 @@ const TABS = [
 ];
 
 type Props = {
-  projectId: string;
+  projectId?: string;
 };
 
 export default function TaskViewSwitcher({ projectId }: Props) {
-  const { isPending } = useGetProjectQuery(projectId);
+  const { isPending } = useGetProjectQuery(projectId!);
   const [value, setValue] = useLocalStorage("active_tab", "TABLE");
+
+  const { workspaceId } = useWorkspace();
+
+  const {
+    statusQuery,
+    projectQuery,
+    assigneeQuery,
+    dueDateQuery,
+    searchQuery,
+  } = useTaskFilters();
+
+  const { data: tasks, isPending: taskPending } = useGetTasksQuery(
+    workspaceId,
+    projectId || projectQuery || undefined,
+    statusQuery || undefined,
+    assigneeQuery || undefined,
+    dueDateQuery || undefined,
+    searchQuery || undefined,
+  );
 
   const onValueChanged = (value: string) => {
     setValue(value);
@@ -73,11 +95,18 @@ export default function TaskViewSwitcher({ projectId }: Props) {
           </div>
         </div>
         <div className="mt-4 w-full">
-          <TaskDataFilter />
+          <TaskDataFilter projectId={projectId} />
         </div>
-        <TabsContent value="TABLE">Table view</TabsContent>
+        {!!taskPending && (
+          <div className="w-full py-5 flex items-center justify-center">
+            <LoaderIcon />
+          </div>
+        )}
+        <br />
+        {!!tasks && JSON.stringify(tasks)}
+        {/* <TabsContent value="TABLE">Table view</TabsContent>
         <TabsContent value="KANBAN">Kanban view</TabsContent>
-        <TabsContent value="CALENDAR">Calendar view</TabsContent>
+        <TabsContent value="CALENDAR">Calendar view</TabsContent> */}
       </Tabs>
     </div>
   );

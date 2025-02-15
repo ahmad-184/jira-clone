@@ -16,7 +16,7 @@ export default async function Page({ params }: Props) {
   const { projectId } = await params;
 
   return (
-    <div className="w-full h-full max-w-6xl flex flex-col gap-10">
+    <div className="w-full h-full flex flex-col gap-10">
       <div>
         <h1 className="text-3xl font-bold mb-1">Project</h1>
         <p className="text-sm text-muted-foreground">

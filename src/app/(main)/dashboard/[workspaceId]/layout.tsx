@@ -4,7 +4,10 @@ import { redirect } from "next/navigation";
 import { Sidebar } from "./_components/sidebar";
 import Header from "./_components/header";
 import { getMemberUseCase } from "@/use-cases/members";
-import { getUserWorkspacesUseCase } from "@/use-cases/workspaces";
+import {
+  getUserWorkspacesUseCase,
+  getWorkspaceProjectsUseCase,
+} from "@/use-cases/workspaces";
 import { makeQueryClient } from "@/lib/react-query";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getProfileWithUserEmailUseCase } from "@/use-cases/users";
@@ -56,6 +59,13 @@ export default async function Layout({
     queryClient.prefetchQuery({
       queryKey: ["current-member", currentWorkspace.id],
       queryFn: () => isMember,
+    }),
+    queryClient.prefetchQuery({
+      queryKey: ["workspace-projects", workspaceId],
+      queryFn: async () => {
+        const projects = await getWorkspaceProjectsUseCase(workspaceId);
+        return { projects };
+      },
     }),
   ]);
 

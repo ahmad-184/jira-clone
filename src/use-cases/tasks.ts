@@ -58,6 +58,7 @@ export async function getTasksWithSearchQueriesUseCase(
     conditions.push(
       like(sql`lower(${tasks.name})`, `%${queries.search.toLowerCase()}%`),
     );
+  if (queries.dueDate) conditions.push(eq(tasks.dueDate, queries.dueDate));
 
   const props: GetTaskPropsType = {
     where: and(...conditions),
