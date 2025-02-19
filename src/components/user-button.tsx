@@ -9,8 +9,12 @@ import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
 import { SettingIconFill } from "@/icons/setting-icon";
 import LoaderIcon from "./loader-icon";
+import { useState } from "react";
+import { LoaderButton } from "./loader-button";
 
 export default function UserButton() {
+  const [loading, setLoading] = useState(false);
+
   const {
     data: profile,
     isPending,
@@ -29,6 +33,7 @@ export default function UserButton() {
   });
 
   const onLogout = async () => {
+    setLoading(true);
     queryClient.removeQueries({ queryKey: ["workspaces"] });
     logOut({});
   };
@@ -82,10 +87,15 @@ export default function UserButton() {
                 <SettingIconFill />
                 Settings
               </Button>
-              <Button onClick={onLogout} variant={"destructive"} size="sm">
+              <LoaderButton
+                isLoading={loading}
+                onClick={onLogout}
+                variant={"destructive"}
+                size="sm"
+              >
                 <LogOutIcon />
                 Log Out
-              </Button>
+              </LoaderButton>
             </div>
           </div>
         </div>

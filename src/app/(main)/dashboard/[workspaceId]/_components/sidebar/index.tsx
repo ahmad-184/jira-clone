@@ -26,6 +26,7 @@ import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member
 import { useProjectRealtime } from "@/hooks/project/use-project-realtime";
 import { useWorkspace } from "@/hooks/workspace-provider";
 import { cn } from "@/lib/utils";
+import { useMemberRealtime } from "@/hooks/member/use-member-realtime";
 
 export function Sidebar() {
   const { workspaceId } = useWorkspace();
@@ -36,6 +37,7 @@ export function Sidebar() {
 
   useWorkspaceRealtime();
   useProjectRealtime();
+  useMemberRealtime();
 
   const { setOpenMobile } = useSidebar();
 

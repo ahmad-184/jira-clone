@@ -32,7 +32,7 @@ export type GetTasksWithSearchQueriesUseCaseReturn = (Task & {
     };
   };
   createdBy: Member;
-  project: Project;
+  project: Pick<Project, "id" | "name" | "imageUrl">;
 })[];
 
 export type GetProfileWithUserEmailUseCaseReturn =

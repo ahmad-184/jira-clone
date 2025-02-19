@@ -12,9 +12,10 @@ import { Role } from "@/db/schema";
 type Props = {
   memberId: string;
   role: Exclude<Role, "OWNER">;
+  onClose?: () => void;
 };
 
-export const useUpdateMemberRole = ({ memberId, role }: Props) => {
+export const useUpdateMemberRole = ({ memberId, role, onClose }: Props) => {
   const [error, setError] = useState<string | undefined>();
 
   const { workspaceId } = useWorkspace();
@@ -33,6 +34,7 @@ export const useUpdateMemberRole = ({ memberId, role }: Props) => {
   const { mutate, isPending } = useUpdateMemberMutation({
     onSuccess: async () => {
       toast.success("Member role updated");
+      onClose?.();
       await queryClient.invalidateQueries({
         queryKey: ["workspace-members", workspaceId],
       });

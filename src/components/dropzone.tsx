@@ -95,6 +95,7 @@ export default function Dropzone({
         display: "flex",
         height: "fit-content",
         flexGrow: 1,
+        ...(disabled && { opacity: 0.5 }),
       }}
       {...getRootProps({ className: "dropzone" })}
     >

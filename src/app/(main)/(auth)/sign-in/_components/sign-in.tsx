@@ -1,11 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import GithubIcon from "@/icons/github-icon";
-import GoogleIcon from "@/icons/google-icon";
-import { MailIcon } from "lucide-react";
-import Link from "next/link";
 import SignInWithPassword from "./sign-in-with-password";
+import GoogleSignInButton from "./google-sign-in-button";
+import GithubSignInButton from "./github-sign-in-button";
+import MagicLinkSignInButton from "./magic-link-sign-in-button";
 
 export default function SignIn() {
   return (
@@ -20,28 +18,11 @@ export default function SignIn() {
       </div>
       <div className="flex flex-col w-full gap-3">
         <div className="flex gap-3 w-full items-center">
-          <Link href="/api/login/google" className="flex-1">
-            <Button variant={"secondary"} className="w-full">
-              <GoogleIcon className="w-4 h-4" />
-              Google
-            </Button>
-          </Link>
-          <Link href="/api/login/github" className="flex-1">
-            <Button variant={"secondary"} className="w-full">
-              <GithubIcon className="w-4 h-4" />
-              Github
-            </Button>
-          </Link>
+          <GoogleSignInButton />
+          <GithubSignInButton />
         </div>
         <div className="w-full">
-          <Link href="/sign-in/magic-link" className="flex-1">
-            <Button variant={"secondary"} className="w-full items-center">
-              <div>
-                <MailIcon />
-              </div>
-              Magic Link
-            </Button>
-          </Link>
+          <MagicLinkSignInButton />
         </div>
       </div>
 

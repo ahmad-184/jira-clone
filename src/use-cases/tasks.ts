@@ -79,7 +79,13 @@ export async function getTasksWithSearchQueriesUseCase(
         },
       },
       createdBy: true,
-      project: true,
+      project: {
+        columns: {
+          id: true,
+          name: true,
+          imageUrl: true,
+        },
+      },
     },
   };
 

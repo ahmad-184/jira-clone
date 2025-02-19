@@ -6,6 +6,7 @@ import Header from "./_components/header";
 import { getMemberUseCase } from "@/use-cases/members";
 import {
   getUserWorkspacesUseCase,
+  getWorkspaceMembersProfileUseCase,
   getWorkspaceProjectsUseCase,
 } from "@/use-cases/workspaces";
 import { makeQueryClient } from "@/lib/react-query";
@@ -66,6 +67,10 @@ export default async function Layout({
         const projects = await getWorkspaceProjectsUseCase(workspaceId);
         return { projects };
       },
+    }),
+    queryClient.prefetchQuery({
+      queryKey: ["workspace-members", workspaceId],
+      queryFn: () => getWorkspaceMembersProfileUseCase(workspaceId),
     }),
   ]);
 

@@ -28,7 +28,7 @@ export default function ProjectIcon({ project, className }: Props) {
   return (
     <div
       className={cn(
-        "w-5 h-5 text-sm rounded-md  bg-gradient-to-t from-purple-500 to-purple-400 overflow-hidden flex items-center justify-center select-none",
+        "w-5 h-5 text-sm rounded-md bg-gradient-to-t from-purple-500 to-purple-400 overflow-hidden flex items-center justify-center select-none",
         className,
       )}
     >

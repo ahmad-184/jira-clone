@@ -1,7 +1,10 @@
-import { CheckIcon, CheckIconFill } from "@/icons/check-icon";
 import { HomeIcon, HomeIconFill } from "@/icons/home-icon";
 import { SettingIcon, SettingIconFill } from "@/icons/setting-icon";
 import { UsersIcon, UsersIconFill } from "@/icons/users-icon";
+import {
+  ViewColumnsIcon,
+  ViewColumnsIconFill,
+} from "@/icons/view-columns-icon";
 
 type SidebarOptionsType = {
   id: string;
@@ -21,11 +24,11 @@ export const SIDEBAR_OPTIONS = (workspaceId: string): SidebarOptionsType => {
       href: `/dashboard/${workspaceId}`,
     },
     {
-      id: "tasks",
-      label: "My Tasks",
-      icon: <CheckIcon />,
-      active_icon: <CheckIconFill fill="#93c5fd" />,
-      href: `/dashboard/${workspaceId}/tasks`,
+      id: "board",
+      label: "Board",
+      icon: <ViewColumnsIcon />,
+      active_icon: <ViewColumnsIconFill fill="#93c5fd" />,
+      href: `/dashboard/${workspaceId}/board`,
     },
     {
       id: "settings",

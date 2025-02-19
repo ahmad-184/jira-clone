@@ -71,10 +71,13 @@ export default function DeleteWorkspace({ workspace, currentMember }: Props) {
             </DialogTitle>
           </div>
           <div className="px-5 py-5 border-b border-t dark:border-shark-700 border-shark-400 bg-background">
-            <DialogDescription className="text-muted-foreground text-sm flex items-center gap-3">
-              <WarningIconFill className="w-5 h-5" /> This will permanently
-              delete the {workspace.name} project and all of its data.
-            </DialogDescription>
+            <div className="flex items-center gap-3">
+              <WarningIconFill className="w-5 h-5 text-muted-foreground" />
+              <DialogDescription className="text-muted-foreground text-sm">
+                This will permanently delete the {workspace.name} project and
+                all of its data.
+              </DialogDescription>
+            </div>
           </div>
           <div className="py-3 px-5">
             <DeleteWorkspaceForm

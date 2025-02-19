@@ -42,7 +42,7 @@ export default function DatePickerPopover({
             mode="single"
             selected={value || undefined}
             onSelect={onChange}
-            disabled={date => date < new Date()}
+            // disabled={date => date < new Date()}
             initialFocus
           />
         </div>

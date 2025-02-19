@@ -15,12 +15,14 @@ type Props = {
   memberId: string;
   memberUserId: User["id"];
   currentUserId: User["id"];
+  onClose?: () => void;
 };
 
 export const useDeleteMember = ({
   memberId,
   memberUserId,
   currentUserId,
+  onClose,
 }: Props) => {
   const [error, setError] = useState<string | undefined>();
 
@@ -45,6 +47,7 @@ export const useDeleteMember = ({
   const { mutate, isPending } = useDeleteMemberMutation({
     onSuccess: async () => {
       toast.success("Member removed successfully");
+      onClose?.();
       if (memberUserId === currentUserId) {
         queryClient.removeQueries({
           queryKey: ["workspace-members", workspaceId],

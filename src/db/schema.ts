@@ -262,7 +262,7 @@ export const tasks = pgTable(
     dueDate: timestamp("dueDate", {
       withTimezone: true,
       mode: "date",
-    }),
+    }).notNull(),
     status: taskStatusEnum("taskStatus").notNull(),
     position: integer("position").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })

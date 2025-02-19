@@ -14,6 +14,8 @@ import {
 import { LoaderButton } from "@/components/loader-button";
 import { MemberWithUserEmailAndProfileType } from "@/types/members";
 import { User } from "@/db/schema";
+import { useState } from "react";
+import { DottedSeparator } from "@/components/ui/dotted-separator";
 
 type Props = {
   member: MemberWithUserEmailAndProfileType;
@@ -21,14 +23,21 @@ type Props = {
 };
 
 export default function DeleteMemberButton({ member, user }: Props) {
+  const [open, setOpen] = useState(false);
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
   const { error, loading, onSubmit } = useDeleteMember({
     memberId: member.id,
     memberUserId: member.userId,
     currentUserId: user.id,
+    onClose,
   });
 
   return (
-    <AlertDialog>
+    <AlertDialog onOpenChange={setOpen} open={open}>
       <AlertDialogTrigger asChild>
         <Button
           variant={"destructive"}
@@ -55,12 +64,14 @@ export default function DeleteMemberButton({ member, user }: Props) {
             <p className="text-red-500 text-sm">{error}</p>
           </div>
         )}
+        <DottedSeparator />
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel className="flex-1">Cancel</AlertDialogCancel>
           <LoaderButton
             isLoading={loading}
             variant={"destructive"}
             onClick={onSubmit}
+            className="flex-1"
           >
             {member.userId === user.id ? "Yes, Leave" : "Yes, Remove"}
           </LoaderButton>

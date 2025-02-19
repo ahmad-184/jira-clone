@@ -40,6 +40,15 @@ export const useGetTasksQuery = (
         ? response.tasks?.map(task => ({
             ...task,
             createdAt: new Date(task.createdAt),
+            dueDate: new Date(task.dueDate),
+            createdBy: {
+              ...task.createdBy,
+              createdAt: new Date(task.createdBy.createdAt),
+            },
+            assignedTo: {
+              ...task.assignedTo,
+              createdAt: new Date(task.assignedTo.createdAt),
+            },
           }))
         : undefined;
     },

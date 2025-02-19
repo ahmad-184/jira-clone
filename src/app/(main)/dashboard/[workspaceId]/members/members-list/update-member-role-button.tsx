@@ -13,6 +13,8 @@ import { LoaderButton } from "@/components/loader-button";
 import { Role } from "@/db/schema";
 import { UsersIconFill } from "@/icons/users-icon";
 import { useUpdateMemberRole } from "./hooks/use-update-member-role";
+import { useState } from "react";
+import { DottedSeparator } from "@/components/ui/dotted-separator";
 
 type Props = {
   memberId: string;
@@ -20,13 +22,20 @@ type Props = {
 };
 
 export default function UpdateMemberRoleButton({ memberId, role }: Props) {
+  const [open, setOpen] = useState(false);
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
   const { error, loading, onSubmit } = useUpdateMemberRole({
     memberId: memberId,
     role,
+    onClose,
   });
 
   return (
-    <AlertDialog>
+    <AlertDialog onOpenChange={setOpen} open={open}>
       <AlertDialogTrigger asChild>
         <Button
           variant={"default"}
@@ -41,7 +50,7 @@ export default function UpdateMemberRoleButton({ memberId, role }: Props) {
         <AlertDialogHeader>
           <AlertDialogTitle>Update Member Role</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to update this member&apos;s role?
+            Are you sure you want to change this member&apos;s role?
           </AlertDialogDescription>
         </AlertDialogHeader>
         {!!error && (
@@ -49,10 +58,16 @@ export default function UpdateMemberRoleButton({ memberId, role }: Props) {
             <p className="text-red-500 text-sm">{error}</p>
           </div>
         )}
+        <DottedSeparator />
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <LoaderButton isLoading={loading} onClick={onSubmit}>
-            Yes, Update
+          <AlertDialogCancel className="flex-1">Cancel</AlertDialogCancel>
+          <LoaderButton
+            className="flex-1"
+            variant={"success"}
+            isLoading={loading}
+            onClick={onSubmit}
+          >
+            Yes, Do it
           </LoaderButton>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -9,6 +9,11 @@ import { Separator } from "@/components/ui/separator";
 import { useWorkspace } from "@/hooks/workspace-provider";
 import { Skeleton } from "@/components/ui/skeleton";
 
+const getValidTimestamp = (date: string | Date | number): number => {
+  const parsedDate = new Date(date).getTime();
+  return isNaN(parsedDate) ? 0 : parsedDate; // Fallback to 0 if invalid
+};
+
 export default function MembersList() {
   const { workspaceId } = useWorkspace();
 
@@ -25,16 +30,21 @@ export default function MembersList() {
   return (
     <div className="w-full max-w-6xl">
       <div className="w-full flex flex-col gap-2">
-        {members?.map((member, i) => (
-          <Fragment key={member.id}>
-            <Member
-              member={member}
-              currentMember={currentMember}
-              user={currentUser}
-            />
-            {i !== members.length - 1 && <Separator className="w-full" />}
-          </Fragment>
-        ))}
+        {members
+          ?.sort(
+            (a, b) =>
+              getValidTimestamp(a.createdAt) - getValidTimestamp(b.createdAt),
+          )
+          ?.map((member, i) => (
+            <Fragment key={member.id}>
+              <Member
+                member={member}
+                currentMember={currentMember}
+                user={currentUser}
+              />
+              {i !== members.length - 1 && <Separator className="w-full" />}
+            </Fragment>
+          ))}
       </div>
     </div>
   );
