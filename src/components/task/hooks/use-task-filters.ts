@@ -1,14 +1,16 @@
 "use client";
 
-import { parseAsStringEnum, useQueryState, parseAsIsoDateTime } from "nuqs";
-import { TaskStatus } from "@/db/schema";
+import { useWorkspace } from "@/hooks/workspace-provider";
 import { TaskStatusEnum } from "@/types/task";
+import { parseAsStringEnum, useQueryState, parseAsIsoDateTime } from "nuqs";
 import { useEffect, useRef, useState } from "react";
 
-export const useTaskFilters = () => {
+type StatusQuery = TaskStatusEnum;
+
+export const useTaskFilters = (projectId?: string) => {
   const [statusQuery, setStatusQuery] = useQueryState(
     "status",
-    parseAsStringEnum<TaskStatus>(Object.values(TaskStatusEnum)),
+    parseAsStringEnum<StatusQuery>(Object.values(TaskStatusEnum)),
   );
   const [assigneeQuery, setAssigneeQuery] = useQueryState("assignee");
   const [projectQuery, setProjectQuery] = useQueryState("project");
@@ -21,27 +23,29 @@ export const useTaskFilters = () => {
 
   const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const { workspaceId } = useWorkspace();
+
   const onChangeStatus = (value: string) => {
-    setStatusQuery(value === "ALL" ? null : (value as TaskStatus));
+    setStatusQuery(value === "ALL" ? null : (value as StatusQuery));
   };
 
   const onChangeAssignee = (value: string) => {
     setAssigneeQuery(value === "ALL" ? null : value);
   };
 
-  const onChangeProject = (value: string) => {
-    setProjectQuery(value === "ALL" ? null : value);
+  const onChangeProject = (value: string | "ALL") => {
+    setProjectQuery(value);
   };
 
   const onChangeDueDate = (value: Date | null) => {
-    setDueDateQuery(value);
+    setDueDateQuery(value ? value : null);
   };
 
   const onChangeSearch = (value: string) => {
     if (searchTimeout.current) clearTimeout(searchTimeout.current);
     searchTimeout.current = setTimeout(() => {
       setSearchQuery(value.length ? value : null);
-    }, 500);
+    }, 300);
   };
 
   useEffect(() => {
@@ -49,18 +53,26 @@ export const useTaskFilters = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue]);
 
+  const workspaceFilter = workspaceId;
+  const projectFilter =
+    projectQuery === "ALL" ? undefined : projectQuery || projectId || undefined;
+  const statusFilter = statusQuery || undefined;
+  const assigneeFilter = assigneeQuery || undefined;
+  const dueDateFilter = dueDateQuery || undefined;
+  const searchFilter = searchQuery || undefined;
+
   return {
-    statusQuery,
+    workspaceFilter,
+    projectFilter,
+    assigneeFilter,
+    statusFilter,
+    dueDateFilter,
+    searchFilter,
     onChangeStatus,
-    assigneeQuery,
     onChangeAssignee,
-    projectQuery,
     onChangeProject,
-    searchQuery,
     onChangeSearch,
-    dueDateQuery,
     onChangeDueDate,
-    searchValue,
     setSearchValue,
   };
 };

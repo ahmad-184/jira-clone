@@ -29,17 +29,17 @@ export default function TaskDataFilter({ projectId }: Props) {
   const { workspaceId } = useWorkspace();
 
   const {
-    statusQuery,
-    assigneeQuery,
-    projectQuery,
-    dueDateQuery,
-    searchValue,
     onChangeStatus,
     onChangeAssignee,
     onChangeDueDate,
     onChangeProject,
+    assigneeFilter,
+    dueDateFilter,
+    projectFilter,
+    searchFilter,
+    statusFilter,
     setSearchValue,
-  } = useTaskFilters();
+  } = useTaskFilters(projectId);
 
   const { data: projects, isPending: projectsPending } =
     useGetWorkspaceProjectsQuery(workspaceId);
@@ -50,10 +50,7 @@ export default function TaskDataFilter({ projectId }: Props) {
     <div className="w-full flex flex-row flex-wrap gap-4 items-center">
       <p className="text-muted-foreground text-sm">Filters: </p>
       {/* Filter with status */}
-      <Select
-        defaultValue={statusQuery || "ALL"}
-        onValueChange={onChangeStatus}
-      >
+      <Select defaultValue={statusFilter} onValueChange={onChangeStatus}>
         <SelectTrigger className="w-fit text-sm h-10 rounded-lg bg-shark-800/50">
           <div className="flex items-center gap-2 pr-1 capitalize">
             <ListChecksIcon className="size-4" />
@@ -61,7 +58,7 @@ export default function TaskDataFilter({ projectId }: Props) {
           </div>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={"ALL"} key={`ALL-`} className="capitalize">
+          <SelectItem value={"ALL"} className="capitalize">
             All Statuses
           </SelectItem>
           <SelectSeparator />
@@ -77,10 +74,7 @@ export default function TaskDataFilter({ projectId }: Props) {
         <Skeleton className="h-10 w-36 rounded-lg" />
       )}
       {!workspaceMembersPending && (
-        <Select
-          defaultValue={assigneeQuery || "ALL"}
-          onValueChange={onChangeAssignee}
-        >
+        <Select defaultValue={assigneeFilter} onValueChange={onChangeAssignee}>
           <SelectTrigger className="w-fit h-10 rounded-lg bg-shark-800/50">
             <div className="flex items-center gap-2 pr-1 capitalize">
               <UserIcon className="size-4" />
@@ -88,7 +82,7 @@ export default function TaskDataFilter({ projectId }: Props) {
             </div>
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={"ALL"} key={`ALL-`} className="capitalize">
+            <SelectItem value={"ALL"} className="capitalize">
               All Assignees
             </SelectItem>
             <SelectSeparator />
@@ -107,10 +101,7 @@ export default function TaskDataFilter({ projectId }: Props) {
       {/* Filter with projects */}
       {!!projectsPending && <Skeleton className="h-10 w-36 rounded-lg" />}
       {!projectsPending && (
-        <Select
-          onValueChange={onChangeProject}
-          defaultValue={projectId || projectQuery || "ALL"}
-        >
+        <Select onValueChange={onChangeProject} defaultValue={projectFilter}>
           <SelectTrigger className="w-fit h-10 rounded-lg bg-shark-800/50">
             <div className="flex items-center gap-2 pr-1 capitalize">
               <FolderIcon className="size-4" />
@@ -118,7 +109,7 @@ export default function TaskDataFilter({ projectId }: Props) {
             </div>
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={"ALL"} key={`ALL-`} className="capitalize">
+            <SelectItem value={"ALL"} className="capitalize">
               All Projects
             </SelectItem>
             <SelectSeparator />
@@ -136,12 +127,12 @@ export default function TaskDataFilter({ projectId }: Props) {
       )}
       <div className="flex gap-2 items-center">
         <DatePickerPopover
-          value={dueDateQuery || undefined}
+          value={dueDateFilter}
           onChange={onChangeDueDate}
           className="w-fit h-10 !bg-shark-800/50 rounded-lg text-primary"
           label="Due Date"
         />
-        {!!dueDateQuery && (
+        {!!dueDateFilter && (
           <Button
             variant={"outline"}
             type="button"
@@ -154,7 +145,7 @@ export default function TaskDataFilter({ projectId }: Props) {
       </div>
       <div className="flex-1">
         <SearchInput
-          value={searchValue}
+          value={searchFilter}
           onChange={e => setSearchValue(e.target.value)}
           className="h-10 max-w-[300px] bg-shark-800/50"
         />

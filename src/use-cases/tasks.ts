@@ -1,5 +1,6 @@
 import {
   createTask,
+  deleteTask,
   getTask,
   getTasks,
   getTasksByProjectId,
@@ -11,6 +12,7 @@ import { and, eq, like, SQL, sql } from "drizzle-orm";
 import {
   GetTasksWithSearchQueries,
   GetTasksWithSearchQueriesUseCaseReturn,
+  GetTaskWithCreatorUseCaseReturn,
 } from "./types";
 
 export async function createTaskUseCase(
@@ -92,4 +94,21 @@ export async function getTasksWithSearchQueriesUseCase(
   const result = await getTasks(props as any);
 
   return result as GetTasksWithSearchQueriesUseCaseReturn;
+}
+
+export async function getTaskWithCreator(taskId: string) {
+  const props: GetTaskPropsType = {
+    where: eq(tasks.id, taskId),
+    with: {
+      createdBy: true,
+    },
+  };
+
+  const task = await getTask(taskId, props as any);
+
+  return task as GetTaskWithCreatorUseCaseReturn;
+}
+
+export async function deleteTaskUseCase(taskId: string) {
+  return await deleteTask(taskId);
 }

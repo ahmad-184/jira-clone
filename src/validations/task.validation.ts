@@ -23,3 +23,8 @@ export const createTaskSchema = z.object({
   status: taskStatusSchema,
   dueDate: z.coerce.date(),
 });
+
+export const deleteTaskSchema = z.object({
+  taskIds: z.array(taskIdSchema),
+  workspaceId: workspaceIdSchema,
+});

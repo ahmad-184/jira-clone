@@ -1,20 +1,28 @@
+import "server-only";
+
 import { Hono } from "hono";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import { returnError } from "../utils";
 import { zValidator } from "@hono/zod-validator";
-import { createTaskSchema } from "@/validations/task.validation";
+import {
+  createTaskSchema,
+  deleteTaskSchema,
+} from "@/validations/task.validation";
 import { getMemberUseCase } from "@/use-cases/members";
 import { PublicError } from "@/lib/errors";
 import { hasPermission } from "@/lib/permission-system";
 import {
   createTaskUseCase,
+  deleteTaskUseCase,
   getHighestPositionTaskUseCase,
   getTasksWithSearchQueriesUseCase,
+  getTaskWithCreator,
 } from "@/use-cases/tasks";
 import { getTasksQuerySchema } from "../validations/task.validator";
 
 const createTaskValidator = zValidator("json", createTaskSchema);
 const getTasksQueryValidator = zValidator("query", getTasksQuerySchema);
+const deleteTaskValidator = zValidator("json", deleteTaskSchema);
 
 const app = new Hono()
   // GET Methods
@@ -28,6 +36,18 @@ const app = new Hono()
 
       if (!member)
         throw new PublicError("You are not a member of this workspace.");
+
+      const canViewTask = hasPermission(
+        member.role,
+        "tasks",
+        "view",
+        undefined,
+      );
+
+      if (!canViewTask.permission)
+        throw new PublicError(
+          canViewTask?.message ?? "You are not allowed to view this task.",
+        );
 
       const tasks = await getTasksWithSearchQueriesUseCase(queries);
 
@@ -77,6 +97,46 @@ const app = new Hono()
 
       return c.json({ projectId: values.projectId });
     } catch (err: unknown) {
+      return returnError(err, c);
+    }
+  })
+  // DELETE Methods
+  // DELETE /delete delete a task
+  .delete("/delete", authMiddleware, deleteTaskValidator, async c => {
+    try {
+      const user = c.get("user");
+      const values = c.req.valid("json");
+
+      const member = await getMemberUseCase(user.id, values.workspaceId);
+
+      if (!member)
+        throw new PublicError("You are not a member of this workspace.");
+
+      await Promise.all(
+        values.taskIds.map(async taskId => {
+          const task = await getTaskWithCreator(taskId);
+
+          const canDeleteTask = hasPermission(member.role, "tasks", "delete", {
+            task,
+            member,
+          });
+
+          if (!canDeleteTask.permission)
+            throw new PublicError(
+              canDeleteTask?.message ??
+                "You are not allowed to delete this task.",
+            );
+        }),
+      );
+
+      await Promise.all(
+        values.taskIds.map(async taskId => {
+          await deleteTaskUseCase(taskId);
+        }),
+      );
+
+      return c.json({ ids: values.taskIds });
+    } catch (err) {
       return returnError(err, c);
     }
   });

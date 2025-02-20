@@ -40,3 +40,7 @@ export async function getTasks(props: Required<GetTaskPropsType>) {
     ...props,
   });
 }
+
+export async function deleteTask(taskId: string) {
+  return await database.delete(tasks).where(eq(tasks.id, taskId));
+}

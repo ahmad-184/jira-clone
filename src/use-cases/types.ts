@@ -35,6 +35,10 @@ export type GetTasksWithSearchQueriesUseCaseReturn = (Task & {
   project: Pick<Project, "id" | "name" | "imageUrl">;
 })[];
 
+export type GetTaskWithCreatorUseCaseReturn = Task & {
+  createdBy: Member;
+};
+
 export type GetProfileWithUserEmailUseCaseReturn =
   | (Profile & { user: Pick<User, "email"> })
   | undefined;

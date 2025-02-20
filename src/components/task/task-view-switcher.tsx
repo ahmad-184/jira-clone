@@ -1,18 +1,16 @@
 "use client";
 
 import { useLocalStorage } from "usehooks-ts";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useGetProjectQuery } from "@/hooks/queries/use-get-project";
-import { Skeleton } from "../ui/skeleton";
 import CreateTaskModal from "./create-task-modal";
 import TaskDataFilter from "./task-data-filter";
 import { useGetTasksQuery } from "@/hooks/queries/use-get-tasks";
 import { useTaskFilters } from "./hooks/use-task-filters";
-import { useWorkspace } from "@/hooks/workspace-provider";
 import LoaderIcon from "../loader-icon";
+import TaskTable from "./table";
 
 const TABS = [
   {
@@ -34,26 +32,24 @@ type Props = {
 };
 
 export default function TaskViewSwitcher({ projectId }: Props) {
-  const { isPending } = useGetProjectQuery(projectId!);
   const [value, setValue] = useLocalStorage("active_tab", "TABLE");
 
-  const { workspaceId } = useWorkspace();
-
   const {
-    statusQuery,
-    projectQuery,
-    assigneeQuery,
-    dueDateQuery,
-    searchQuery,
-  } = useTaskFilters();
+    assigneeFilter,
+    dueDateFilter,
+    projectFilter,
+    searchFilter,
+    statusFilter,
+    workspaceFilter,
+  } = useTaskFilters(projectId);
 
   const { data: tasks, isPending: taskPending } = useGetTasksQuery(
-    workspaceId,
-    projectId || projectQuery || undefined,
-    statusQuery || undefined,
-    assigneeQuery || undefined,
-    dueDateQuery || undefined,
-    searchQuery || undefined,
+    workspaceFilter,
+    projectFilter,
+    statusFilter,
+    assigneeFilter,
+    dueDateFilter,
+    searchFilter,
   );
 
   const onValueChanged = (value: string) => {
@@ -84,29 +80,31 @@ export default function TaskViewSwitcher({ projectId }: Props) {
             </TabsList>
           </div>
           <div>
-            {!!isPending && <Skeleton className="h-10 w-[118px]" />}
-            {!isPending && (
-              <CreateTaskModal>
-                <Button>
-                  <PlusIcon /> New Task
-                </Button>
-              </CreateTaskModal>
-            )}
+            <CreateTaskModal>
+              <Button>
+                <PlusIcon /> New Task
+              </Button>
+            </CreateTaskModal>
           </div>
         </div>
-        <div className="mt-4 w-full">
+        <div className="mt-3 w-full">
           <TaskDataFilter projectId={projectId} />
         </div>
         {!!taskPending && (
-          <div className="w-full py-5 flex items-center justify-center">
+          <div className="w-full py-5 h-[150px] flex items-center justify-center">
             <LoaderIcon />
           </div>
         )}
-        <br />
-        {!!tasks && JSON.stringify(tasks)}
-        {/* <TabsContent value="TABLE">Table view</TabsContent>
-        <TabsContent value="KANBAN">Kanban view</TabsContent>
-        <TabsContent value="CALENDAR">Calendar view</TabsContent> */}
+        <div className="py-1" />
+        {!taskPending && (
+          <>
+            <TabsContent value="TABLE">
+              <TaskTable tasks={tasks} />
+            </TabsContent>
+            <TabsContent value="KANBAN">Kanban view</TabsContent>
+            <TabsContent value="CALENDAR">Calendar view</TabsContent>
+          </>
+        )}
       </Tabs>
     </div>
   );
