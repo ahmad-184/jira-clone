@@ -36,9 +36,10 @@ export default function TaskDataFilter({ projectId }: Props) {
     assigneeFilter,
     dueDateFilter,
     projectFilter,
+    searchInput,
     searchFilter,
     statusFilter,
-    setSearchValue,
+    onChangeSearchInput,
   } = useTaskFilters(projectId);
 
   const { data: projects, isPending: projectsPending } =
@@ -145,9 +146,10 @@ export default function TaskDataFilter({ projectId }: Props) {
       </div>
       <div className="flex-1">
         <SearchInput
-          value={searchFilter}
-          onChange={e => setSearchValue(e.target.value)}
-          className="h-10 max-w-[300px] bg-shark-800/50"
+          value={searchInput.length ? searchInput : undefined}
+          defaultValue={searchFilter}
+          onChange={e => onChangeSearchInput(e.target.value)}
+          className="h-10 max-w-[300px] min-w-[250px] bg-shark-800/50"
         />
       </div>
     </div>

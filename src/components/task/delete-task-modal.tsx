@@ -11,9 +11,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
-import { LoaderButton } from "../loader-button";
-import { useDeleteTask } from "./hooks/use-delete-task";
-import { useWorkspace } from "@/hooks/workspace-provider";
+import DeleteTaskForm from "../forms/delete-task-form";
 
 type Props = {
   children: React.ReactNode;
@@ -28,18 +26,12 @@ export default function DeleteTaskModal({
 }: Props) {
   const [open, setOpen] = useState(false);
 
-  const { workspaceId } = useWorkspace();
-
   const onClose = () => setOpen(false);
 
-  const { error, loading, onSubmit } = useDeleteTask({
-    taskIds,
-    workspaceId,
-    onCallback: () => {
-      onClose();
-      onCallback?.();
-    },
-  });
+  const callback = () => {
+    onClose();
+    onCallback?.();
+  };
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -56,17 +48,9 @@ export default function DeleteTaskModal({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <DottedSeparator />
-        {!!error && <p className="text-red-600 text-sm py-1"></p>}
         <div className="w-full flex items-center gap-3 justify-end">
           <AlertDialogCancel className="flex-1">Cancel</AlertDialogCancel>
-          <LoaderButton
-            className="flex-1"
-            variant={"destructive"}
-            onClick={onSubmit}
-            isLoading={loading}
-          >
-            Delete
-          </LoaderButton>
+          <DeleteTaskForm taskIds={taskIds} onCallback={callback} />
         </div>
       </AlertDialogContent>
     </AlertDialog>

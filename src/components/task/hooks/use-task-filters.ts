@@ -19,7 +19,7 @@ export const useTaskFilters = (projectId?: string) => {
     "due_date",
     parseAsIsoDateTime,
   );
-  const [searchValue, setSearchValue] = useState("");
+  const [searchInput, setSearchInput] = useState("");
 
   const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -45,13 +45,18 @@ export const useTaskFilters = (projectId?: string) => {
     if (searchTimeout.current) clearTimeout(searchTimeout.current);
     searchTimeout.current = setTimeout(() => {
       setSearchQuery(value.length ? value : null);
-    }, 300);
+    }, 500);
   };
 
-  useEffect(() => {
-    onChangeSearch(searchValue);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchValue]);
+  const onChangeSearchInput = async (value: string) => {
+    setSearchInput(value);
+    onChangeSearch(value);
+  };
+
+  // useEffect(() => {
+  //   onChangeSearch(searchInput);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [searchInput]);
 
   const workspaceFilter = workspaceId;
   const projectFilter =
@@ -73,6 +78,7 @@ export const useTaskFilters = (projectId?: string) => {
     onChangeProject,
     onChangeSearch,
     onChangeDueDate,
-    setSearchValue,
+    onChangeSearchInput,
+    searchInput,
   };
 };

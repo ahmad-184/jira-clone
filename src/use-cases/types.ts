@@ -24,16 +24,20 @@ export type GetTasksWithSearchQueries = {
   assignedToMemberId?: string | null | undefined;
 };
 
-export type GetTasksWithSearchQueriesUseCaseReturn = (Task & {
-  assignedTo: Member & {
-    user: {
-      email: Pick<User, "email">;
-      profile: Pick<Profile, "image" | "displayName">;
-    };
+type MemberWithUserAndProfile = Member & {
+  user: {
+    email: Pick<User, "email">;
+    profile: Pick<Profile, "image" | "displayName">;
   };
-  createdBy: Member;
+};
+
+export type GetTaskUseCaseReturn = Task & {
+  assignedTo: MemberWithUserAndProfile;
+  createdBy: MemberWithUserAndProfile;
   project: Pick<Project, "id" | "name" | "imageUrl">;
-})[];
+};
+
+export type GetTasksWithSearchQueriesUseCaseReturn = GetTaskUseCaseReturn[];
 
 export type GetTaskWithCreatorUseCaseReturn = Task & {
   createdBy: Member;

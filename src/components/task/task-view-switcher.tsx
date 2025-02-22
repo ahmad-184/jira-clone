@@ -43,21 +43,21 @@ export default function TaskViewSwitcher({ projectId }: Props) {
     workspaceFilter,
   } = useTaskFilters(projectId);
 
-  const { data: tasks, isPending: taskPending } = useGetTasksQuery(
-    workspaceFilter,
-    projectFilter,
-    statusFilter,
-    assigneeFilter,
-    dueDateFilter,
-    searchFilter,
-  );
+  const { data: tasks, isPending: taskPending } = useGetTasksQuery({
+    workspaceId: workspaceFilter,
+    projectId: projectFilter,
+    status: statusFilter,
+    assignedToMemberId: assigneeFilter,
+    dueDate: dueDateFilter,
+    search: searchFilter,
+  });
 
   const onValueChanged = (value: string) => {
     setValue(value);
   };
 
   return (
-    <div className="w-full">
+    <div>
       <Tabs onValueChange={onValueChanged} value={value ?? "TABLE"}>
         <div className="w-full flex py-2 items-center rounded-sm bg-shark-800/50 px-3">
           <div className="flex-1">
@@ -95,10 +95,10 @@ export default function TaskViewSwitcher({ projectId }: Props) {
             <LoaderIcon />
           </div>
         )}
-        <div className="py-1" />
+        <div className="py-2" />
         {!taskPending && (
           <>
-            <TabsContent value="TABLE">
+            <TabsContent value="TABLE" className="w-full relative">
               <TaskTable tasks={tasks} />
             </TabsContent>
             <TabsContent value="KANBAN">Kanban view</TabsContent>

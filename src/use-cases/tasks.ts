@@ -5,6 +5,7 @@ import {
   getTasks,
   getTasksByProjectId,
   getTasksByWorkspaceId,
+  updateTask,
 } from "@/data-access/tasks";
 import { GetTaskPropsType } from "@/data-access/type";
 import { Task, tasks, TaskStatus } from "@/db/schema";
@@ -12,6 +13,7 @@ import { and, eq, like, SQL, sql } from "drizzle-orm";
 import {
   GetTasksWithSearchQueries,
   GetTasksWithSearchQueriesUseCaseReturn,
+  GetTaskUseCaseReturn,
   GetTaskWithCreatorUseCaseReturn,
 } from "./types";
 
@@ -19,6 +21,55 @@ export async function createTaskUseCase(
   values: Omit<Task, "id" | "createdAt">,
 ) {
   await createTask(values);
+}
+
+export async function getTaskUseCase(taskId: string) {
+  const props: GetTaskPropsType = {
+    where: eq(tasks.id, taskId),
+    with: {
+      assignedTo: {
+        with: {
+          user: {
+            columns: { email: true },
+            with: {
+              profile: {
+                columns: {
+                  image: true,
+                  displayName: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      createdBy: {
+        with: {
+          user: {
+            columns: { email: true },
+            with: {
+              profile: {
+                columns: {
+                  image: true,
+                  displayName: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      project: {
+        columns: {
+          id: true,
+          name: true,
+          imageUrl: true,
+        },
+      },
+    },
+  };
+
+  const task = await getTask(taskId, props as any);
+
+  return task as GetTaskUseCaseReturn;
 }
 
 export async function getHighestPositionTaskUseCase(
@@ -34,7 +85,7 @@ export async function getHighestPositionTaskUseCase(
   };
 
   const task = await getTask("", options);
-  console.log(task);
+
   return task;
 }
 
@@ -80,7 +131,21 @@ export async function getTasksWithSearchQueriesUseCase(
           },
         },
       },
-      createdBy: true,
+      createdBy: {
+        with: {
+          user: {
+            columns: { email: true },
+            with: {
+              profile: {
+                columns: {
+                  image: true,
+                  displayName: true,
+                },
+              },
+            },
+          },
+        },
+      },
       project: {
         columns: {
           id: true,
@@ -111,4 +176,8 @@ export async function getTaskWithCreator(taskId: string) {
 
 export async function deleteTaskUseCase(taskId: string) {
   return await deleteTask(taskId);
+}
+
+export async function updateTaskUseCase(taskId: string, values: Partial<Task>) {
+  return await updateTask(taskId, values);
 }

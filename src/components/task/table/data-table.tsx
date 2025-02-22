@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/table";
 import { TrashIcon } from "@/icons/trash-icon";
 import DeleteTaskModal from "../delete-task-modal";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 type Props = {
   data: GetTasksWithSearchQueriesUseCaseReturn;
@@ -60,8 +61,10 @@ export default function DataTable({ data }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rowSelection]);
 
+  const [animatedBox] = useAutoAnimate();
+
   return (
-    <div>
+    <div className="absolute w-full" ref={animatedBox}>
       {!!Object.entries(rowSelection).length && (
         <div className="mb-4">
           <DeleteTaskModal

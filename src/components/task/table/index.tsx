@@ -8,9 +8,5 @@ type Props = {
 };
 
 export default function TaskTable({ tasks }: Props) {
-  return (
-    <div className="w-full">
-      <DataTable data={tasks || []} />
-    </div>
-  );
+  return <DataTable data={tasks || []} />;
 }

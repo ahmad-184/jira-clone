@@ -51,7 +51,7 @@ export const columns: ColumnDef<
   {
     id: "select",
     header: ({ table }) => (
-      <div className="w-full h-full flex items-center justify-center">
+      <div className="w-full h-full flex items-center justify-center min-w-[30px]">
         <Checkbox
           checked={
             table.getIsAllPageRowsSelected() ||
@@ -78,14 +78,16 @@ export const columns: ColumnDef<
     accessorKey: "name",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          className="px-0 hover:bg-transparent"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Task name
-          <ArrowUpDown />
-        </Button>
+        <div className="min-w-[150px]">
+          <Button
+            variant="ghost"
+            className="px-0 hover:bg-transparent"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Task name
+            <ArrowUpDown />
+          </Button>
+        </div>
       );
     },
     sortingFn: sortNameFn,
@@ -97,14 +99,16 @@ export const columns: ColumnDef<
     accessorKey: "projectId",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          className="px-0 hover:bg-transparent"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Project
-          <ArrowUpDown />
-        </Button>
+        <div className="min-w-[150px]">
+          <Button
+            variant="ghost"
+            className="px-0 hover:bg-transparent"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Project
+            <ArrowUpDown />
+          </Button>
+        </div>
       );
     },
     cell: ({ row }) => {
@@ -124,14 +128,16 @@ export const columns: ColumnDef<
     accessorKey: "assignedToMemberId",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          className="px-0 hover:bg-transparent"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Assignee
-          <ArrowUpDown />
-        </Button>
+        <div className="min-w-[150px]">
+          <Button
+            variant="ghost"
+            className="px-0 hover:bg-transparent"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Assignee
+            <ArrowUpDown />
+          </Button>
+        </div>
       );
     },
     cell: ({ row }) => {
@@ -154,17 +160,54 @@ export const columns: ColumnDef<
     },
   },
   {
+    accessorKey: "createdBy",
+    header: ({ column }) => {
+      return (
+        <div className="min-w-[150px]">
+          <Button
+            variant="ghost"
+            className="px-0 hover:bg-transparent"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Creator
+            <ArrowUpDown />
+          </Button>
+        </div>
+      );
+    },
+    cell: ({ row }) => {
+      const task = row.original;
+
+      return (
+        <div className="flex flex-1 items-center gap-2">
+          <div>
+            <Avatar
+              alt={`task assigned to ${task.createdBy.user.profile.displayName}`}
+              profile={task.createdBy.user.profile}
+              className="size-7"
+            />
+          </div>
+          <p className="font-semibold text-sm">
+            {task.createdBy.user.profile.displayName}
+          </p>
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "dueDate",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          className="px-0 hover:bg-transparent"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Due Date
-          <ArrowUpDown />
-        </Button>
+        <div className="min-w-[150px]">
+          <Button
+            variant="ghost"
+            className="px-0 hover:bg-transparent"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Due Date
+            <ArrowUpDown />
+          </Button>
+        </div>
       );
     },
     sortingFn: sortDateFn,
@@ -181,21 +224,23 @@ export const columns: ColumnDef<
     accessorKey: "status",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          className="px-0 hover:bg-transparent"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Status
-          <ArrowUpDown />
-        </Button>
+        <div className="min-w-[100px]">
+          <Button
+            variant="ghost"
+            className="px-0 hover:bg-transparent"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Status
+            <ArrowUpDown />
+          </Button>
+        </div>
       );
     },
     sortingFn: sortStatusFn,
     cell: ({ row }) => {
       const task = row.original;
       return (
-        <div className="text-sm font-medium capitalize">
+        <div className="text-sm font-medium capitalize flex w-full justify-center">
           <TaskStatusBadge status={task.status} />
         </div>
       );
@@ -206,8 +251,7 @@ export const columns: ColumnDef<
     enableHiding: false,
     cell: ({ row }) => {
       const task = row.original;
-
-      return <ActionsMenu id={task.id} projectId={task.projectId} />;
+      return <ActionsMenu task={task} />;
     },
   },
 ];

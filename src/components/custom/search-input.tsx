@@ -8,6 +8,7 @@ import { useRef } from "react";
 interface SearchInputProps {
   className?: string;
   value?: string;
+  defaultValue?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
 }
@@ -16,6 +17,7 @@ export default function SearchInput({
   className,
   onChange,
   value,
+  defaultValue,
   placeholder,
 }: SearchInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -31,6 +33,7 @@ export default function SearchInput({
         <Input
           ref={inputRef}
           value={value}
+          defaultValue={defaultValue}
           onChange={onChange}
           placeholder={placeholder ?? "Search..."}
           className="h-full flex-1 !bg-transparent border-none py-3 !ring-0 !px-0"
