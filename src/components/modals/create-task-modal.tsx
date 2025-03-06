@@ -4,58 +4,72 @@ import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
 import { DottedSeparator } from "../ui/dotted-separator";
+import CreateTaskForm from "../forms/create-task-form";
+import { useParams } from "next/navigation";
 import { useGetWorkspaceProjectsQuery } from "@/hooks/queries/use-get-workspace-projects";
 import { useWorkspace } from "@/hooks/workspace-provider";
 import LoaderIcon from "../loader-icon";
 import { useGetWorkspaceMembersQuery } from "@/hooks/queries/use-get-workspace-memebrs";
-import UpdateTaskForm from "../forms/update-task-form";
-import { GetTaskUseCaseReturn } from "@/use-cases/types";
+import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member";
+import { useGetWorkspaceTagsQuery } from "@/hooks/queries/use-get-workspace-tags";
 
 type Props = {
   children: React.ReactNode;
-  task: GetTaskUseCaseReturn;
 };
 
-export default function UpdateTaskModal({ children, task }: Props) {
+export default function CreateTaskModal({ children }: Props) {
   const [open, setOpen] = useState(false);
 
+  const params = useParams<{ projectId: string }>();
   const { workspaceId } = useWorkspace();
 
   const { data: projects, isPending: projectsPending } =
     useGetWorkspaceProjectsQuery(workspaceId);
-
+  const { data: currentMember, isPending: currentMemberPending } =
+    useGetCurrentMemberQuery(workspaceId);
   const { data: workspaceMembers, isPending: workspaceMembersPending } =
     useGetWorkspaceMembersQuery(workspaceId);
+  const { data: tags, isPending: workspaceTagsPending } =
+    useGetWorkspaceTagsQuery(workspaceId);
 
-  const isLoading = projectsPending || workspaceMembersPending;
+  const isLoading =
+    projectsPending ||
+    workspaceMembersPending ||
+    currentMemberPending ||
+    workspaceTagsPending;
+
+  if (!currentMember) return null;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <div onClick={() => setOpen(true)}>{children}</div>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Update the Task</DialogTitle>
+          <DialogTitle>Create a new Task</DialogTitle>
+          <DialogDescription>
+            Create a new project to start tracking your time.
+          </DialogDescription>
         </DialogHeader>
         <DottedSeparator color="#454f59" />
         {!!isLoading && (
-          <div className="flex w-full items-center justify-center min-h-[200px]">
+          <div className="flex w-full items-center justify-center min-w-[200px]">
             <LoaderIcon />
           </div>
         )}
         {!isLoading && (
-          <UpdateTaskForm
+          <CreateTaskForm
+            projectId={params.projectId}
             workspaceMembers={workspaceMembers ?? []}
             projects={projects?.projects || []}
+            currentMember={currentMember}
+            tags={tags || []}
             onClose={() => setOpen(false)}
-            task={task}
-            taskId={task.id}
           />
         )}
       </DialogContent>

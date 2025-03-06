@@ -48,11 +48,11 @@ export default function TaskDataFilter({ projectId }: Props) {
     useGetWorkspaceMembersQuery(workspaceId);
 
   return (
-    <div className="w-full flex flex-row flex-wrap gap-4 items-center">
+    <div className="flex flex-row flex-wrap gap-4 items-center">
       <p className="text-muted-foreground text-sm">Filters: </p>
       {/* Filter with status */}
       <Select defaultValue={statusFilter} onValueChange={onChangeStatus}>
-        <SelectTrigger className="w-fit text-sm h-10 rounded-lg bg-shark-800/50">
+        <SelectTrigger className="w-fit text-sm h-9 px-2 rounded-lg bg-shark-800/50">
           <div className="flex items-center gap-2 pr-1 capitalize">
             <ListChecksIcon className="size-4" />
             <SelectValue placeholder="Status" className="capitalize" />
@@ -76,7 +76,7 @@ export default function TaskDataFilter({ projectId }: Props) {
       )}
       {!workspaceMembersPending && (
         <Select defaultValue={assigneeFilter} onValueChange={onChangeAssignee}>
-          <SelectTrigger className="w-fit h-10 rounded-lg bg-shark-800/50">
+          <SelectTrigger className="w-fit h-9 px-2 rounded-lg bg-shark-800/50">
             <div className="flex items-center gap-2 pr-1 capitalize">
               <UserIcon className="size-4" />
               <SelectValue placeholder="Assignee" className="capitalize" />
@@ -103,7 +103,7 @@ export default function TaskDataFilter({ projectId }: Props) {
       {!!projectsPending && <Skeleton className="h-10 w-36 rounded-lg" />}
       {!projectsPending && (
         <Select onValueChange={onChangeProject} defaultValue={projectFilter}>
-          <SelectTrigger className="w-fit h-10 rounded-lg bg-shark-800/50">
+          <SelectTrigger className="w-fit h-9 px-2 rounded-lg bg-shark-800/50">
             <div className="flex items-center gap-2 pr-1 capitalize">
               <FolderIcon className="size-4" />
               <SelectValue placeholder="Project" className="capitalize" />
@@ -130,14 +130,14 @@ export default function TaskDataFilter({ projectId }: Props) {
         <DatePickerPopover
           value={dueDateFilter}
           onChange={onChangeDueDate}
-          className="w-fit h-10 !bg-shark-800/50 rounded-lg text-primary"
+          className="w-fit h-9 px-2 !bg-shark-800/50 rounded-lg text-primary"
           label="Due Date"
         />
         {!!dueDateFilter && (
           <Button
             variant={"outline"}
             type="button"
-            className="h-10"
+            className="h-9"
             onClick={() => onChangeDueDate(null)}
           >
             Reset
@@ -149,7 +149,7 @@ export default function TaskDataFilter({ projectId }: Props) {
           value={searchInput.length ? searchInput : undefined}
           defaultValue={searchFilter}
           onChange={e => onChangeSearchInput(e.target.value)}
-          className="h-10 max-w-[300px] min-w-[250px] bg-shark-800/50"
+          className="h-9 px-2 max-w-[300px] min-w-[250px]"
         />
       </div>
     </div>

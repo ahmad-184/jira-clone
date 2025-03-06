@@ -1,11 +1,14 @@
 "use client";
 
 import { useMemo } from "react";
-import { ColumnDef, SortingFn } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ColumnDef, Row, SortingFn, Table } from "@tanstack/react-table";
+import { ArrowUpDown, MoreVerticalIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { GetTasksWithSearchQueriesUseCaseReturn } from "@/use-cases/types";
+import {
+  GetTasksWithSearchQueriesUseCaseReturn,
+  GetTaskUseCaseReturn,
+} from "@/use-cases/types";
 import ProjectIcon from "@/components/project/project-icon";
 import Avatar from "@/components/avatar";
 import { fDate } from "@/lib/format-time";
@@ -13,7 +16,9 @@ import { TaskStatusArray } from "@/constants";
 import { TaskStatus } from "@/db/schema";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import ActionsMenu from "./actions-menu";
+import ActionsMenu from "../actions-menu";
+import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member";
+import { usePermission } from "@/hooks/use-permission";
 
 const sortStatusFn: SortingFn<
   GetTasksWithSearchQueriesUseCaseReturn[number]
@@ -50,27 +55,8 @@ export const columns: ColumnDef<
 >[] = [
   {
     id: "select",
-    header: ({ table }) => (
-      <div className="w-full h-full flex items-center justify-center min-w-[30px]">
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="w-full h-full flex items-center justify-center">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={value => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      </div>
-    ),
+    header: ({ table }) => <SelectHeader table={table} />,
+    cell: ({ row }) => <SelectCell row={row} />,
     enableSorting: false,
     enableHiding: false,
   },
@@ -159,41 +145,41 @@ export const columns: ColumnDef<
       );
     },
   },
-  {
-    accessorKey: "createdBy",
-    header: ({ column }) => {
-      return (
-        <div className="min-w-[150px]">
-          <Button
-            variant="ghost"
-            className="px-0 hover:bg-transparent"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Creator
-            <ArrowUpDown />
-          </Button>
-        </div>
-      );
-    },
-    cell: ({ row }) => {
-      const task = row.original;
+  // {
+  //   accessorKey: "createdBy",
+  //   header: ({ column }) => {
+  //     return (
+  //       <div className="min-w-[150px]">
+  //         <Button
+  //           variant="ghost"
+  //           className="px-0 hover:bg-transparent"
+  //           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+  //         >
+  //           Creator
+  //           <ArrowUpDown />
+  //         </Button>
+  //       </div>
+  //     );
+  //   },
+  //   cell: ({ row }) => {
+  //     const task = row.original;
 
-      return (
-        <div className="flex flex-1 items-center gap-2">
-          <div>
-            <Avatar
-              alt={`task assigned to ${task.createdBy.user.profile.displayName}`}
-              profile={task.createdBy.user.profile}
-              className="size-7"
-            />
-          </div>
-          <p className="font-semibold text-sm">
-            {task.createdBy.user.profile.displayName}
-          </p>
-        </div>
-      );
-    },
-  },
+  //     return (
+  //       <div className="flex flex-1 items-center gap-2">
+  //         <div>
+  //           <Avatar
+  //             alt={`task assigned to ${task.createdBy.user.profile.displayName}`}
+  //             profile={task.createdBy.user.profile}
+  //             className="size-7"
+  //           />
+  //         </div>
+  //         <p className="font-semibold text-sm">
+  //           {task.createdBy.user.profile.displayName}
+  //         </p>
+  //       </div>
+  //     );
+  //   },
+  // },
   {
     accessorKey: "dueDate",
     header: ({ column }) => {
@@ -251,18 +237,67 @@ export const columns: ColumnDef<
     enableHiding: false,
     cell: ({ row }) => {
       const task = row.original;
-      return <ActionsMenu task={task} />;
+      return (
+        <div className="flex w-full justify-end">
+          <ActionsMenu
+            task={task}
+            trigger={
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreVerticalIcon />
+              </Button>
+            }
+          />
+        </div>
+      );
     },
   },
 ];
 
-const TaskStatusBadge = ({ status }: { status: TaskStatus }) => {
+function SelectHeader({ table }: { table: Table<GetTaskUseCaseReturn> }) {
+  return (
+    <div className="w-full h-full flex items-center justify-center min-w-[30px]">
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    </div>
+  );
+}
+
+function SelectCell({ row }: { row: Row<GetTaskUseCaseReturn> }) {
+  const task = row.original;
+
+  const { data: currentMember } = useGetCurrentMemberQuery(task.workspaceId);
+
+  const permission = usePermission(currentMember!.role, "tasks", "delete", {
+    member: currentMember!,
+    task,
+  });
+
+  return (
+    <div className="w-full h-full flex items-center justify-center">
+      <Checkbox
+        disabled={!permission.permission}
+        checked={row.getIsSelected()}
+        onCheckedChange={value => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    </div>
+  );
+}
+
+function TaskStatusBadge({ status }: { status: TaskStatus }) {
   const color = useMemo(() => {
-    if (status === "BACKLOG") return "from-fuchsia-500 to-fuchsia-400";
-    if (status === "TODO") return "from-orange-500 to-orange-400";
-    if (status === "IN_PROGRESS") return "from-yellow-500 to-yellow-400";
-    if (status === "IN_REVIEW") return "from-blue-500 to-blue-400";
-    if (status === "DONE") return "from-emerald-500 to-emerald-400";
+    if (status === "BACKLOG") return "from-pink-400 to-pink-300";
+    if (status === "TODO") return "from-red-400 to-red-300";
+    if (status === "IN_PROGRESS") return "from-yellow-400 to-yellow-300";
+    if (status === "IN_REVIEW") return "from-blue-400 to-blue-300";
+    if (status === "DONE") return "from-emerald-400 to-emerald-300";
     return "bg-primary";
   }, [status]);
 
@@ -277,4 +312,4 @@ const TaskStatusBadge = ({ status }: { status: TaskStatus }) => {
       {status.replaceAll("_", " ").toLowerCase()}
     </Badge>
   );
-};
+}

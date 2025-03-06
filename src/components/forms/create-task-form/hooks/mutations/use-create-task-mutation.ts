@@ -1,14 +1,20 @@
 import { client } from "@/lib/rpc";
 import { UseMutationProps } from "@/types/mutation";
+import { GetTaskUseCaseReturn } from "@/use-cases/types";
+import { convertToDate } from "@/util";
 import { useMutation } from "@tanstack/react-query";
-import { InferRequestType, InferResponseType } from "hono";
+import { InferRequestType } from "hono";
 
 type RequestType = InferRequestType<
   (typeof client.api.task)["create"]["$post"]
 >;
-type ResponseType = InferResponseType<
-  (typeof client.api.task)["create"]["$post"]
->;
+type ResponseType =
+  | {
+      error: string;
+    }
+  | {
+      task: GetTaskUseCaseReturn;
+    };
 
 type ResponseWithoutError = Exclude<ResponseType, { error: string }>;
 type UseCreateTaskMutationProps = UseMutationProps<
@@ -29,7 +35,7 @@ export const useCreateTaskMutation = (
         "error" in response ? response.error : "Something went wrong";
       if (!res.ok) throw new Error(error);
       if ("error" in response) throw new Error(error);
-      return response;
+      return { task: convertToDate(response.task) };
     },
     ...props,
   });

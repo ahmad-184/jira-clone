@@ -10,7 +10,7 @@ import { useCreateTaskMutation } from "./mutations/use-create-task-mutation";
 import { toast } from "sonner";
 import { TASK_STATUS } from "@/constants/forms";
 import { TaskStatus } from "@/db/schema";
-import { useQueryClient } from "@tanstack/react-query";
+import { useTask } from "@/hooks/task/use-task";
 
 type Props = {
   projectId?: string;
@@ -25,8 +25,8 @@ export const useCreateTask = ({
 }: Props) => {
   const [error, setError] = useState<string | undefined>(undefined);
 
+  const { broadcastCreateTask } = useTask();
   const { workspaceId } = useWorkspace();
-  const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof createTaskSchema>>({
     resolver: zodResolver(createTaskSchema),
@@ -39,15 +39,14 @@ export const useCreateTask = ({
       dueDate: undefined,
       name: "",
       status: TASK_STATUS[1] as TaskStatus,
+      taskTags: [],
     },
   });
 
   const { mutate, isPending } = useCreateTaskMutation({
-    onSuccess: () => {
+    onSuccess: ({ task }) => {
       toast.success("New task created.");
-      queryClient.invalidateQueries({
-        queryKey: ["tasks"],
-      });
+      broadcastCreateTask(task);
       onClose?.();
     },
     onError: err => {

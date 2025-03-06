@@ -1,4 +1,5 @@
 import { client } from "@/lib/rpc";
+import { convertToDate } from "@/util";
 import { useQuery } from "@tanstack/react-query";
 
 export const useCurrentUserProfileQuery = () => {
@@ -11,12 +12,7 @@ export const useCurrentUserProfileQuery = () => {
         "error" in response ? response.error : "Something went wrong";
       if (!res.ok) throw new Error(error);
       if ("error" in response) throw new Error(error);
-      return response.profile
-        ? {
-            ...response.profile,
-            createdAt: new Date(response.profile.createdAt),
-          }
-        : undefined;
+      return response.profile ? convertToDate(response.profile) : undefined;
     },
   });
 };

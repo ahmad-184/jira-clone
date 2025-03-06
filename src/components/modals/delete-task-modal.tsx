@@ -17,12 +17,14 @@ type Props = {
   children: React.ReactNode;
   taskIds: string[];
   onCallback?: () => void;
+  className?: string;
 };
 
 export default function DeleteTaskModal({
   children,
   taskIds,
   onCallback,
+  className,
 }: Props) {
   const [open, setOpen] = useState(false);
 
@@ -35,10 +37,8 @@ export default function DeleteTaskModal({
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger asChild>
-        <div onClick={() => setOpen(true)} className="w-fit">
-          {children}
-        </div>
+      <AlertDialogTrigger className={className} onClick={() => setOpen(true)}>
+        {children}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

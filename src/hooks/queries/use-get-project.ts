@@ -1,4 +1,5 @@
 import { client } from "@/lib/rpc";
+import { convertToDate } from "@/util";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetProjectQuery = (projectId: string) => {
@@ -15,12 +16,7 @@ export const useGetProjectQuery = (projectId: string) => {
         "error" in response ? response.error : "Something went wrong";
       if (!res.ok) throw new Error(error);
       if ("error" in response) throw new Error(error);
-      return response.project
-        ? {
-            ...response.project,
-            createdAt: new Date(response.project.createdAt ?? Date.now()),
-          }
-        : undefined;
+      return response.project ? convertToDate(response.project) : undefined;
     },
     enabled: !!projectId,
   });

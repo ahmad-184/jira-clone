@@ -5,6 +5,7 @@ import {
   integer,
   pgEnum,
   pgTable,
+  primaryKey,
   serial,
   text,
   timestamp,
@@ -257,7 +258,7 @@ export const tasks = pgTable(
       .references(() => projects.id, { onDelete: "cascade" }),
     assignedToMemberId: text("assignedToMemberId")
       .notNull()
-      .references(() => members.id, { onDelete: "cascade" }),
+      .references(() => members.id, { onDelete: "set null" }),
     description: text("description"),
     dueDate: timestamp("dueDate", {
       withTimezone: true,
@@ -274,6 +275,42 @@ export const tasks = pgTable(
     index("tasks_workspace_id_idx").on(table.workspaceId),
     index("tasks_member_created_id_idx").on(table.createdById),
     index("tasks_member_assigned_to_id_idx").on(table.assignedToMemberId),
+    index("task_workspace_status_idx").on(table.workspaceId, table.status),
+    index("task_project_position_idx").on(table.projectId, table.position),
+  ],
+);
+
+export const tags = pgTable(
+  "gf_tags",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createUUID()),
+    name: text("name").notNull(),
+    workspaceId: text("workspaceId")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+  },
+  table => [
+    index("tags_workspace_id_idx").on(table.workspaceId),
+    unique("unique_tag_name_per_workspace").on(table.workspaceId, table.name),
+  ],
+);
+
+export const taskTags = pgTable(
+  "gf_task_tags",
+  {
+    taskId: text("taskId")
+      .notNull()
+      .references(() => tasks.id, { onDelete: "cascade" }),
+    tagId: text("tagId")
+      .notNull()
+      .references(() => tags.id, { onDelete: "cascade" }),
+  },
+  table => [
+    primaryKey({ columns: [table.taskId, table.tagId] }),
+    index("task_tags_task_id_idx").on(table.taskId),
+    index("task_tags_tag_id_idx").on(table.tagId),
   ],
 );
 
@@ -308,6 +345,7 @@ export const workspacesRelations = relations(workspaces, ({ one, many }) => ({
   }),
   members: many(members),
   projects: many(projects),
+  tags: many(tags),
 }));
 
 export const membersRelations = relations(members, ({ one }) => ({
@@ -328,7 +366,7 @@ export const projectsRelations = relations(projects, ({ one }) => ({
   }),
 }));
 
-export const tasksRelations = relations(tasks, ({ one }) => ({
+export const tasksRelations = relations(tasks, ({ one, many }) => ({
   workspace: one(workspaces, {
     fields: [tasks.workspaceId],
     references: [workspaces.id],
@@ -345,6 +383,26 @@ export const tasksRelations = relations(tasks, ({ one }) => ({
     fields: [tasks.assignedToMemberId],
     references: [members.id],
   }),
+  taskTags: many(taskTags),
+}));
+
+export const tagsRelations = relations(tags, ({ one, many }) => ({
+  workspace: one(workspaces, {
+    fields: [tags.workspaceId],
+    references: [workspaces.id],
+  }),
+  taskTags: many(taskTags),
+}));
+
+export const taskTagsRelations = relations(taskTags, ({ one }) => ({
+  tag: one(tags, {
+    fields: [taskTags.tagId],
+    references: [tags.id],
+  }),
+  task: one(tasks, {
+    fields: [taskTags.taskId],
+    references: [tasks.id],
+  }),
 }));
 
 export type User = typeof users.$inferSelect;
@@ -359,6 +417,8 @@ export type Workspace = typeof workspaces.$inferSelect;
 export type Member = typeof members.$inferSelect;
 export type Project = typeof projects.$inferSelect;
 export type Task = typeof tasks.$inferSelect;
+export type Tag = typeof tags.$inferSelect;
+export type TaskTag = typeof taskTags.$inferSelect;
 
 export type Role = (typeof memberRoleEnum.enumValues)[number];
 export type AccountType = (typeof accountTypeEnum.enumValues)[number];

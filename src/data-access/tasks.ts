@@ -2,10 +2,14 @@ import { database } from "@/db";
 import { Task, tasks } from "@/db/schema";
 import "server-only";
 import { GetTaskPropsType } from "./type";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 
-export async function createTask(values: Omit<Task, "id" | "createdAt">) {
-  await database.insert(tasks).values(values);
+export async function createTask(values: Omit<Task, "createdAt">) {
+  const [res] = await database
+    .insert(tasks)
+    .values(values)
+    .returning({ id: tasks.id });
+  return res;
 }
 
 export async function getTask(taskId: string, props: GetTaskPropsType = {}) {
@@ -45,6 +49,20 @@ export async function deleteTask(taskId: string) {
   return await database.delete(tasks).where(eq(tasks.id, taskId));
 }
 
+export async function deleteTasks(taskIds: string[]) {
+  return await database.delete(tasks).where(inArray(tasks.id, taskIds));
+}
+
 export async function updateTask(taskId: string, values: Partial<Task>) {
-  await database.update(tasks).set(values).where(eq(tasks.id, taskId));
+  return await database.update(tasks).set(values).where(eq(tasks.id, taskId));
+}
+
+export async function updateTasks(
+  values: { id: string; data: Partial<Task> }[],
+) {
+  await Promise.all(
+    values.map(value =>
+      database.update(tasks).set(value.data).where(eq(tasks.id, value.id)),
+    ),
+  );
 }

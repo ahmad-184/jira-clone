@@ -1,0 +1,1 @@
+ALTER TABLE "gf_task_tags" ADD COLUMN "id" text PRIMARY KEY NOT NULL;

@@ -1,4 +1,5 @@
 import { client } from "@/lib/rpc";
+import { convertToDate } from "@/util";
 import { useQuery } from "@tanstack/react-query";
 
 export const useUserWorkspacesQuery = () => {
@@ -11,10 +12,7 @@ export const useUserWorkspacesQuery = () => {
         "error" in response ? response.error : "Something went wrong";
       if (!res.ok) throw new Error(error);
       if ("error" in response) throw new Error(error);
-      return response.workspaces.map(workspace => ({
-        ...workspace,
-        createdAt: new Date(workspace.createdAt),
-      }));
+      return response.workspaces.map(workspace => convertToDate(workspace));
     },
   });
 };

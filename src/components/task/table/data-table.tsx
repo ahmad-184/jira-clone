@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import {
   ColumnFiltersState,
   flexRender,
@@ -23,9 +23,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { TrashIcon } from "@/icons/trash-icon";
-import DeleteTaskModal from "../delete-task-modal";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { hasPermission } from "@/lib/permission-system";
+import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member";
+import { useWorkspace } from "@/hooks/workspace-provider";
+import { useLocalStorage } from "usehooks-ts";
 
 type Props = {
   data: GetTasksWithSearchQueriesUseCaseReturn;
@@ -35,7 +36,12 @@ export default function DataTable({ data }: Props) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
+  const [rowSelection, setRowSelection] = useLocalStorage<
+    Record<number, boolean>
+  >("rows_selection", {});
+
+  const { workspaceId } = useWorkspace();
+  const { data: currentMember } = useGetCurrentMemberQuery(workspaceId);
 
   const table = useReactTable({
     data,
@@ -54,29 +60,20 @@ export default function DataTable({ data }: Props) {
       columnVisibility,
       rowSelection,
     },
+    getRowId: row => row.id,
+    enableRowSelection: row => {
+      const { permission } = hasPermission(
+        currentMember!.role,
+        "tasks",
+        "delete",
+        { member: currentMember!, task: row.original },
+      );
+      return permission;
+    },
   });
 
-  const rowsIds = useMemo(() => {
-    return table.getSelectedRowModel().rows.map(e => e.original.id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rowSelection]);
-
-  const [animatedBox] = useAutoAnimate();
-
   return (
-    <div className="absolute w-full" ref={animatedBox}>
-      {!!Object.entries(rowSelection).length && (
-        <div className="mb-4">
-          <DeleteTaskModal
-            taskIds={rowsIds}
-            onCallback={() => setRowSelection({})}
-          >
-            <Button variant={"destructive"} size="sm">
-              <TrashIcon /> Delete Selected Tasks
-            </Button>
-          </DeleteTaskModal>
-        </div>
-      )}
+    <div className="w-full">
       <div className="rounded-md border overflow-hidden">
         <Table>
           <TableHeader className="bg-shark-800/50">

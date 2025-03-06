@@ -3,7 +3,7 @@
 import { useWorkspace } from "@/hooks/workspace-provider";
 import { TaskStatusEnum } from "@/types/task";
 import { parseAsStringEnum, useQueryState, parseAsIsoDateTime } from "nuqs";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 type StatusQuery = TaskStatusEnum;
 
@@ -53,11 +53,6 @@ export const useTaskFilters = (projectId?: string) => {
     onChangeSearch(value);
   };
 
-  // useEffect(() => {
-  //   onChangeSearch(searchInput);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [searchInput]);
-
   const workspaceFilter = workspaceId;
   const projectFilter =
     projectQuery === "ALL" ? undefined : projectQuery || projectId || undefined;
@@ -80,5 +75,13 @@ export const useTaskFilters = (projectId?: string) => {
     onChangeDueDate,
     onChangeSearchInput,
     searchInput,
+    filters: {
+      workspaceId: workspaceFilter,
+      projectId: projectFilter,
+      assignee: assigneeFilter,
+      status: statusFilter,
+      dueDate: dueDateFilter,
+      search: searchFilter,
+    },
   };
 };

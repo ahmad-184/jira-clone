@@ -14,23 +14,30 @@ import { PublicError } from "@/lib/errors";
 import { hasPermission } from "@/lib/permission-system";
 import {
   createTaskUseCase,
-  deleteTaskUseCase,
+  deleteTasksUseCase,
   getHighestPositionTaskUseCase,
   getTasksWithSearchQueriesUseCase,
   getTaskUseCase,
   getTaskWithCreator,
+  updateTasksPositionUseCase,
   updateTaskUseCase,
 } from "@/use-cases/tasks";
 import {
   getTaskSchema,
   getTasksQuerySchema,
+  updateTasksPositionSchema,
 } from "../validations/task.validator";
+import { createUUID } from "@/util/uuid";
 
 const createTaskValidator = zValidator("json", createTaskSchema);
 const getTaskValidator = zValidator("query", getTaskSchema);
 const getTasksQueryValidator = zValidator("query", getTasksQuerySchema);
 const deleteTaskValidator = zValidator("json", deleteTaskSchema);
 const updateTaskValidator = zValidator("json", updateTaskSchema);
+const updateTasksPositionValidator = zValidator(
+  "json",
+  updateTasksPositionSchema,
+);
 
 const app = new Hono()
   // GET Methods
@@ -127,13 +134,16 @@ const app = new Hono()
       const data = {
         ...values,
         position: 0,
+        id: createUUID(),
       };
 
       if (highestPositionTask) data.position = highestPositionTask.position + 1;
 
-      await createTaskUseCase(data);
+      const { id } = await createTaskUseCase(data);
 
-      return c.json({ projectId: values.projectId });
+      const createdTask = await getTaskUseCase(id);
+
+      return c.json({ task: createdTask });
     } catch (err: unknown) {
       return returnError(err, c);
     }
@@ -165,13 +175,40 @@ const app = new Hono()
 
       await updateTaskUseCase(values.id, values);
 
+      const updatedTask = await getTaskUseCase(values.id);
+
       return c.json({
-        id: values.id,
+        task: updatedTask,
       });
     } catch (err: unknown) {
       return returnError(err, c);
     }
   })
+  // PUT /update-tasks-position update tasks position
+  .post(
+    "/update-tasks-position",
+    authMiddleware,
+    updateTasksPositionValidator,
+    async c => {
+      try {
+        const user = c.get("user");
+        const values = c.req.valid("json");
+
+        const member = await getMemberUseCase(user.id, values.workspaceId);
+
+        if (!member)
+          throw new PublicError("You are not a member of this workspace.");
+
+        const ids = await updateTasksPositionUseCase(member, values.tasks);
+
+        return c.json({
+          ids,
+        });
+      } catch (err: unknown) {
+        return returnError(err, c);
+      }
+    },
+  )
   // DELETE Methods
   // DELETE /delete delete a task
   .delete("/delete", authMiddleware, deleteTaskValidator, async c => {
@@ -201,11 +238,7 @@ const app = new Hono()
         }),
       );
 
-      await Promise.all(
-        values.taskIds.map(async taskId => {
-          await deleteTaskUseCase(taskId);
-        }),
-      );
+      await deleteTasksUseCase(values.taskIds);
 
       return c.json({ ids: values.taskIds });
     } catch (err) {

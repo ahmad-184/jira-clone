@@ -1,4 +1,5 @@
 import { client } from "@/lib/rpc";
+import { convertToDate } from "@/util";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetWorkspaceProjectsQuery = (workspaceId: string) => {
@@ -15,10 +16,7 @@ export const useGetWorkspaceProjectsQuery = (workspaceId: string) => {
       if ("error" in response) throw new Error(error);
       return {
         projects: response.projects
-          ? response.projects.map(project => ({
-              ...project,
-              createdAt: new Date(project.createdAt ?? Date.now()),
-            }))
+          ? response.projects.map(project => convertToDate(project))
           : undefined,
       };
     },

@@ -1,4 +1,12 @@
-import { Member, Profile, Project, Task, TaskStatus, User } from "@/db/schema";
+import {
+  Member,
+  Profile,
+  Project,
+  Tag,
+  Task,
+  TaskStatus,
+  User,
+} from "@/db/schema";
 
 export type UserId = number;
 
@@ -25,8 +33,7 @@ export type GetTasksWithSearchQueries = {
 };
 
 type MemberWithUserAndProfile = Member & {
-  user: {
-    email: Pick<User, "email">;
+  user: Pick<User, "email"> & {
     profile: Pick<Profile, "image" | "displayName">;
   };
 };
@@ -35,6 +42,9 @@ export type GetTaskUseCaseReturn = Task & {
   assignedTo: MemberWithUserAndProfile;
   createdBy: MemberWithUserAndProfile;
   project: Pick<Project, "id" | "name" | "imageUrl">;
+  taskTags: {
+    tag: Pick<Tag, "name" | "id">;
+  }[];
 };
 
 export type GetTasksWithSearchQueriesUseCaseReturn = GetTaskUseCaseReturn[];

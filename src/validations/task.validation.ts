@@ -22,6 +22,7 @@ export const createTaskSchema = z.object({
   description: z.string().optional().default(""),
   status: taskStatusSchema,
   dueDate: z.coerce.date(),
+  taskTags: z.array(z.string()).default([]),
 });
 
 export const deleteTaskSchema = z.object({
@@ -39,4 +40,5 @@ export const updateTaskSchema = z.object({
   description: z.string().default("").nullable(),
   status: taskStatusSchema.optional(),
   dueDate: z.coerce.date().optional(),
+  taskTags: z.array(z.string()).default([]),
 });

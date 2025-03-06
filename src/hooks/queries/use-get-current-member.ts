@@ -1,4 +1,5 @@
 import { client } from "@/lib/rpc";
+import { convertToDate } from "@/util";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetCurrentMemberQuery = (workspaceId: string) => {
@@ -13,12 +14,7 @@ export const useGetCurrentMemberQuery = (workspaceId: string) => {
         "error" in response ? response.error : "Something went wrong";
       if (!res.ok) throw new Error(error);
       if ("error" in response) throw new Error(error);
-      return response.member
-        ? {
-            ...response.member,
-            createdAt: new Date(response.member.createdAt),
-          }
-        : undefined;
+      return response.member ? convertToDate(response.member) : undefined;
     },
     enabled: !!workspaceId,
   });

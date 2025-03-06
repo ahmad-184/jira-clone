@@ -1,8 +1,8 @@
 "use client";
 
-import TaskViewSwitcher from "@/components/task/task-view-switcher";
 import ProjectDetails from "./project-details";
 import { DottedSeparator } from "@/components/ui/dotted-separator";
+import TaskView from "@/components/task";
 
 type Props = {
   projectId: string;
@@ -14,7 +14,7 @@ export default function ProjectView({ projectId }: Props) {
     <div className="w-full flex flex-col gap-7">
       <ProjectDetails projectId={projectId} />
       <DottedSeparator />
-      <TaskViewSwitcher projectId={projectId} />
+      <TaskView />
     </div>
   );
 }

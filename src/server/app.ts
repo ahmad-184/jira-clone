@@ -8,6 +8,7 @@ import workspaceRoutes from "./routes/workspace.route";
 import memberRoutes from "./routes/member.route";
 import projectRoutes from "./routes/project.route";
 import taskRoutes from "./routes/task.route";
+import tagRoutes from "./routes/tag.route";
 
 export const app = new Hono().basePath("/api");
 
@@ -23,7 +24,9 @@ export const routes = app
   // project routes
   .route("/project", projectRoutes)
   // task routes
-  .route("/task", taskRoutes);
+  .route("/task", taskRoutes)
+  // tag routes
+  .route("/tag", tagRoutes);
 
 export const METHODS = {
   GET: handle(app),

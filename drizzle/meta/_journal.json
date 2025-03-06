@@ -78,6 +78,20 @@
       "when": 1739195690896,
       "tag": "0010_glorious_amphibian",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1740542695284,
+      "tag": "0011_futuristic_nekra",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1740543942429,
+      "tag": "0012_deep_butterfly",
+      "breakpoints": true
     }
   ]
 }

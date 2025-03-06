@@ -6,8 +6,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDeleteTaskMutation } from "./mutations/use-delete-task-mutation";
 import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
 import { useWorkspace } from "@/hooks/workspace-provider";
+import { useTask } from "@/hooks/task/use-task";
 
 type Props = {
   taskIds: string[];
@@ -17,8 +17,8 @@ type Props = {
 export const useDeleteTask = ({ taskIds, onCallback }: Props) => {
   const [error, setError] = useState<string | undefined>(undefined);
 
-  const queryClient = useQueryClient();
   const { workspaceId } = useWorkspace();
+  const { deleteTasksOptimistic, broadcastDeletedTasks } = useTask();
 
   const form = useForm({
     resolver: zodResolver(deleteTaskSchema),
@@ -29,12 +29,11 @@ export const useDeleteTask = ({ taskIds, onCallback }: Props) => {
   });
 
   const { mutate, isPending } = useDeleteTaskMutation({
-    onSuccess: () => {
-      toast.success("Task deleted.");
+    onSuccess: res => {
       onCallback?.();
-      queryClient.invalidateQueries({
-        queryKey: ["tasks"],
-      });
+      deleteTasksOptimistic(res.ids);
+      broadcastDeletedTasks(res.ids);
+      toast.success("Task deleted.");
     },
     onError: error => {
       toast.error(error.message);

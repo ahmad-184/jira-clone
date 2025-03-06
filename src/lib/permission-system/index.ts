@@ -39,11 +39,17 @@ type TaskPermission = {
   };
 };
 
+type TagPermission = {
+  action: "create" | "delete";
+  dataType: undefined;
+};
+
 export type Permissions = {
   workspaces: WorkspacePermission;
   members: MemberPermission;
   projects: ProjectPermission;
   tasks: TaskPermission;
+  tags: TagPermission;
 };
 
 const ROLES = {
@@ -89,6 +95,10 @@ const ROLES = {
       create: { permission: true },
       view: { permission: true },
       update: { permission: true },
+      delete: { permission: true },
+    },
+    tags: {
+      create: { permission: true },
       delete: { permission: true },
     },
   },
@@ -182,6 +192,10 @@ const ROLES = {
         return { permission: true };
       },
     },
+    tags: {
+      create: { permission: true },
+      delete: { permission: true },
+    },
   },
   MEMBER: {
     workspaces: {
@@ -257,6 +271,10 @@ const ROLES = {
         // Members can delete a task that created by self.
         return { permission: true };
       },
+    },
+    tags: {
+      create: { permission: true },
+      delete: { permission: true },
     },
   },
 } as const satisfies RolesWithPermissions;

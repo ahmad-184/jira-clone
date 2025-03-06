@@ -23,8 +23,29 @@ import {
 import { MemberWithUserEmailAndProfileType } from "@/types/members";
 import Avatar from "@/components/avatar";
 import { TASK_STATUS } from "@/constants/forms";
-import { Member, Project } from "@/db/schema";
+import { Member, Project, Tag, TaskStatus } from "@/db/schema";
 import ProjectIcon from "@/components/project/project-icon";
+import { useEffect, useState } from "react";
+import { statusNames } from "@/constants/status";
+import {
+  CircleCheckIcon,
+  CircleDashedIcon,
+  CircleDotDashedIcon,
+  CircleDotIcon,
+  CircleIcon,
+} from "lucide-react";
+import MultiSelect from "@/components/custom/multi-select";
+import { createUUID } from "@/util/uuid";
+import { useCreateTag } from "@/hooks/tag/use-create-tag";
+import { toast } from "sonner";
+
+const statusIcons: Record<TaskStatus, React.ReactNode> = {
+  BACKLOG: <CircleDashedIcon className="size-[15px] text-pink-400" />,
+  TODO: <CircleIcon className="size-[15px] text-red-400" />,
+  IN_PROGRESS: <CircleDotDashedIcon className="size-[15px] text-yellow-400" />,
+  IN_REVIEW: <CircleDotIcon className="size-[15px] text-blue-400" />,
+  DONE: <CircleCheckIcon className="size-[15px] text-emerald-400" />,
+};
 
 type Props = {
   projectId: string;
@@ -32,6 +53,12 @@ type Props = {
   workspaceMembers: MemberWithUserEmailAndProfileType[];
   projects: Project[];
   currentMember: Member;
+  tags: Tag[];
+};
+
+type TagOption = {
+  value: string;
+  label: string;
 };
 
 export default function CreateTaskForm({
@@ -40,12 +67,38 @@ export default function CreateTaskForm({
   workspaceMembers,
   currentMember,
   projects,
+  tags,
 }: Props) {
+  const [tagsOptions, setTagsOptions] = useState<TagOption[]>([]);
+
   const { form, onSubmit, error, loading } = useCreateTask({
     projectId,
     onClose,
     currentMemberId: currentMember.id,
   });
+
+  const { onSubmit: onCreateTag } = useCreateTag();
+
+  const onCreateNewTag = (name: string) => {
+    if (!name?.trim().length) return;
+    const tag = tagsOptions.find(
+      t => t.label.toLowerCase() === name.toLowerCase(),
+    );
+    if (tag) return toast.error("Tag already exists");
+    const id = createUUID();
+    const newTag = {
+      value: id,
+      label: name,
+    };
+    const allTags = form.getValues("taskTags");
+    form.setValue("taskTags", [...allTags, newTag.value]);
+    setTagsOptions([...tagsOptions, newTag]);
+    onCreateTag(id, name);
+  };
+
+  useEffect(() => {
+    setTagsOptions(tags.map(e => ({ value: e.id, label: e.name })));
+  }, [tags]);
 
   const [animated] = useAutoAnimate();
 
@@ -142,15 +195,20 @@ export default function CreateTaskForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {TASK_STATUS.map((m, i) => (
-                    <SelectItem
-                      value={m}
-                      key={`${m}-${i}`}
-                      className="capitalize"
-                    >
-                      {m.replaceAll("_", " ").toLowerCase()}
-                    </SelectItem>
-                  ))}
+                  {TASK_STATUS.map((m, i) => {
+                    const icon = statusIcons[m as TaskStatus];
+                    const name = statusNames[m as TaskStatus];
+                    return (
+                      <SelectItem value={m} key={`${m}-${i}`}>
+                        <div className="capitalize flex items-center gap-2 flex-1">
+                          <div>{icon}</div>
+                          <p className="text-sm font-medium capitalize">
+                            {name.toLowerCase()}
+                          </p>
+                        </div>
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -165,7 +223,7 @@ export default function CreateTaskForm({
               <FormLabel>Project</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger className="capitalize w-full h-11 dark:!bg-shark-900/60 bg-shark-50 rounded-sm">
+                  <SelectTrigger className="w-full h-11 dark:!bg-shark-900/60 bg-shark-50 rounded-sm">
                     <SelectValue placeholder="Select a project" />
                   </SelectTrigger>
                 </FormControl>
@@ -182,6 +240,25 @@ export default function CreateTaskForm({
                   ))}
                 </SelectContent>
               </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="taskTags"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="w-full">Tags</FormLabel>
+              <FormControl>
+                <MultiSelect
+                  options={tagsOptions}
+                  values={field.value}
+                  onChangeValues={values => form.setValue("taskTags", values)}
+                  allowCreate={true}
+                  onCreate={onCreateNewTag}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}

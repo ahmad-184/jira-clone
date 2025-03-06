@@ -27,6 +27,7 @@ import { useProjectRealtime } from "@/hooks/project/use-project-realtime";
 import { useWorkspace } from "@/hooks/workspace-provider";
 import { cn } from "@/lib/utils";
 import { useMemberRealtime } from "@/hooks/member/use-member-realtime";
+import { useTask } from "@/hooks/task/use-task";
 
 export function Sidebar() {
   const { workspaceId } = useWorkspace();
@@ -38,6 +39,7 @@ export function Sidebar() {
   useWorkspaceRealtime();
   useProjectRealtime();
   useMemberRealtime();
+  useTask();
 
   const { setOpenMobile } = useSidebar();
 

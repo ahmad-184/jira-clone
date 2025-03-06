@@ -1,4 +1,4 @@
-import TaskViewSwitcher from "@/components/task/task-view-switcher";
+import TaskView from "@/components/task";
 import { getCurrentUser } from "@/lib/session";
 import { redirect } from "next/navigation";
 
@@ -15,7 +15,7 @@ export default async function Page() {
           View all your tasks in board page.
         </p>
       </div>
-      <TaskViewSwitcher />
+      <TaskView />
     </div>
   );
 }

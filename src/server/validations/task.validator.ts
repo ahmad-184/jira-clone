@@ -17,3 +17,14 @@ export const getTaskSchema = z.object({
   taskId: taskIdSchema,
   workspaceId: workspaceIdSchema,
 });
+
+export const updateTasksPositionSchema = z.object({
+  workspaceId: workspaceIdSchema,
+  tasks: z.array(
+    z.object({
+      id: taskIdSchema,
+      position: z.number(),
+      status: taskStatusSchema,
+    }),
+  ),
+});

@@ -5,10 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
 import { useUpdateTaskMutation } from "./mutations/use-update-task-mutation";
 import { useWorkspace } from "@/hooks/workspace-provider";
 import { GetTaskUseCaseReturn } from "@/use-cases/types";
+import { z } from "zod";
+import { useTask } from "@/hooks/task/use-task";
 
 type Props = {
   taskId: string;
@@ -19,28 +20,25 @@ type Props = {
 export const useUpdateTask = ({ taskId, onCallback, task }: Props) => {
   const [error, setError] = useState<string | undefined>(undefined);
 
-  const queryClient = useQueryClient();
   const { workspaceId } = useWorkspace();
+  const { updateTasksOptimistic, broadcastUpdatedTasks } = useTask();
 
-  const form = useForm({
+  const form = useForm<z.infer<typeof updateTaskSchema>>({
     resolver: zodResolver(updateTaskSchema),
     defaultValues: {
       ...task,
       id: taskId,
       workspaceId,
+      taskTags: task.taskTags.map(t => t.tag.id),
     },
   });
 
   const { mutate, isPending } = useUpdateTaskMutation({
-    onSuccess: async () => {
+    onSuccess: async res => {
       toast.success("Task updated.");
       onCallback?.();
-      await queryClient.invalidateQueries({
-        queryKey: ["tasks"],
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ["task", taskId],
-      });
+      updateTasksOptimistic([res.task]);
+      broadcastUpdatedTasks([res.task]);
     },
     onError: error => {
       setError(error.message);

@@ -1,5 +1,5 @@
 import CustomTooltip from "@/components/custom/tooltip";
-import CreateProjectModal from "@/components/project/create-project-modal";
+import CreateProjectModal from "@/components/modals/create-project-modal";
 import ProjectIcon from "@/components/project/project-icon";
 import {
   SidebarGroupLabel,

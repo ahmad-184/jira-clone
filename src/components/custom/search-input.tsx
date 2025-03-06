@@ -28,7 +28,7 @@ export default function SearchInput({
 
   return (
     <div className={cn("max-w-md flex-1", className)} onClick={handleFocus}>
-      <div className="rounded-lg px-4 flex items-center h-full border dark:border-shark-700 gap-4">
+      <div className="rounded-lg px-4 overflow-hidden flex items-center h-full border dark:border-shark-700 gap-4">
         <SearchIcon className="w-5 h-5 text-shark-400" />
         <Input
           ref={inputRef}
