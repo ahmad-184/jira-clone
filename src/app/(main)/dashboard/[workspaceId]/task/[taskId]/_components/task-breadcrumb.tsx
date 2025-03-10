@@ -23,7 +23,7 @@ export default function TaskBreadcrumb({ task }: Props) {
         <BreadcrumbList>
           <BreadcrumbItem>
             <Link
-              className="text-base font-medium flex items-center gap-2"
+              className="text-base font-medium flex items-center gap-2 hover:text-primary"
               href={`/dashboard/${workspaceId}/project/${task.project.id}`}
             >
               <div>
