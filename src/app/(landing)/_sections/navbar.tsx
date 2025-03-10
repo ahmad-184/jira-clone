@@ -39,7 +39,7 @@ export default function Navbar() {
         ))}
       </nav>
       <div className="flex items-center gap-3">
-        {!!isPending ? (
+        {!isFetched && !!isPending ? (
           <Skeleton className="w-16 h-10" />
         ) : !!isFetched ? (
           <Link href="/dashboard">
