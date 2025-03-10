@@ -2,13 +2,13 @@ import ProjectIcon from "@/components/project/project-icon";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { useWorkspace } from "@/hooks/workspace-provider";
 import { GetTaskUseCaseReturn } from "@/use-cases/types";
+import Link from "next/link";
 
 type Props = {
   task: GetTaskUseCaseReturn;
@@ -22,7 +22,7 @@ export default function TaskBreadcrumb({ task }: Props) {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink
+            <Link
               className="text-base font-medium flex items-center gap-2"
               href={`/dashboard/${workspaceId}/project/${task.project.id}`}
             >
@@ -30,7 +30,7 @@ export default function TaskBreadcrumb({ task }: Props) {
                 <ProjectIcon project={task.project} className="size-5" />
               </div>
               <p>{task.project.name}</p>
-            </BreadcrumbLink>
+            </Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
