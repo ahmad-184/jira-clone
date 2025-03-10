@@ -9,14 +9,17 @@ import KanbanCard from "./kanban-card";
 import { useUpdateTaskPositionMutation } from "../hooks/mutations/use-update-task-position";
 import { useWorkspace } from "@/hooks/workspace-provider";
 import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member";
-import { useTask } from "../../../hooks/task/use-task";
+import { useTask } from "@/hooks/task/use-task";
 import { useQueryClient } from "@tanstack/react-query";
 
 type Props = {
-  tasks: GetTasksWithSearchQueriesUseCaseReturn | undefined;
+  tasks: GetTasksWithSearchQueriesUseCaseReturn["tasks"] | undefined;
 };
 type TaskUpdate = Pick<Task, "id" | "workspaceId" | "position" | "status">;
-type TaskState = Record<TaskStatus, GetTasksWithSearchQueriesUseCaseReturn>;
+type TaskState = Record<
+  TaskStatus,
+  GetTasksWithSearchQueriesUseCaseReturn["tasks"]
+>;
 
 export default function TaskKanban({ tasks }: Props) {
   const [boardState, setBoardState] = useState<TaskState>({

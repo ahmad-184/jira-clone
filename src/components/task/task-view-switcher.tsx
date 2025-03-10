@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useLocalStorage } from "usehooks-ts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -20,6 +21,10 @@ import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member
 import { useWorkspace } from "@/hooks/workspace-provider";
 import TaskKanban from "./kanban";
 import { useTask } from "../../hooks/task/use-task";
+
+const TaskCalendar = dynamic(() => import("./calendar"), {
+  ssr: false,
+});
 
 const TABS = [
   {
@@ -119,12 +124,14 @@ export default function TaskViewSwitcher({ projectId }: Props) {
       {!loading && (
         <>
           <TabsContent value="TABLE" className="w-full">
-            <TaskTable tasks={tasks} />
+            <TaskTable tasks={tasks?.tasks || []} />
           </TabsContent>
           <TabsContent value="KANBAN">
-            <TaskKanban tasks={tasks} />
+            <TaskKanban tasks={tasks?.tasks || []} />
           </TabsContent>
-          <TabsContent value="CALENDAR">Calendar view</TabsContent>
+          <TabsContent value="CALENDAR">
+            <TaskCalendar tasks={tasks?.tasks || []} />
+          </TabsContent>
         </>
       )}
     </Tabs>

@@ -46,8 +46,6 @@ export const useProjectRealtime = () => {
           () => router.replace(`/dashboard/${workspaceId}`),
           2000,
         );
-
-        return;
       }
 
       if (projectsData?.projects?.some(p => p.id === payload.old.id)) {

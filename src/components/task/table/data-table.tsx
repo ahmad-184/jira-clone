@@ -29,7 +29,7 @@ import { useWorkspace } from "@/hooks/workspace-provider";
 import { useLocalStorage } from "usehooks-ts";
 
 type Props = {
-  data: GetTasksWithSearchQueriesUseCaseReturn;
+  data: GetTasksWithSearchQueriesUseCaseReturn["tasks"];
 };
 
 export default function DataTable({ data }: Props) {

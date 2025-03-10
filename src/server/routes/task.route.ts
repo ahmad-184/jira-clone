@@ -94,9 +94,9 @@ const app = new Hono()
           canViewTask?.message ?? "You are not allowed to view this task.",
         );
 
-      const tasks = await getTasksWithSearchQueriesUseCase(queries);
+      const res = await getTasksWithSearchQueriesUseCase(queries);
 
-      return c.json({ tasks });
+      return c.json(res);
     } catch (err: unknown) {
       return returnError(err, c);
     }

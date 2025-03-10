@@ -40,7 +40,9 @@ export default function UpdateTaskModal({ children, task }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <div onClick={() => setOpen(true)}>{children}</div>
+        <div className="cursor-pointer" onClick={() => setOpen(true)}>
+          {children}
+        </div>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

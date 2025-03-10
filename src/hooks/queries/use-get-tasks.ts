@@ -10,6 +10,7 @@ type Props = {
   assignee?: string;
   dueDate?: Date;
   search?: string;
+  limit?: number;
 };
 
 export const useGetTasksQuery = (filters: Props) => {
@@ -24,6 +25,7 @@ export const useGetTasksQuery = (filters: Props) => {
           assignedToMemberId: filters?.assignee,
           dueDate: filters?.dueDate?.toISOString() || undefined,
           search: filters?.search,
+          limit: filters?.limit?.toString() || undefined,
         },
       });
       const response = await res.json();
@@ -32,7 +34,10 @@ export const useGetTasksQuery = (filters: Props) => {
       if (!res.ok) throw new Error(error);
       if ("error" in response) throw new Error(error);
       return response
-        ? response.tasks?.map(task => convertToDate(task))
+        ? {
+            tasks: response.tasks.map(task => convertToDate(task)),
+            total: response.total,
+          }
         : undefined;
     },
     enabled: !!filters.workspaceId,

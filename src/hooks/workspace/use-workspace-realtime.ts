@@ -64,6 +64,7 @@ export const useWorkspaceRealtime = () => {
 
     if (workspaces?.some(w => w.id === payload.old.id)) {
       await queryClient.invalidateQueries({ queryKey: ["workspaces"] });
+      queryClient.removeQueries({ queryKey: ["workspace", payload.new.id] });
     }
   };
 

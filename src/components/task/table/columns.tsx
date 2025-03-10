@@ -1,47 +1,34 @@
 "use client";
 
-import { useMemo } from "react";
 import { ColumnDef, Row, SortingFn, Table } from "@tanstack/react-table";
 import { ArrowUpDown, MoreVerticalIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  GetTasksWithSearchQueriesUseCaseReturn,
-  GetTaskUseCaseReturn,
-} from "@/use-cases/types";
+import { GetTaskUseCaseReturn } from "@/use-cases/types";
 import ProjectIcon from "@/components/project/project-icon";
 import Avatar from "@/components/avatar";
 import { fDate } from "@/lib/format-time";
 import { TaskStatusArray } from "@/constants";
-import { TaskStatus } from "@/db/schema";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 import ActionsMenu from "../actions-menu";
 import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member";
 import { usePermission } from "@/hooks/use-permission";
+import Link from "next/link";
+import TaskStatusBadge from "../task-status-badge";
 
-const sortStatusFn: SortingFn<
-  GetTasksWithSearchQueriesUseCaseReturn[number]
-> = (rowA, rowB) => {
+const sortStatusFn: SortingFn<GetTaskUseCaseReturn> = (rowA, rowB) => {
   const statusA = rowA.original.status;
   const statusB = rowB.original.status;
   const statusOrder = TaskStatusArray;
   return statusOrder.indexOf(statusA) - statusOrder.indexOf(statusB);
 };
 
-const sortDateFn: SortingFn<GetTasksWithSearchQueriesUseCaseReturn[number]> = (
-  rowA,
-  rowB,
-) => {
+const sortDateFn: SortingFn<GetTaskUseCaseReturn> = (rowA, rowB) => {
   const dateA = new Date(rowA.original.dueDate);
   const dateB = new Date(rowB.original.dueDate);
   return dateA.getTime() - dateB.getTime();
 };
 
-const sortNameFn: SortingFn<GetTasksWithSearchQueriesUseCaseReturn[number]> = (
-  rowA,
-  rowB,
-) => {
+const sortNameFn: SortingFn<GetTaskUseCaseReturn> = (rowA, rowB) => {
   const nameA = rowA.original.name?.trim() || "";
   const nameB = rowB.original.name?.trim() || "";
   if (!nameA && !nameB) return 0;
@@ -50,9 +37,7 @@ const sortNameFn: SortingFn<GetTasksWithSearchQueriesUseCaseReturn[number]> = (
   return nameA.localeCompare(nameB);
 };
 
-export const columns: ColumnDef<
-  GetTasksWithSearchQueriesUseCaseReturn[number]
->[] = [
+export const columns: ColumnDef<GetTaskUseCaseReturn>[] = [
   {
     id: "select",
     header: ({ table }) => <SelectHeader table={table} />,
@@ -78,7 +63,12 @@ export const columns: ColumnDef<
     },
     sortingFn: sortNameFn,
     cell: ({ row }) => (
-      <div className="capitalize text-sm">{row.original.name}</div>
+      <Link
+        href={`/dashboard/${row.original.workspaceId}/task/${row.original.id}`}
+        className="capitalize text-sm font-medium hover:underline hover:text-blue-500"
+      >
+        {row.original.name}
+      </Link>
     ),
   },
   {
@@ -145,41 +135,6 @@ export const columns: ColumnDef<
       );
     },
   },
-  // {
-  //   accessorKey: "createdBy",
-  //   header: ({ column }) => {
-  //     return (
-  //       <div className="min-w-[150px]">
-  //         <Button
-  //           variant="ghost"
-  //           className="px-0 hover:bg-transparent"
-  //           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-  //         >
-  //           Creator
-  //           <ArrowUpDown />
-  //         </Button>
-  //       </div>
-  //     );
-  //   },
-  //   cell: ({ row }) => {
-  //     const task = row.original;
-
-  //     return (
-  //       <div className="flex flex-1 items-center gap-2">
-  //         <div>
-  //           <Avatar
-  //             alt={`task assigned to ${task.createdBy.user.profile.displayName}`}
-  //             profile={task.createdBy.user.profile}
-  //             className="size-7"
-  //           />
-  //         </div>
-  //         <p className="font-semibold text-sm">
-  //           {task.createdBy.user.profile.displayName}
-  //         </p>
-  //       </div>
-  //     );
-  //   },
-  // },
   {
     accessorKey: "dueDate",
     header: ({ column }) => {
@@ -226,7 +181,7 @@ export const columns: ColumnDef<
     cell: ({ row }) => {
       const task = row.original;
       return (
-        <div className="text-sm font-medium capitalize flex w-full justify-center">
+        <div className="text-sm font-medium capitalize">
           <TaskStatusBadge status={task.status} />
         </div>
       );
@@ -288,28 +243,5 @@ function SelectCell({ row }: { row: Row<GetTaskUseCaseReturn> }) {
         aria-label="Select row"
       />
     </div>
-  );
-}
-
-function TaskStatusBadge({ status }: { status: TaskStatus }) {
-  const color = useMemo(() => {
-    if (status === "BACKLOG") return "from-pink-400 to-pink-300";
-    if (status === "TODO") return "from-red-400 to-red-300";
-    if (status === "IN_PROGRESS") return "from-yellow-400 to-yellow-300";
-    if (status === "IN_REVIEW") return "from-blue-400 to-blue-300";
-    if (status === "DONE") return "from-emerald-400 to-emerald-300";
-    return "bg-primary";
-  }, [status]);
-
-  return (
-    <Badge
-      className={cn(
-        "capitalize select-none rounded-lg bg-gradient-to-t",
-        color,
-        `hover:${color}`,
-      )}
-    >
-      {status.replaceAll("_", " ").toLowerCase()}
-    </Badge>
   );
 }

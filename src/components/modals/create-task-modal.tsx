@@ -18,12 +18,14 @@ import LoaderIcon from "../loader-icon";
 import { useGetWorkspaceMembersQuery } from "@/hooks/queries/use-get-workspace-memebrs";
 import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member";
 import { useGetWorkspaceTagsQuery } from "@/hooks/queries/use-get-workspace-tags";
+import { Task } from "@/db/schema";
 
 type Props = {
   children: React.ReactNode;
+  initialData?: Partial<Task>;
 };
 
-export default function CreateTaskModal({ children }: Props) {
+export default function CreateTaskModal({ children, initialData }: Props) {
   const [open, setOpen] = useState(false);
 
   const params = useParams<{ projectId: string }>();
@@ -70,6 +72,7 @@ export default function CreateTaskModal({ children }: Props) {
             currentMember={currentMember}
             tags={tags || []}
             onClose={() => setOpen(false)}
+            initialData={initialData}
           />
         )}
       </DialogContent>

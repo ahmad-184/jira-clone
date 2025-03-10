@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { GetTaskUseCaseReturn } from "@/use-cases/types";
 import ActionsMenu from "../actions-menu";
 import { MoreHorizontalIcon } from "lucide-react";
@@ -8,10 +7,10 @@ import { cn } from "@/lib/utils";
 import Avatar from "@/components/avatar";
 import { fDate } from "@/lib/format-time";
 import ProjectIcon from "@/components/project/project-icon";
-import { getTextColor, nameToColor } from "@/util/colors";
 import { Draggable } from "@hello-pangea/dnd";
 import { Member } from "@/db/schema";
 import { usePermission } from "@/hooks/use-permission";
+import TaskTag from "../task-tag";
 
 type Props = {
   board: GetTaskUseCaseReturn;
@@ -20,11 +19,6 @@ type Props = {
 };
 
 export default function KanbanCard({ board, index, currentMember }: Props) {
-  const tags = useMemo(() => {
-    const ts = board.taskTags.map(t => t.tag.name);
-    return ts.map(t => ({ color: nameToColor(t), name: t }));
-  }, [board.taskTags]);
-
   const canUpdate = usePermission(currentMember.role, "tasks", "update", {
     member: currentMember,
     task: board,
@@ -85,19 +79,8 @@ export default function KanbanCard({ board, index, currentMember }: Props) {
                 </p>
               </div>
               <div className="flex flex-row flex-wrap gap-1.5">
-                {tags.map(t => (
-                  <div
-                    key={`${t.name}-${t.color}`}
-                    className={
-                      "px-1 rounded-[2px] flex items-center justify-center text-xs font-semibold h-[18px] py-0 uppercase"
-                    }
-                    style={{
-                      backgroundColor: t.color,
-                      color: getTextColor(t.color),
-                    }}
-                  >
-                    {t.name}
-                  </div>
+                {board.taskTags.map(t => (
+                  <TaskTag key={t.tag.id} data={t.tag} />
                 ))}
               </div>
               <div className="w-full my-1">

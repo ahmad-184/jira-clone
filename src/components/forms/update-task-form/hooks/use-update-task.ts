@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useUpdateTaskMutation } from "./mutations/use-update-task-mutation";
+import { useUpdateTaskMutation } from "@/hooks/mutations/use-update-task-mutation";
 import { useWorkspace } from "@/hooks/workspace-provider";
 import { GetTaskUseCaseReturn } from "@/use-cases/types";
 import { z } from "zod";

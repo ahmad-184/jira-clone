@@ -30,6 +30,7 @@ export type GetTasksWithSearchQueries = {
   dueDate?: Date | null | undefined;
   status?: TaskStatus | null | undefined;
   assignedToMemberId?: string | null | undefined;
+  limit?: string | null | undefined;
 };
 
 type MemberWithUserAndProfile = Member & {
@@ -47,7 +48,10 @@ export type GetTaskUseCaseReturn = Task & {
   }[];
 };
 
-export type GetTasksWithSearchQueriesUseCaseReturn = GetTaskUseCaseReturn[];
+export type GetTasksWithSearchQueriesUseCaseReturn = {
+  tasks: GetTaskUseCaseReturn[];
+  total: number;
+};
 
 export type GetTaskWithCreatorUseCaseReturn = Task & {
   createdBy: Member;

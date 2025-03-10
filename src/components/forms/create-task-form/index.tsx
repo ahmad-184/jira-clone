@@ -23,7 +23,7 @@ import {
 import { MemberWithUserEmailAndProfileType } from "@/types/members";
 import Avatar from "@/components/avatar";
 import { TASK_STATUS } from "@/constants/forms";
-import { Member, Project, Tag, TaskStatus } from "@/db/schema";
+import { Member, Project, Tag, Task, TaskStatus } from "@/db/schema";
 import ProjectIcon from "@/components/project/project-icon";
 import { useEffect, useState } from "react";
 import { statusNames } from "@/constants/status";
@@ -54,6 +54,7 @@ type Props = {
   projects: Project[];
   currentMember: Member;
   tags: Tag[];
+  initialData?: Partial<Task>;
 };
 
 type TagOption = {
@@ -68,6 +69,7 @@ export default function CreateTaskForm({
   currentMember,
   projects,
   tags,
+  initialData,
 }: Props) {
   const [tagsOptions, setTagsOptions] = useState<TagOption[]>([]);
 
@@ -75,6 +77,7 @@ export default function CreateTaskForm({
     projectId,
     onClose,
     currentMemberId: currentMember.id,
+    initialData,
   });
 
   const { onSubmit: onCreateTag } = useCreateTag();

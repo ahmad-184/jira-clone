@@ -1,8 +1,8 @@
 import { database } from "@/db";
 import { Task, tasks } from "@/db/schema";
 import "server-only";
-import { GetTaskPropsType } from "./type";
-import { eq, inArray } from "drizzle-orm";
+import { GetTaskPropsType, GetTasksPropsType } from "./type";
+import { count, eq, inArray, SQL } from "drizzle-orm";
 
 export async function createTask(values: Omit<Task, "createdAt">) {
   const [res] = await database
@@ -39,7 +39,7 @@ export async function getTasksByWorkspaceId(
   });
 }
 
-export async function getTasks(props: Required<GetTaskPropsType>) {
+export async function getTasks(props: Partial<GetTasksPropsType> = {}) {
   return await database.query.tasks.findMany({
     ...props,
   });
@@ -65,4 +65,12 @@ export async function updateTasks(
       database.update(tasks).set(value.data).where(eq(tasks.id, value.id)),
     ),
   );
+}
+
+export async function getTasksCount(props: SQL<unknown> | undefined) {
+  const [res] = await database
+    .select({ count: count() })
+    .from(tasks)
+    .where(props);
+  return res.count;
 }

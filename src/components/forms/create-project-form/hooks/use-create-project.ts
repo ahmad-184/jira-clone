@@ -78,8 +78,9 @@ export const useCreateProject = ({ workspaceId, onClose }: Props) => {
   }, [isPending, isUploading, form.formState.isDirty]);
 
   useEffect(() => {
+    if (!workspaceId) return;
     form.setValue("workspaceId", workspaceId);
-  }, [workspaceId]);
+  }, [workspaceId, form]);
 
   return {
     form,

@@ -9,23 +9,25 @@ import { z } from "zod";
 import { useCreateTaskMutation } from "./mutations/use-create-task-mutation";
 import { toast } from "sonner";
 import { TASK_STATUS } from "@/constants/forms";
-import { TaskStatus } from "@/db/schema";
+import { Task, TaskStatus } from "@/db/schema";
 import { useTask } from "@/hooks/task/use-task";
 
 type Props = {
   projectId?: string;
   onClose?: () => void;
   currentMemberId: string;
+  initialData?: Partial<Task>;
 };
 
 export const useCreateTask = ({
   projectId,
   onClose,
   currentMemberId,
+  initialData,
 }: Props) => {
   const [error, setError] = useState<string | undefined>(undefined);
 
-  const { broadcastCreateTask } = useTask();
+  const { broadcastCreateTask, createTaskOptimistic } = useTask();
   const { workspaceId } = useWorkspace();
 
   const form = useForm<z.infer<typeof createTaskSchema>>({
@@ -35,11 +37,12 @@ export const useCreateTask = ({
       projectId,
       assignedToMemberId: undefined,
       createdById: currentMemberId,
-      description: "",
       dueDate: undefined,
       name: "",
       status: TASK_STATUS[1] as TaskStatus,
       taskTags: [],
+      ...initialData,
+      description: "",
     },
   });
 
@@ -47,6 +50,7 @@ export const useCreateTask = ({
     onSuccess: ({ task }) => {
       toast.success("New task created.");
       broadcastCreateTask(task);
+      createTaskOptimistic(task);
       onClose?.();
     },
     onError: err => {

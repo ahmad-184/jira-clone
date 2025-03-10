@@ -11,6 +11,7 @@ export const getTasksQuerySchema = z.object({
   status: taskStatusSchema.nullish(),
   search: z.string().nullish(),
   dueDate: z.coerce.date().nullish(),
+  limit: z.string().nullish(),
 });
 
 export const getTaskSchema = z.object({

@@ -14,6 +14,7 @@ import {
   createWorkspaceUseCase,
   deleteWorkspaceUseCase,
   getUserWorkspacesUseCase,
+  getWorkspaceAnalyticsUseCase,
   getWorkspaceMembersProfileUseCase,
   getWorkspaceProjectsUseCase,
   getWorkspaceUseCase,
@@ -30,6 +31,14 @@ import {
 import { hasPermission } from "@/lib/permission-system";
 import { z } from "zod";
 
+const getWorkspaceValidator = zValidator(
+  "param",
+  z.object({ id: workspaceIdSchema }),
+);
+const getWorkspaceAnalyticsValidator = zValidator(
+  "param",
+  z.object({ id: workspaceIdSchema }),
+);
 const createWorkspaceValidator = zValidator("json", createWorkspaceSchema);
 const updateWorkspaceValidator = zValidator("json", updateWorkspaceSchema);
 const updateWorkspaceParamValidator = zValidator(
@@ -125,10 +134,10 @@ const app = new Hono()
     }
   })
   // GET /:id get a workspace
-  .get("/:id", authMiddleware, async c => {
+  .get("/:id", authMiddleware, getWorkspaceValidator, async c => {
     try {
       const user = c.get("user");
-      const { id: workspaceId } = c.req.param();
+      const { id: workspaceId } = c.req.valid("param");
 
       const workspace = await getWorkspaceUseCase(workspaceId);
 
@@ -160,6 +169,52 @@ const app = new Hono()
       return returnError(err, c);
     }
   })
+  // GET /:id/analytics get analytics of a workspace
+  .get(
+    "/:id/analytics",
+    authMiddleware,
+    getWorkspaceAnalyticsValidator,
+    async c => {
+      try {
+        const user = c.get("user");
+        const { id: workspaceId } = c.req.valid("param");
+
+        const workspace = await getWorkspaceUseCase(workspaceId);
+
+        if (!workspace) throw new PublicError("Workspace not found.");
+
+        const currentMember = await getMemberUseCase(user.id, workspaceId);
+
+        if (!currentMember)
+          throw new PublicError("You are not a member of this workspace.");
+
+        const canViewWorkspace = hasPermission(
+          currentMember.role,
+          "workspaces",
+          "view",
+          undefined,
+        );
+
+        if (!canViewWorkspace)
+          throw new PublicError("You are not allowed to view this workspace.");
+
+        if (!canViewWorkspace.permission)
+          throw new PublicError(
+            canViewWorkspace.message ??
+              "You are not allowed to view this workspace.",
+          );
+
+        const analytics = await getWorkspaceAnalyticsUseCase(
+          workspaceId,
+          currentMember.id,
+        );
+
+        return c.json({ analytics });
+      } catch (err: unknown) {
+        return returnError(err, c);
+      }
+    },
+  )
   // POST API METHODS
   // POST /create create workspace
   .post("/create", authMiddleware, createWorkspaceValidator, async c => {

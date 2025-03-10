@@ -6,10 +6,11 @@ import {
   getTasks,
   getTasksByProjectId,
   getTasksByWorkspaceId,
+  getTasksCount,
   updateTask,
   updateTasks,
 } from "@/data-access/tasks";
-import { GetTaskPropsType } from "@/data-access/type";
+import { GetTaskPropsType, GetTasksPropsType } from "@/data-access/type";
 import { Member, Task, tasks, TaskStatus } from "@/db/schema";
 import { and, eq, like, SQL, sql } from "drizzle-orm";
 import {
@@ -168,7 +169,7 @@ export async function getTasksWithSearchQueriesUseCase(
     );
   if (queries.dueDate) conditions.push(eq(tasks.dueDate, queries.dueDate));
 
-  const props: GetTaskPropsType = {
+  const props: GetTasksPropsType = {
     where: and(...conditions),
     with: {
       assignedTo: {
@@ -220,11 +221,18 @@ export async function getTasksWithSearchQueriesUseCase(
         },
       },
     },
+    ...(queries.limit ? { limit: parseInt(queries.limit) } : {}),
   };
 
-  const result = await getTasks(props as any);
+  const [result, total] = await Promise.all([
+    getTasks(props as any),
+    getTasksCount(and(...conditions)),
+  ]);
 
-  return result as GetTasksWithSearchQueriesUseCaseReturn;
+  return {
+    tasks: result,
+    total,
+  } as GetTasksWithSearchQueriesUseCaseReturn;
 }
 
 export async function getTaskWithCreator(taskId: string) {

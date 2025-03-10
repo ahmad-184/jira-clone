@@ -80,8 +80,10 @@ export const useTask = () => {
         .forEach(key => {
           queryClient.setQueryData(
             key,
-            (oldData: GetTasksWithSearchQueriesUseCaseReturn) => {
-              const newData = oldData.map(task => {
+            (
+              oldData: Exclude<GetTasksWithSearchQueriesUseCaseReturn, "total">,
+            ) => {
+              const newData = oldData.tasks.map(task => {
                 const update = taskUpdates.find(t => t.id === task.id);
                 return update ? { ...task, ...update } : task;
               });
@@ -91,7 +93,7 @@ export const useTask = () => {
         });
       taskUpdates.forEach(update => {
         queryClient.setQueryData(
-          ["task", update.id],
+          ["task", workspaceId, update.id],
           (oldData: GetTaskUseCaseReturn) => ({
             ...oldData,
             ...update,
@@ -99,7 +101,7 @@ export const useTask = () => {
         );
       });
     },
-    [queryClient],
+    [queryClient, workspaceId],
   );
 
   const deleteTasksOptimistic = useCallback(
@@ -115,10 +117,10 @@ export const useTask = () => {
           );
         });
       ids.forEach(id => {
-        queryClient.removeQueries({ queryKey: ["task", id] });
+        queryClient.removeQueries({ queryKey: ["task", workspaceId, id] });
       });
     },
-    [queryClient],
+    [queryClient, workspaceId],
   );
 
   const broadcastCreateTask = (data: GetTaskUseCaseReturn) => {
@@ -165,7 +167,6 @@ export const useTask = () => {
     async ({ payload }: UpdatePayloadType) => {
       if (!payload || !payload.length) return;
       if (payload.every(e => e.workspaceId !== workspaceId)) return;
-      console.log("onUpdate", payload);
       updateTasksOptimistic(payload);
     },
     [updateTasksOptimistic, workspaceId],
@@ -191,6 +192,7 @@ export const useTask = () => {
 
     channel.subscribe(status => {
       if (status !== "SUBSCRIBED") return;
+      console.log("subscribed");
 
       channel
         .on("broadcast", { event: taskRealtimeEvents.insert }, payload =>

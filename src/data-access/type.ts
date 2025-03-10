@@ -23,3 +23,7 @@ export type GetProjectPropsType = Parameters<
 export type GetTaskPropsType = Parameters<
   typeof database.query.tasks.findFirst
 >[0];
+
+export type GetTasksPropsType = Parameters<
+  typeof database.query.tasks.findMany
+>[0];

@@ -15,6 +15,7 @@ import { getMemberUseCase } from "@/use-cases/members";
 import {
   createProjectUseCase,
   deleteProjectUseCase,
+  getProjectAnalyticsUseCase,
   getProjectUseCase,
   updateProjectUseCase,
 } from "@/use-cases/projects";
@@ -22,6 +23,12 @@ import { PublicError } from "@/lib/errors";
 import { hasPermission } from "@/lib/permission-system";
 
 const getProjectValidator = zValidator(
+  "param",
+  z.object({
+    projectId: projectIdSchema,
+  }),
+);
+const getProjectAnalyticsValidator = zValidator(
   "param",
   z.object({
     projectId: projectIdSchema,
@@ -78,6 +85,48 @@ const app = new Hono()
       return returnError(err, c);
     }
   })
+  // GET /:projectId/analytics get project analytics
+  .get(
+    "/:projectId/analytics",
+    authMiddleware,
+    getProjectAnalyticsValidator,
+    async c => {
+      try {
+        const user = c.get("user");
+        const { projectId } = c.req.valid("param");
+
+        const project = await getProjectUseCase(projectId);
+
+        if (!project) throw new PublicError("Project not found.");
+
+        const member = await getMemberUseCase(user.id, project.workspaceId);
+
+        if (!member)
+          throw new PublicError("You are not a member of this workspace.");
+
+        const canView = hasPermission(
+          member.role,
+          "projects",
+          "view",
+          undefined,
+        );
+
+        if (!canView.permission)
+          throw new PublicError(
+            canView?.message ?? "You are not allowed to view this project.",
+          );
+
+        const analytics = await getProjectAnalyticsUseCase(
+          projectId,
+          member.id,
+        );
+
+        return c.json({ analytics });
+      } catch (err: unknown) {
+        return returnError(err, c);
+      }
+    },
+  )
   // POST Methods
   // POST /create create a project
   .post("/create", authMiddleware, createProjectValidator, async c => {

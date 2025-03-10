@@ -1,3 +1,6 @@
+@import "react-big-calendar/lib/css/react-big-calendar.css";
+@import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -238,13 +241,69 @@
   @apply !bg-shark-600 text-white;
 }
 
-
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* calendar styles */
+.rbc-calendar {
+  /* @apply !w-full !min-h-[1500px]; */
+
+  .rbc-btn-group {
+    @apply !hidden;
+  }
+
+  .rbc-month-view {
+    @apply !border-none;
+  }
+
+  .rbc-header {
+    @apply !border-none;
+  }
+
+  .rbc-month-row {
+    @apply !border !border-border !min-h-[210px];
+  }
+
+  .rbc-day-bg {
+    @apply !border-l-border !bg-shark-950;
+  }
+
+  .rbc-row-bg .rbc-day-bg:last-of-type {
+    @apply !border-r !border-border;
+  }
+
+  .rbc-off-range-bg {
+    @apply !bg-muted/10;
+  }
+
+  .rbc-button-link {
+    @apply !text-xs !text-muted-foreground;
+  }
+
+  .rbc-date-cell.rbc-now {
+    @apply !font-normal;
+  }
+
+  .rbc-header {
+    @apply !text-muted-foreground pb-3 !font-medium;
+  }
+
+  .rbc-toolbar-label {
+    @apply !hidden;
+  }
+
+  .rbc-today {
+    @apply !bg-blue-500/10;
+  }
+
+  .rbc-event,
+  .rbc-day-slot .rbc-background-event {
+    @apply !bg-transparent !p-0;
   }
 }
