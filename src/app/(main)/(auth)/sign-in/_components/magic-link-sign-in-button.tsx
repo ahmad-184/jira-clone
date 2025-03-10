@@ -14,7 +14,7 @@ export default function MagicLinkSignInButton({ className }: Props) {
   const [loading, setLoading] = useState(false);
 
   return (
-    <Link href="/magic-link" className="flex-1">
+    <Link href="/sign-in/magic-link" className="flex-1">
       <LoaderButton
         isLoading={loading}
         onClick={() => setLoading(true)}
