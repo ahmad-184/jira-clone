@@ -55,12 +55,18 @@ export const useTask = () => {
         .forEach(({ queryKey }) => {
           const filters = queryKey[1] || {};
           if (taskMatchesFilters(newTask, filters)) {
-            queryClient.setQueryData(queryKey, (old: Task[]) => {
-              const taskExist = old.find(e => e.id === task.id);
-              return !!taskExist
-                ? old.map(e => (e.id === task.id ? newTask : e))
-                : [...old, newTask];
-            });
+            queryClient.setQueryData(
+              queryKey,
+              (old: GetTasksWithSearchQueriesUseCaseReturn) => {
+                const taskExist = old.tasks.find(e => e.id === task.id);
+                if (!taskExist)
+                  return { ...old, tasks: [...old.tasks, newTask] };
+                return {
+                  ...old,
+                  tasks: old.tasks.map(e => (e.id === task.id ? newTask : e)),
+                };
+              },
+            );
           }
         });
     },
@@ -80,14 +86,12 @@ export const useTask = () => {
         .forEach(key => {
           queryClient.setQueryData(
             key,
-            (
-              oldData: Exclude<GetTasksWithSearchQueriesUseCaseReturn, "total">,
-            ) => {
+            (oldData: GetTasksWithSearchQueriesUseCaseReturn) => {
               const newData = oldData.tasks.map(task => {
                 const update = taskUpdates.find(t => t.id === task.id);
                 return update ? { ...task, ...update } : task;
               });
-              return newData;
+              return { ...oldData, tasks: newData };
             },
           );
         });
@@ -112,8 +116,13 @@ export const useTask = () => {
         .forEach(({ queryKey }) => {
           queryClient.setQueryData(
             queryKey,
-            (old: Task[] | undefined) =>
-              old?.filter(task => !ids.includes(task.id)) || [],
+            (old: GetTasksWithSearchQueriesUseCaseReturn | undefined) => {
+              if (!old) return old;
+              return {
+                ...old,
+                tasks: old.tasks.filter(task => !ids.includes(task.id)),
+              };
+            },
           );
         });
       ids.forEach(id => {

@@ -1,10 +1,10 @@
 "use client";
 
-import { GetTasksWithSearchQueriesUseCaseReturn } from "@/use-cases/types";
+import { GetTaskUseCaseReturn } from "@/use-cases/types";
 import DataTable from "./data-table";
 
 type Props = {
-  tasks: GetTasksWithSearchQueriesUseCaseReturn["tasks"];
+  tasks: GetTaskUseCaseReturn[];
 };
 
 export default function TaskTable({ tasks }: Props) {

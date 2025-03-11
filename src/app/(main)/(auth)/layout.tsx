@@ -10,9 +10,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <Logo />
           </Link>
           <div className="py-10 w-full flex justify-center">{children}</div>
-          {/* <div className="pb-5">
-            <ThemeToggle />
-          </div> */}
         </div>
       </div>
     </div>

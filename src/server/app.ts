@@ -12,6 +12,7 @@ import taskRoutes from "./routes/task.route";
 import tagRoutes from "./routes/tag.route";
 
 export const app = new Hono().basePath("/api");
+
 app.use("/api/*", cors());
 
 export const routes = app

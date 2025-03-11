@@ -1,7 +1,4 @@
-import {
-  GetTasksWithSearchQueriesUseCaseReturn,
-  GetTaskUseCaseReturn,
-} from "@/use-cases/types";
+import { GetTaskUseCaseReturn } from "@/use-cases/types";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { enUS } from "date-fns/locale";
 import {
@@ -31,7 +28,7 @@ const localizer = dateFnsLocalizer({
 });
 
 type Props = {
-  tasks: GetTasksWithSearchQueriesUseCaseReturn["tasks"] | undefined;
+  tasks: GetTaskUseCaseReturn[] | undefined;
 };
 type OnNavigate = (action: "prev" | "next" | "today") => void;
 type Event = {

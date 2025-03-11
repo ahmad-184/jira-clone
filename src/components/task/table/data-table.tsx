@@ -13,7 +13,7 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 import { columns } from "./columns";
-import { GetTasksWithSearchQueriesUseCaseReturn } from "@/use-cases/types";
+import { GetTaskUseCaseReturn } from "@/use-cases/types";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -29,7 +29,7 @@ import { useWorkspace } from "@/hooks/workspace-provider";
 import { useLocalStorage } from "usehooks-ts";
 
 type Props = {
-  data: GetTasksWithSearchQueriesUseCaseReturn["tasks"];
+  data: GetTaskUseCaseReturn[];
 };
 
 export default function DataTable({ data }: Props) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
-import { GetTasksWithSearchQueriesUseCaseReturn } from "@/use-cases/types";
+import { GetTaskUseCaseReturn } from "@/use-cases/types";
 import { Task, TaskStatus } from "@/db/schema";
 import { useCallback, useEffect, useState } from "react";
 import KanbanColumnHeader from "./kanban-column-header";
@@ -13,13 +13,10 @@ import { useTask } from "@/hooks/task/use-task";
 import { useQueryClient } from "@tanstack/react-query";
 
 type Props = {
-  tasks: GetTasksWithSearchQueriesUseCaseReturn["tasks"] | undefined;
+  tasks: GetTaskUseCaseReturn[] | undefined;
 };
 type TaskUpdate = Pick<Task, "id" | "workspaceId" | "position" | "status">;
-type TaskState = Record<
-  TaskStatus,
-  GetTasksWithSearchQueriesUseCaseReturn["tasks"]
->;
+type TaskState = Record<TaskStatus, GetTaskUseCaseReturn[]>;
 
 export default function TaskKanban({ tasks }: Props) {
   const [boardState, setBoardState] = useState<TaskState>({
@@ -78,13 +75,13 @@ export default function TaskKanban({ tasks }: Props) {
       }));
 
       updateTasksOptimistic(toUpdate);
+      setTaskUpdates(toUpdate.map(e => ({ ...e, workspaceId })));
       updateTasksPosition({
         json: {
           workspaceId,
           tasks: toUpdate,
         },
       });
-      setTaskUpdates(toUpdate.map(e => ({ ...e, workspaceId })));
     },
     [boardState, workspaceId, updateTasksPosition, updateTasksOptimistic],
   );
