@@ -118,9 +118,14 @@ export const useTask = () => {
             queryKey,
             (old: GetTasksWithSearchQueriesUseCaseReturn | undefined) => {
               if (!old) return old;
+              const filteredTasks = old.tasks.filter(task => {
+                if (ids.includes(task.id) || ids.includes(task.projectId))
+                  return false;
+                return true;
+              });
               return {
                 ...old,
-                tasks: old.tasks.filter(task => !ids.includes(task.id)),
+                tasks: filteredTasks,
               };
             },
           );

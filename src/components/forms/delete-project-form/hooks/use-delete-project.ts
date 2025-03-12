@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useDeleteProjectMutation } from "./mutations/use-delete-project-mutation";
+import { useTask } from "@/hooks/task/use-task";
 
 type Props = {
   projectName: string;
@@ -28,6 +29,8 @@ const validationSchema = (projectName: string) => {
 export const useDeleteProject = ({ projectId, projectName }: Props) => {
   const [error, setError] = useState<string | null>(null);
 
+  const { deleteTasksOptimistic } = useTask();
+
   const validation = validationSchema(projectName);
 
   const form = useForm<z.infer<typeof validation>>({
@@ -39,6 +42,9 @@ export const useDeleteProject = ({ projectId, projectName }: Props) => {
   });
 
   const { mutate, isPending } = useDeleteProjectMutation({
+    onSuccess: res => {
+      deleteTasksOptimistic([res.id]);
+    },
     onError: error => {
       setError(error.message);
     },
