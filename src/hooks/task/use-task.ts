@@ -3,7 +3,7 @@
 import { useGetTasksQuery } from "@/hooks/queries/use-get-tasks";
 import { useTaskFilters } from "../../components/task/hooks/use-task-filters";
 import { useParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { Task, TaskStatus } from "@/db/schema";
 import {
   GetTasksWithSearchQueriesUseCaseReturn,
@@ -35,8 +35,7 @@ type UpdatePayloadType = Payload<
 type InsertPayloadType = Payload<GetTaskUseCaseReturn>;
 
 export const useTask = () => {
-  const [realtimeChannel, setRealtimeChannel] =
-    useState<RealtimeChannel | null>(null);
+  const realtimeChannelRef = useRef<RealtimeChannel | null>(null);
 
   const { projectId } = useParams<{ projectId: string | undefined }>();
   const queryClient = useQueryClient();
@@ -138,8 +137,9 @@ export const useTask = () => {
   );
 
   const broadcastCreateTask = (data: GetTaskUseCaseReturn) => {
-    if (!realtimeChannel) return;
-    realtimeChannel.send({
+    if (!realtimeChannelRef.current) return;
+    const channel = realtimeChannelRef.current;
+    channel.send({
       event: taskRealtimeEvents.insert,
       type: "broadcast",
       payload: data,
@@ -152,8 +152,9 @@ export const useTask = () => {
       workspaceId: string;
     })[],
   ) => {
-    if (!realtimeChannel) return;
-    realtimeChannel.send({
+    if (!realtimeChannelRef.current) return;
+    const channel = realtimeChannelRef.current;
+    channel.send({
       event: taskRealtimeEvents.update,
       type: "broadcast",
       payload: data,
@@ -161,8 +162,9 @@ export const useTask = () => {
   };
 
   const broadcastDeletedTasks = (data: string[]) => {
-    if (!realtimeChannel) return;
-    realtimeChannel.send({
+    if (!realtimeChannelRef.current) return;
+    const channel = realtimeChannelRef.current;
+    channel.send({
       event: taskRealtimeEvents.delete,
       type: "broadcast",
       payload: data,
@@ -199,14 +201,15 @@ export const useTask = () => {
     if (!connection) return;
     if (!workspaceId || !validate(workspaceId)) return;
 
-    let channel: RealtimeChannel | null = null;
-    channel = supabase.channel(workspaceId);
-
-    if (!channel) return;
+    const channel = supabase.channel(workspaceId);
+    realtimeChannelRef.current = channel;
 
     channel.subscribe(status => {
-      if (status !== "SUBSCRIBED") return;
-      console.log("subscribed");
+      if (status !== "SUBSCRIBED") {
+        console.log("Subscription failed to channel:", workspaceId);
+        return;
+      }
+      console.log("Subscribed to channel:", workspaceId);
 
       channel
         .on("broadcast", { event: taskRealtimeEvents.insert }, payload =>
@@ -218,22 +221,27 @@ export const useTask = () => {
         .on("broadcast", { event: taskRealtimeEvents.delete }, payload =>
           onDelete(payload as DeletePayloadType),
         );
-
-      setRealtimeChannel(channel);
     });
 
     return () => {
-      channel.unsubscribe().then(() => {
-        setRealtimeChannel(null);
-        console.log("unsubscribed");
-      });
+      if (realtimeChannelRef.current) {
+        realtimeChannelRef.current
+          .unsubscribe()
+          .then(() => {
+            console.log("Unsubscribed from channel:", workspaceId);
+            realtimeChannelRef.current = null;
+          })
+          .catch(error => {
+            console.error("Unsubscribe error:", error);
+          });
+      }
     };
   }, [workspaceId, connection, onInsert, onUpdate, onDelete]);
 
   return {
     tasks,
     loading: taskPending,
-    realtimeChannel,
+    realtimeChannel: realtimeChannelRef.current,
     createTaskOptimistic,
     updateTasksOptimistic,
     deleteTasksOptimistic,
