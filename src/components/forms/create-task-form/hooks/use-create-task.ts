@@ -10,7 +10,7 @@ import { useCreateTaskMutation } from "./mutations/use-create-task-mutation";
 import { toast } from "sonner";
 import { TASK_STATUS } from "@/constants/forms";
 import { Task, TaskStatus } from "@/db/schema";
-import { useTask } from "@/hooks/task/use-task";
+import { useTaskRealtime } from "@/providers/task-realtime-provider";
 
 type Props = {
   projectId?: string;
@@ -27,7 +27,7 @@ export const useCreateTask = ({
 }: Props) => {
   const [error, setError] = useState<string | undefined>(undefined);
 
-  const { broadcastCreateTask, createTaskOptimistic } = useTask();
+  const { broadcastCreateTask, createTaskOptimistic } = useTaskRealtime();
   const { workspaceId } = useWorkspace();
 
   const form = useForm<z.infer<typeof createTaskSchema>>({

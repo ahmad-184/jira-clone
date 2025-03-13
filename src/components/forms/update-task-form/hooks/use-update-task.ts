@@ -9,7 +9,7 @@ import { useUpdateTaskMutation } from "@/hooks/mutations/use-update-task-mutatio
 import { useWorkspace } from "@/hooks/workspace-provider";
 import { GetTaskUseCaseReturn } from "@/use-cases/types";
 import { z } from "zod";
-import { useTask } from "@/hooks/task/use-task";
+import { useTaskRealtime } from "@/providers/task-realtime-provider";
 
 type Props = {
   taskId: string;
@@ -21,7 +21,7 @@ export const useUpdateTask = ({ taskId, onCallback, task }: Props) => {
   const [error, setError] = useState<string | undefined>(undefined);
 
   const { workspaceId } = useWorkspace();
-  const { updateTasksOptimistic, broadcastUpdatedTasks } = useTask();
+  const { updateTasksOptimistic, broadcastUpdatedTasks } = useTaskRealtime();
 
   const form = useForm<z.infer<typeof updateTaskSchema>>({
     resolver: zodResolver(updateTaskSchema),

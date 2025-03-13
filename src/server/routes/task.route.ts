@@ -199,10 +199,10 @@ const app = new Hono()
         if (!member)
           throw new PublicError("You are not a member of this workspace.");
 
-        const ids = await updateTasksPositionUseCase(member, values.tasks);
+        const tasks = await updateTasksPositionUseCase(member, values.tasks);
 
         return c.json({
-          ids,
+          tasks,
         });
       } catch (err: unknown) {
         return returnError(err, c);

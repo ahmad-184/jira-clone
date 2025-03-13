@@ -2,20 +2,18 @@
 
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { GetTaskUseCaseReturn } from "@/use-cases/types";
-import { Task, TaskStatus } from "@/db/schema";
+import { TaskStatus } from "@/db/schema";
 import { useCallback, useEffect, useState } from "react";
 import KanbanColumnHeader from "./kanban-column-header";
 import KanbanCard from "./kanban-card";
 import { useUpdateTaskPositionMutation } from "../hooks/mutations/use-update-task-position";
 import { useWorkspace } from "@/hooks/workspace-provider";
 import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member";
-import { useTask } from "@/hooks/task/use-task";
-import { useQueryClient } from "@tanstack/react-query";
+import { useTaskRealtime } from "@/providers/task-realtime-provider";
 
 type Props = {
   tasks: GetTaskUseCaseReturn[] | undefined;
 };
-type TaskUpdate = Pick<Task, "id" | "workspaceId" | "position" | "status">;
 type TaskState = Record<TaskStatus, GetTaskUseCaseReturn[]>;
 
 export default function TaskKanban({ tasks }: Props) {
@@ -26,22 +24,16 @@ export default function TaskKanban({ tasks }: Props) {
     IN_REVIEW: [],
     DONE: [],
   });
-  const [taskUpdates, setTaskUpdates] = useState<TaskUpdate[]>([]);
 
-  const queryClient = useQueryClient();
   const { workspaceId } = useWorkspace();
   const { data: currentMember } = useGetCurrentMemberQuery(workspaceId);
-  const { updateTasksOptimistic, broadcastUpdatedTasks } = useTask();
+  const { updateTasksOptimistic, broadcastUpdatedTasks } = useTaskRealtime();
 
   const { mutate: updateTasksPosition } = useUpdateTaskPositionMutation({
-    onSuccess: () => {
-      if (!taskUpdates.length) return;
-      broadcastUpdatedTasks(taskUpdates);
-      setTaskUpdates([]);
-    },
-    onError: () => {
-      setTaskUpdates([]);
-      queryClient.invalidateQueries({ queryKey: ["tasks"], type: "all" });
+    onSuccess: res => {
+      if (!res.tasks.length) return;
+      const tasks = res.tasks.map(e => ({ ...e, workspaceId }));
+      broadcastUpdatedTasks(tasks);
     },
   });
 
@@ -75,7 +67,6 @@ export default function TaskKanban({ tasks }: Props) {
       }));
 
       updateTasksOptimistic(toUpdate);
-      setTaskUpdates(toUpdate.map(e => ({ ...e, workspaceId })));
       updateTasksPosition({
         json: {
           workspaceId,

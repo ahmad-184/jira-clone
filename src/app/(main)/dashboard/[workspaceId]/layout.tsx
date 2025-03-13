@@ -13,6 +13,7 @@ import { makeQueryClient } from "@/lib/react-query";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getProfileWithUserEmailUseCase } from "@/use-cases/users";
 import { WorkspaceProvider } from "@/providers/workspace-provider";
+import TaskRealtimeProvider from "@/providers/task-realtime-provider";
 
 export default async function Layout({
   children,
@@ -79,15 +80,17 @@ export default async function Layout({
   return (
     <HydrationBoundary state={dehydratedState}>
       <WorkspaceProvider workspaceId={currentWorkspace.id}>
-        <main className="min-w-screen min-h-screen">
-          <SidebarProvider>
-            <Sidebar />
-            <main className="flex-1 flex p-4 flex-col gap-7 dark:!bg-shark-900 overflow-x-hidden">
-              <Header />
-              <div className="flex-1 pb-5">{children}</div>
-            </main>
-          </SidebarProvider>
-        </main>
+        <TaskRealtimeProvider workspaceId={currentWorkspace.id}>
+          <main className="min-w-screen min-h-screen">
+            <SidebarProvider>
+              <Sidebar />
+              <main className="flex-1 flex p-4 flex-col gap-7 dark:!bg-shark-900 overflow-x-hidden">
+                <Header />
+                <div className="flex-1 pb-5">{children}</div>
+              </main>
+            </SidebarProvider>
+          </main>
+        </TaskRealtimeProvider>
       </WorkspaceProvider>
     </HydrationBoundary>
   );

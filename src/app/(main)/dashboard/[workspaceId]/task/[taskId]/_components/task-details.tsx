@@ -21,7 +21,7 @@ import TaskTag from "@/components/task/task-tag";
 import TaskStatusBadge from "@/components/task/task-status-badge";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useUpdateTaskMutation } from "@/hooks/mutations/use-update-task-mutation";
-import { useTask } from "@/hooks/task/use-task";
+import { useTaskRealtime } from "@/providers/task-realtime-provider";
 
 type Props = {
   taskId: string;
@@ -39,7 +39,7 @@ export default function TaskDetails({ taskId }: Props) {
   const { data: currentMember, isPending: currentMemberLoading } =
     useGetCurrentMemberQuery(workspaceId);
 
-  const { broadcastUpdatedTasks, updateTasksOptimistic } = useTask();
+  const { broadcastUpdatedTasks, updateTasksOptimistic } = useTaskRealtime();
 
   const { mutate: updateTask } = useUpdateTaskMutation({
     onSuccess: ({ task }) => {

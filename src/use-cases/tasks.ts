@@ -65,7 +65,11 @@ export async function updateTasksPositionUseCase(
 
   await updateTasks(results);
 
-  return results.map(result => result.id);
+  return results.map(result => ({
+    id: result.id,
+    position: result.data.position,
+    status: result.data.status,
+  }));
 }
 
 export async function getTaskUseCase(taskId: string) {
