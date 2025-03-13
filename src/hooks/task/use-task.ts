@@ -1,8 +1,9 @@
 "use client";
 
+import { useParams } from "next/navigation";
+
 import { useGetTasksQuery } from "@/hooks/queries/use-get-tasks";
 import { useTaskFilters } from "../../components/task/hooks/use-task-filters";
-import { useParams } from "next/navigation";
 
 export const useTask = () => {
   const { projectId } = useParams<{ projectId: string | undefined }>();

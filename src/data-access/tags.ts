@@ -1,6 +1,9 @@
+import "server-only";
+
+import { and, eq, notInArray } from "drizzle-orm";
+
 import { database } from "@/db";
 import { Tag, tags, TaskTag, taskTags } from "@/db/schema";
-import { and, eq, notInArray } from "drizzle-orm";
 
 export async function createTag(values: Tag) {
   await database.insert(tags).values(values);

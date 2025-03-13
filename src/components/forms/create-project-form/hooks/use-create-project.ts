@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { useCreateProjectMutation } from "./mutations/use-create-project-mutation";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { createProjectSchema } from "@/validations/project.validation";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
+
+import { useCreateProjectMutation } from "./mutations/use-create-project-mutation";
+import { createProjectSchema } from "@/validations/project.validation";
 import { FileWithPreview } from "@/types";
 import { startUploadImage } from "@/lib/uploader";
 

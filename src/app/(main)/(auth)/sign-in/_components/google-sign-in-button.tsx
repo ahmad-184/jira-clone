@@ -1,10 +1,11 @@
 "use client";
 
+import { useState } from "react";
+import Link from "next/link";
+
 import { LoaderButton } from "@/components/loader-button";
 import GoogleIcon from "@/icons/google-icon";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { useState } from "react";
 
 type Props = {
   className?: string;

@@ -1,6 +1,8 @@
+import { redirect } from "next/navigation";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { getCurrentUser } from "@/lib/session";
-import { redirect } from "next/navigation";
 import { Sidebar } from "./_components/sidebar";
 import Header from "./_components/header";
 import { getMemberUseCase } from "@/use-cases/members";
@@ -10,7 +12,6 @@ import {
   getWorkspaceProjectsUseCase,
 } from "@/use-cases/workspaces";
 import { makeQueryClient } from "@/lib/react-query";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getProfileWithUserEmailUseCase } from "@/use-cases/users";
 import { WorkspaceProvider } from "@/providers/workspace-provider";
 import TaskRealtimeProvider from "@/providers/task-realtime-provider";

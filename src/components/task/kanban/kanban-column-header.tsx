@@ -1,7 +1,6 @@
 "use client";
 
-import { statusNames } from "@/constants/status";
-import { TaskStatus } from "@/db/schema";
+import { useMemo } from "react";
 import {
   CircleCheckIcon,
   CircleDashedIcon,
@@ -9,7 +8,9 @@ import {
   CircleDotIcon,
   CircleIcon,
 } from "lucide-react";
-import { useMemo } from "react";
+
+import { statusNames } from "@/constants/status";
+import { TaskStatus } from "@/db/schema";
 
 const statusIcons: Record<TaskStatus, React.ReactNode> = {
   BACKLOG: <CircleDashedIcon className="size-[15px] text-pink-400" />,

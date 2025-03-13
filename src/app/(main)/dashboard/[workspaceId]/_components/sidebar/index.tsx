@@ -1,5 +1,8 @@
 "use client";
 
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+
 import {
   Sidebar as AppSidebar,
   SidebarContent,
@@ -16,10 +19,8 @@ import {
 import SidebarHeader from "./sidebar-header";
 import { useUserWorkspacesQuery } from "@/hooks/queries/use-user-workspaces-query";
 import { useCurrentUserQuery } from "@/hooks/queries/use-current-user-query";
-import { usePathname } from "next/navigation";
 import WorkspacesSwitcher from "./workspaces-switcher";
 import { SIDEBAR_OPTIONS } from "@/constants/sidebar";
-import Link from "next/link";
 import { useWorkspaceRealtime } from "@/hooks/workspace/use-workspace-realtime";
 import ProjectsMenu from "./projects-menu";
 import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member";

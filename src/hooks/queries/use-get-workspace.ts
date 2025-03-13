@@ -1,6 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
+
 import { client } from "@/lib/rpc";
 import { convertToDate } from "@/util";
-import { useQuery } from "@tanstack/react-query";
 
 export const useGetWorkspaceQuery = (workspaceId: string) => {
   return useQuery({

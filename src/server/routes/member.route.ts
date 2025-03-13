@@ -1,7 +1,9 @@
 import "server-only";
 
-import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
+import { zValidator } from "@hono/zod-validator";
+import { z } from "zod";
+
 import { returnError } from "../utils";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import {
@@ -13,7 +15,6 @@ import {
 import { hasPermission } from "@/lib/permission-system";
 import { PublicError } from "@/lib/errors";
 import { getWorkspaceMembersUseCase } from "@/use-cases/workspaces";
-import { z } from "zod";
 import { workspaceIdSchema } from "@/validations/workspace.validation";
 import {
   deleteMemberSchema,
@@ -33,7 +34,6 @@ const workspaceIdValidator = zValidator(
 );
 
 const app = new Hono()
-  // GET Methods
   // GET /current-member?workspaceId="xxxxxx"
   .get("/current-member", authMiddleware, workspaceIdValidator, async c => {
     try {
@@ -45,7 +45,6 @@ const app = new Hono()
       return returnError(err, c);
     }
   })
-  // UPDATE Methods
   // UPDATE /:memberId update a member
   .put(
     "/:memberId",
@@ -109,7 +108,6 @@ const app = new Hono()
       }
     },
   )
-  // DELETE Methods
   // DELETE /:memberId delete a member
   .delete("/:memberId", authMiddleware, deleteMemberValidator, async c => {
     try {

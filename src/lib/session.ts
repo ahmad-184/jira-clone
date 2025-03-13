@@ -1,12 +1,13 @@
 import "server-only";
 
+import { cache } from "react";
+import { cookies } from "next/headers";
+
 import {
   generateSessionIdByToken,
   generateSessionToken,
   validateRequest,
 } from "@/auth";
-import { cache } from "react";
-import { cookies } from "next/headers";
 import { UserId } from "@/use-cases/types";
 import { AuthenticationError } from "./errors";
 import {

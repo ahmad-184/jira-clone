@@ -1,9 +1,10 @@
 import "server-only";
 
+import { eq } from "drizzle-orm";
+
 import { database } from "@/db";
 import { Session, sessions } from "@/db/schema";
 import { UserId } from "@/use-cases/types";
-import { eq } from "drizzle-orm";
 
 export async function getSession(sessionId: string) {
   const sessionInDb = await database.query.sessions.findFirst({

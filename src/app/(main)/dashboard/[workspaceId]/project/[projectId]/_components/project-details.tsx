@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import ProjectIcon from "@/components/project/project-icon";
 import { buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -7,7 +9,6 @@ import { useGetProjectQuery } from "@/hooks/queries/use-get-project";
 import { SettingIconFill } from "@/icons/setting-icon";
 import { fDate } from "@/lib/format-time";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 
 type Props = {
   projectId: string;

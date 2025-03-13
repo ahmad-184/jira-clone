@@ -1,8 +1,10 @@
+import "server-only";
+
+import { count, eq, inArray, SQL } from "drizzle-orm";
+
 import { database } from "@/db";
 import { Task, tasks } from "@/db/schema";
-import "server-only";
 import { GetTaskPropsType, GetTasksPropsType } from "./type";
-import { count, eq, inArray, SQL } from "drizzle-orm";
 
 export async function createTask(values: Omit<Task, "createdAt">) {
   const [res] = await database

@@ -1,13 +1,14 @@
+import { MoreHorizontalIcon } from "lucide-react";
+import { Draggable } from "@hello-pangea/dnd";
+
 import { GetTaskUseCaseReturn } from "@/use-cases/types";
 import ActionsMenu from "../actions-menu";
-import { MoreHorizontalIcon } from "lucide-react";
 import { DottedSeparator } from "@/components/ui/dotted-separator";
 import { truncateString } from "@/util/truncate-string";
 import { cn } from "@/lib/utils";
 import Avatar from "@/components/avatar";
 import { fDate } from "@/lib/format-time";
 import ProjectIcon from "@/components/project/project-icon";
-import { Draggable } from "@hello-pangea/dnd";
 import { Member } from "@/db/schema";
 import { usePermission } from "@/hooks/use-permission";
 import TaskTag from "../task-tag";

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { MinusIcon } from "@/icons/minus-icon";
 import { useDeleteMember } from "./hooks/use-delete-member";
@@ -14,7 +16,6 @@ import {
 import { LoaderButton } from "@/components/loader-button";
 import { MemberWithUserEmailAndProfileType } from "@/types/members";
 import { User } from "@/db/schema";
-import { useState } from "react";
 import { DottedSeparator } from "@/components/ui/dotted-separator";
 
 type Props = {

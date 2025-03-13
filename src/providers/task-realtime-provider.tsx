@@ -1,14 +1,9 @@
 "use client";
 
-import { Task, TaskStatus } from "@/db/schema";
-import useInternetConnection from "@/hooks/use-connection";
-import { supabase } from "@/lib/supabase";
-import {
-  GetTasksWithSearchQueriesUseCaseReturn,
-  GetTaskUseCaseReturn,
-} from "@/use-cases/types";
 import { REALTIME_LISTEN_TYPES, RealtimeChannel } from "@supabase/supabase-js";
 import { useQueryClient } from "@tanstack/react-query";
+import { validate } from "uuid";
+
 import {
   createContext,
   useCallback,
@@ -16,7 +11,14 @@ import {
   useEffect,
   useState,
 } from "react";
-import { validate } from "uuid";
+
+import { Task, TaskStatus } from "@/db/schema";
+import useInternetConnection from "@/hooks/use-connection";
+import { supabase } from "@/lib/supabase";
+import {
+  GetTasksWithSearchQueriesUseCaseReturn,
+  GetTaskUseCaseReturn,
+} from "@/use-cases/types";
 
 const taskRealtimeEvents = {
   insert: "TASK:INSERT",
@@ -36,7 +38,12 @@ type UpdatePayloadType = Payload<
 >;
 type InsertPayloadType = Payload<GetTaskUseCaseReturn>;
 
-type TaskRealtimeContextType = {
+type TaskRealtimeProviderProps = {
+  children: React.ReactNode;
+  workspaceId: string;
+};
+
+type ContextType = {
   realtimeChannel: RealtimeChannel | null;
   createTaskOptimistic: (data: GetTaskUseCaseReturn) => void;
   updateTasksOptimistic: (
@@ -55,7 +62,7 @@ type TaskRealtimeContextType = {
   broadcastDeletedTasks: (data: string[]) => void;
 };
 
-export const TaskRealtimeContext = createContext<TaskRealtimeContextType>({
+export const TaskRealtimeContext = createContext<ContextType>({
   realtimeChannel: null,
   createTaskOptimistic: () => {},
   updateTasksOptimistic: () => {},
@@ -78,45 +85,41 @@ export const useTaskRealtime = () => {
 export default function TaskRealtimeProvider({
   children,
   workspaceId,
-}: {
-  children: React.ReactNode;
-  workspaceId: string;
-}) {
+}: TaskRealtimeProviderProps) {
   const [realtimeChannel, setRealtimeChannel] =
     useState<RealtimeChannel | null>(null);
 
   const queryClient = useQueryClient();
   const connection = useInternetConnection();
 
-  const createTaskOptimistic: TaskRealtimeContextType["createTaskOptimistic"] =
-    useCallback(
-      (task: GetTaskUseCaseReturn) => {
-        const newTask = task;
-        queryClient
-          .getQueryCache()
-          .findAll({ queryKey: ["tasks"] })
-          .forEach(({ queryKey }) => {
-            const filters = queryKey[1] || {};
-            if (taskMatchesFilters(newTask, filters)) {
-              queryClient.setQueryData(
-                queryKey,
-                (old: GetTasksWithSearchQueriesUseCaseReturn) => {
-                  const taskExist = old.tasks.find(e => e.id === task.id);
-                  if (!taskExist)
-                    return { ...old, tasks: [...old.tasks, newTask] };
-                  return {
-                    ...old,
-                    tasks: old.tasks.map(e => (e.id === task.id ? newTask : e)),
-                  };
-                },
-              );
-            }
-          });
-      },
-      [queryClient],
-    );
+  const createTaskOptimistic: ContextType["createTaskOptimistic"] = useCallback(
+    (task: GetTaskUseCaseReturn) => {
+      const newTask = task;
+      queryClient
+        .getQueryCache()
+        .findAll({ queryKey: ["tasks"] })
+        .forEach(({ queryKey }) => {
+          const filters = queryKey[1] || {};
+          if (taskMatchesFilters(newTask, filters)) {
+            queryClient.setQueryData(
+              queryKey,
+              (old: GetTasksWithSearchQueriesUseCaseReturn) => {
+                const taskExist = old.tasks.find(e => e.id === task.id);
+                if (!taskExist)
+                  return { ...old, tasks: [...old.tasks, newTask] };
+                return {
+                  ...old,
+                  tasks: old.tasks.map(e => (e.id === task.id ? newTask : e)),
+                };
+              },
+            );
+          }
+        });
+    },
+    [queryClient],
+  );
 
-  const updateTasksOptimistic: TaskRealtimeContextType["updateTasksOptimistic"] =
+  const updateTasksOptimistic: ContextType["updateTasksOptimistic"] =
     useCallback(
       taskUpdates => {
         queryClient
@@ -148,7 +151,7 @@ export default function TaskRealtimeProvider({
       [queryClient, workspaceId],
     );
 
-  const deleteTasksOptimistic: TaskRealtimeContextType["deleteTasksOptimistic"] =
+  const deleteTasksOptimistic: ContextType["deleteTasksOptimistic"] =
     useCallback(
       ids => {
         queryClient
@@ -178,15 +181,14 @@ export default function TaskRealtimeProvider({
       [queryClient, workspaceId],
     );
 
-  const broadcastCreateTask: TaskRealtimeContextType["broadcastCreateTask"] =
-    useCallback(
-      data => {
-        sendEvent(realtimeChannel, taskRealtimeEvents.insert, data);
-      },
-      [realtimeChannel],
-    );
+  const broadcastCreateTask: ContextType["broadcastCreateTask"] = useCallback(
+    data => {
+      sendEvent(realtimeChannel, taskRealtimeEvents.insert, data);
+    },
+    [realtimeChannel],
+  );
 
-  const broadcastUpdatedTasks: TaskRealtimeContextType["broadcastUpdatedTasks"] =
+  const broadcastUpdatedTasks: ContextType["broadcastUpdatedTasks"] =
     useCallback(
       data => {
         sendEvent(realtimeChannel, taskRealtimeEvents.update, data);
@@ -194,7 +196,7 @@ export default function TaskRealtimeProvider({
       [realtimeChannel],
     );
 
-  const broadcastDeletedTasks: TaskRealtimeContextType["broadcastDeletedTasks"] =
+  const broadcastDeletedTasks: ContextType["broadcastDeletedTasks"] =
     useCallback(
       data => {
         sendEvent(realtimeChannel, taskRealtimeEvents.delete, data);
@@ -203,7 +205,7 @@ export default function TaskRealtimeProvider({
     );
 
   const onDelete = useCallback(
-    async ({ payload }: DeletePayloadType) => {
+    ({ payload }: DeletePayloadType) => {
       if (!payload || !payload.length) return;
       deleteTasksOptimistic(payload);
     },
@@ -211,7 +213,7 @@ export default function TaskRealtimeProvider({
   );
 
   const onUpdate = useCallback(
-    async ({ payload }: UpdatePayloadType) => {
+    ({ payload }: UpdatePayloadType) => {
       if (!payload || !payload.length) return;
       if (payload.every(e => e.workspaceId !== workspaceId)) return;
       updateTasksOptimistic(payload);
@@ -220,7 +222,7 @@ export default function TaskRealtimeProvider({
   );
 
   const onInsert = useCallback(
-    async ({ payload }: InsertPayloadType) => {
+    ({ payload }: InsertPayloadType) => {
       if (!payload.id) return;
       if (payload.workspaceId !== workspaceId) return;
       createTaskOptimistic(payload);
@@ -279,12 +281,8 @@ const sendEvent = (
   payload: any,
 ) => {
   if (!socket) return;
-  if (socket.state !== "joined") return;
-  socket.send({
-    event,
-    type: "broadcast",
-    payload,
-  });
+  if (socket.state !== "joined") return sendEvent(socket, event, payload);
+  socket.send({ event, type: "broadcast", payload });
 };
 
 const taskMatchesFilters = (

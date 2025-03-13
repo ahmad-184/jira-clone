@@ -1,3 +1,6 @@
+import { useParams, usePathname } from "next/navigation";
+import Link from "next/link";
+
 import CustomTooltip from "@/components/custom/tooltip";
 import CreateProjectModal from "@/components/modals/create-project-modal";
 import ProjectIcon from "@/components/project/project-icon";
@@ -14,8 +17,6 @@ import { useGetWorkspaceProjectsQuery } from "@/hooks/queries/use-get-workspace-
 import { usePermission } from "@/hooks/use-permission";
 import { PlusIconFill } from "@/icons/plus-icon";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
 
 type Props = {
   currentMember: Member;

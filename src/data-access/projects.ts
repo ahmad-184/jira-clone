@@ -1,8 +1,9 @@
 import "server-only";
 
+import { eq } from "drizzle-orm";
+
 import { database } from "@/db";
 import { Project, projects } from "@/db/schema";
-import { eq } from "drizzle-orm";
 import { GetProjectPropsType } from "./type";
 
 export async function createProject(

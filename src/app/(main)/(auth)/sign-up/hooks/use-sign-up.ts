@@ -1,12 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+
 import { useRegisterStore } from "../store/register-store";
-import { useState } from "react";
 import { useSignUpMutation } from "./mutations/use-sign-up-mutation";
 import { useVerifyEmailOtpMutation } from "./mutations/use-verify-email-otp-mutation";
 import { afterLoginUrl } from "@/app-config";

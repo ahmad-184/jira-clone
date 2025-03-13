@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { useWorkspace } from "@/hooks/workspace-provider";
 import {
   Dialog,
@@ -10,7 +12,6 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import CreateProjectForm from "../forms/create-project-form";
-import { useState } from "react";
 import { DottedSeparator } from "../ui/dotted-separator";
 
 type Props = {

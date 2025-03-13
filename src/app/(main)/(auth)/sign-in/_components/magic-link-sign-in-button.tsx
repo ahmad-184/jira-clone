@@ -1,10 +1,11 @@
 "use client";
 
+import { useState } from "react";
+import Link from "next/link";
+import { MailIcon } from "lucide-react";
+
 import { LoaderButton } from "@/components/loader-button";
 import { cn } from "@/lib/utils";
-import { MailIcon } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
 
 type Props = {
   className?: string;

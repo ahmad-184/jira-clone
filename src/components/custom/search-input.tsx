@@ -1,9 +1,10 @@
 "use client";
 
+import { useRef } from "react";
 import { SearchIcon } from "lucide-react";
+
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
-import { useRef } from "react";
 
 interface SearchInputProps {
   className?: string;

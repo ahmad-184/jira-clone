@@ -1,5 +1,6 @@
-import Logo from "@/icons/logo";
 import Link from "next/link";
+
+import Logo from "@/icons/logo";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

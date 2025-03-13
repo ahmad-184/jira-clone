@@ -1,8 +1,9 @@
+import { useMemo } from "react";
+
 import { statusNames } from "@/constants/status";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
 import { TaskStatus } from "@/db/schema";
-import { useMemo } from "react";
 
 export default function TaskStatusBadge({ status }: { status: TaskStatus }) {
   const statusBg = useMemo(() => {

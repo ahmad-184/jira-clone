@@ -1,8 +1,9 @@
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 
 type Props = {

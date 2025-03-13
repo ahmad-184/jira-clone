@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import ProjectIcon from "@/components/project/project-icon";
 import {
   Breadcrumb,
@@ -8,7 +10,6 @@ import {
 } from "@/components/ui/breadcrumb";
 import { useWorkspace } from "@/hooks/workspace-provider";
 import { GetTaskUseCaseReturn } from "@/use-cases/types";
-import Link from "next/link";
 
 type Props = {
   task: GetTaskUseCaseReturn;

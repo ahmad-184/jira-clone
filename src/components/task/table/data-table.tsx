@@ -12,6 +12,8 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
+import { useLocalStorage } from "usehooks-ts";
+
 import { columns } from "./columns";
 import { GetTaskUseCaseReturn } from "@/use-cases/types";
 import { Button } from "@/components/ui/button";
@@ -26,7 +28,6 @@ import {
 import { hasPermission } from "@/lib/permission-system";
 import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member";
 import { useWorkspace } from "@/hooks/workspace-provider";
-import { useLocalStorage } from "usehooks-ts";
 
 type Props = {
   data: GetTaskUseCaseReturn[];

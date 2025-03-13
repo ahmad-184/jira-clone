@@ -1,6 +1,7 @@
+import Image from "next/image";
+
 import { Workspace } from "@/db/schema";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 type Props = {
   workspace: Pick<Workspace, "imageUrl" | "name">;

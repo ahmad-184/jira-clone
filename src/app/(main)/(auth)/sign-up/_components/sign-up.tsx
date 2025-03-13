@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { Terminal } from "lucide-react";
+
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -12,8 +15,6 @@ import {
 } from "@/components/ui/form";
 import { LoaderButton } from "@/components/loader-button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Terminal } from "lucide-react";
-import Link from "next/link";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useSignUp } from "../hooks/use-sign-up";
 

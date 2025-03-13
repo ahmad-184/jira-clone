@@ -2,21 +2,22 @@
 
 import dynamic from "next/dynamic";
 import { useLocalStorage } from "usehooks-ts";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button, buttonVariants } from "@/components/ui/button";
 import {
   AlignStartHorizontalIcon,
   CalendarIcon,
   PlusIcon,
   Table2Icon,
 } from "lucide-react";
+import { useMemo } from "react";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button, buttonVariants } from "@/components/ui/button";
 import CreateTaskModal from "../modals/create-task-modal";
 import TaskDataFilter from "./task-data-filter";
 import LoaderIcon from "../loader-icon";
 import TaskTable from "./table";
 import DeleteTaskModal from "../modals/delete-task-modal";
 import { TrashIcon } from "@/icons/trash-icon";
-import { useMemo } from "react";
 import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member";
 import { useWorkspace } from "@/hooks/workspace-provider";
 import TaskKanban from "./kanban";

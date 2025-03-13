@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { PlusIcon } from "lucide-react";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DottedSeparator } from "@/components/ui/dotted-separator";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -6,8 +9,6 @@ import { useGetWorkspaceProjectsQuery } from "@/hooks/queries/use-get-workspace-
 import { useWorkspace } from "@/hooks/workspace-provider";
 import CreateProjectModal from "@/components/modals/create-project-modal";
 import { buttonVariants } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
-import Link from "next/link";
 import ProjectIcon from "@/components/project/project-icon";
 
 export default function DashboardProjects() {

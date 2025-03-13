@@ -1,6 +1,7 @@
-import { client } from "@/lib/rpc";
-import { useQuery } from "@tanstack/react-query";
 import { InferResponseType } from "hono";
+import { useQuery } from "@tanstack/react-query";
+
+import { client } from "@/lib/rpc";
 
 export type WorkspaceAnalyticsResponse = Exclude<
   InferResponseType<(typeof client.api.workspace)[":id"]["analytics"]["$get"]>,

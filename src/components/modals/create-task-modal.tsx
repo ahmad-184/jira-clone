@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { useParams } from "next/navigation";
+
 import {
   Dialog,
   DialogContent,
@@ -11,7 +13,6 @@ import {
 } from "../ui/dialog";
 import { DottedSeparator } from "../ui/dotted-separator";
 import CreateTaskForm from "../forms/create-task-form";
-import { useParams } from "next/navigation";
 import { useGetWorkspaceProjectsQuery } from "@/hooks/queries/use-get-workspace-projects";
 import { useWorkspace } from "@/hooks/workspace-provider";
 import LoaderIcon from "../loader-icon";

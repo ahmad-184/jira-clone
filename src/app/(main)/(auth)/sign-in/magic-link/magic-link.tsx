@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { ChevronLeftIcon, TerminalIcon } from "lucide-react";
+
 import {
   Form,
   FormControl,
@@ -10,9 +13,7 @@ import {
 import { useSignInWithMagicLink } from "../hooks/use-sign-in";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ChevronLeftIcon, TerminalIcon } from "lucide-react";
 import { LoaderButton } from "@/components/loader-button";
-import Link from "next/link";
 
 export default function MagicLink() {
   const { form, onSubmit, loading, error } = useSignInWithMagicLink();

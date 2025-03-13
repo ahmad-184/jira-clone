@@ -1,8 +1,9 @@
+import { createMiddleware } from "hono/factory";
+
 import { validateRequest, validateSessionToken } from "@/auth";
 import { User } from "@/db/schema";
 import { AUTHENTICATION_ERROR_MESSAGE } from "@/lib/errors";
 import { getSessionToken } from "@/lib/session";
-import { createMiddleware } from "hono/factory";
 
 type AuthAdditionalContext = {
   Variables: {

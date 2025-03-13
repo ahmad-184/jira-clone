@@ -1,5 +1,8 @@
 "use client";
 
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { Undo2Icon } from "lucide-react";
+
 import {
   Form,
   FormControl,
@@ -14,8 +17,6 @@ import Dropzone from "@/components/dropzone";
 import { useUpdateWorkspace } from "./hooks/use-update-workspace";
 import { Member, Workspace } from "@/db/schema";
 import { Button } from "@/components/ui/button";
-import { Undo2Icon } from "lucide-react";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 type Props = {
   workspace: Workspace;

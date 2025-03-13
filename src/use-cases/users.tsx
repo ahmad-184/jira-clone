@@ -1,3 +1,6 @@
+import { render } from "@react-email/components";
+import { uniqueNamesGenerator, colors, animals } from "unique-names-generator";
+
 import { applicationName } from "@/app-config";
 import {
   createUser,
@@ -18,7 +21,6 @@ import {
   createAccountViaGoogle,
   updatePassword,
 } from "@/data-access/accounts";
-import { uniqueNamesGenerator, colors, animals } from "unique-names-generator";
 import {
   createProfile,
   getProfile,
@@ -41,7 +43,6 @@ import {
 import { createTransaction } from "@/data-access/utils";
 import { LoginError, PublicError, TokenExpiredError } from "@/lib/errors";
 import { deleteSessionForUser } from "@/data-access/sessions";
-import { render } from "@react-email/components";
 import { VerifyEmailOTP } from "@/emails/verify-email-otp";
 import { GitHubUser, GoogleUser } from "@/types/auth";
 

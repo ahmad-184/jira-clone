@@ -1,8 +1,9 @@
 "use client";
 
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+
 import ReactQueryProvider from "./react-query-provider";
 import { ThemeProvider } from "./theme-provider";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 type Props = {
   children: React.ReactNode;

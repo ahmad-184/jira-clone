@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import Avatar from "@/components/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,7 +9,6 @@ import { useGetWorkspaceMembersQuery } from "@/hooks/queries/use-get-workspace-m
 import { useWorkspace } from "@/hooks/workspace-provider";
 import { SettingIcon } from "@/icons/setting-icon";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 
 export default function DashboardMembers() {
   const { workspaceId } = useWorkspace();

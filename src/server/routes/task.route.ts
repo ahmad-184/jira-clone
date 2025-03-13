@@ -1,9 +1,10 @@
 import "server-only";
 
 import { Hono } from "hono";
+import { zValidator } from "@hono/zod-validator";
+
 import { authMiddleware } from "../middlewares/auth.middleware";
 import { returnError } from "../utils";
-import { zValidator } from "@hono/zod-validator";
 import {
   createTaskSchema,
   deleteTaskSchema,
@@ -40,7 +41,6 @@ const updateTasksPositionValidator = zValidator(
 );
 
 const app = new Hono()
-  // GET Methods
   // GET / get a task
   .get("/", authMiddleware, getTaskValidator, async c => {
     try {
@@ -101,7 +101,6 @@ const app = new Hono()
       return returnError(err, c);
     }
   })
-  // POST Methods
   // POST /create create new task
   .post("/create", authMiddleware, createTaskValidator, async c => {
     try {
@@ -148,7 +147,6 @@ const app = new Hono()
       return returnError(err, c);
     }
   })
-  // PUT Methods
   // PUT /update update a task
   .post("/update", authMiddleware, updateTaskValidator, async c => {
     try {
@@ -209,7 +207,6 @@ const app = new Hono()
       }
     },
   )
-  // DELETE Methods
   // DELETE /delete delete a task
   .delete("/delete", authMiddleware, deleteTaskValidator, async c => {
     try {

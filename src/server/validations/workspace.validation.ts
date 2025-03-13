@@ -1,5 +1,6 @@
-import { workspaceIdSchema } from "@/validations/workspace.validation";
 import { z } from "zod";
+
+import { workspaceIdSchema } from "@/validations/workspace.validation";
 
 export const deleteWorkspaceSchema = z.object({
   workspaceId: workspaceIdSchema,

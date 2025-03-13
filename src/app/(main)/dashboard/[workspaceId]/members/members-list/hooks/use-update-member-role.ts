@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useUpdateMemberMutation } from "./mutations/use-update-member-mutation";
 import { useForm } from "react-hook-form";
-import { updateMemberSchema } from "@/validations/member.validation";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
+
+import { useUpdateMemberMutation } from "./mutations/use-update-member-mutation";
+import { updateMemberSchema } from "@/validations/member.validation";
 import { useWorkspace } from "@/hooks/workspace-provider";
 import { Role } from "@/db/schema";
 

@@ -1,3 +1,5 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+
 import {
   Form,
   FormControl,
@@ -9,7 +11,6 @@ import {
 import { useDeleteWorkspace } from "./hooks/use-delete-workspace";
 import { Input } from "@/components/ui/input";
 import { LoaderButton } from "@/components/loader-button";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 type Props = {
   workspaceName: string;

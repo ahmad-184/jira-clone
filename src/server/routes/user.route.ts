@@ -1,7 +1,8 @@
 import "server-only";
 
-import { getCurrentUser } from "@/lib/session";
 import { Hono } from "hono";
+
+import { getCurrentUser } from "@/lib/session";
 import { returnError } from "../utils";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import { getProfileWithUserEmailUseCase } from "@/use-cases/users";

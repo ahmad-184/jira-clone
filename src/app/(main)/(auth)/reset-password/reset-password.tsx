@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { ChevronLeftIcon, TerminalIcon } from "lucide-react";
+
 import { LoaderButton } from "@/components/loader-button";
 import {
   Form,
@@ -13,8 +16,6 @@ import {
 import { useResetPassword } from "./hooks/use-reset-password";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ChevronLeftIcon, TerminalIcon } from "lucide-react";
-import Link from "next/link";
 
 export default function ResetPassword() {
   const { form, onSubmit, loading, error } = useResetPassword();

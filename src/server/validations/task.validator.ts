@@ -1,8 +1,9 @@
+import { z } from "zod";
+
 import { memberIdSchema } from "@/validations/member.validation";
 import { projectIdSchema } from "@/validations/project.validation";
 import { taskIdSchema, taskStatusSchema } from "@/validations/task.validation";
 import { workspaceIdSchema } from "@/validations/workspace.validation";
-import { z } from "zod";
 
 export const getTasksQuerySchema = z.object({
   workspaceId: workspaceIdSchema,

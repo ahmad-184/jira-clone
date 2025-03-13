@@ -1,10 +1,11 @@
 "use client";
 
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCurrentUserQuery } from "@/hooks/queries/use-current-user-query";
 import Logo from "@/icons/logo";
-import Link from "next/link";
 
 const navLinks = [
   {

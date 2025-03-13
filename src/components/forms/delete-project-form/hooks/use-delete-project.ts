@@ -1,7 +1,8 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useDeleteProjectMutation } from "./mutations/use-delete-project-mutation";
 import { useTaskRealtime } from "@/providers/task-realtime-provider";
 

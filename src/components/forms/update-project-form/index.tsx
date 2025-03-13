@@ -1,5 +1,8 @@
 "use client";
 
+import { Undo2Icon } from "lucide-react";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+
 import {
   Form,
   FormControl,
@@ -13,8 +16,6 @@ import { LoaderButton } from "@/components/loader-button";
 import Dropzone from "@/components/dropzone";
 import { Member, Project } from "@/db/schema";
 import { Button } from "@/components/ui/button";
-import { Undo2Icon } from "lucide-react";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useUpdateProject } from "./hooks/use-update-project-form";
 
 type Props = {

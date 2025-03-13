@@ -1,9 +1,10 @@
 "use client";
 
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import Link from "next/link";
-import { useForgotPassword } from "../hooks/use-forgot-password";
 import { ChevronLeftIcon, TerminalIcon } from "lucide-react";
+
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { useForgotPassword } from "../hooks/use-forgot-password";
 import { LoaderButton } from "@/components/loader-button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { FormMessage } from "@/components/ui/form";

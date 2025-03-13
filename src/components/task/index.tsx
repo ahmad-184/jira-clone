@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
+
 import TaskViewSwitcher from "./task-view-switcher";
 
 export default function TaskView() {

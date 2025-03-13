@@ -1,11 +1,12 @@
 "use client";
 
-import { deleteTaskSchema } from "@/validations/task.validation";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDeleteTaskMutation } from "./mutations/use-delete-task-mutation";
 import { toast } from "sonner";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { deleteTaskSchema } from "@/validations/task.validation";
+import { useDeleteTaskMutation } from "./mutations/use-delete-task-mutation";
 import { useWorkspace } from "@/hooks/workspace-provider";
 import { useTaskRealtime } from "@/providers/task-realtime-provider";
 

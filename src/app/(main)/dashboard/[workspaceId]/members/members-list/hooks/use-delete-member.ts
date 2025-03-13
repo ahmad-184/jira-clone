@@ -1,14 +1,15 @@
 "use client";
 
-import { deleteMemberSchema } from "@/validations/member.validation";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useDeleteMemberMutation } from "./mutations/use-delete-member-mutation";
 import { toast } from "sonner";
+import { z } from "zod";
+
+import { deleteMemberSchema } from "@/validations/member.validation";
+import { useDeleteMemberMutation } from "./mutations/use-delete-member-mutation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useWorkspace } from "@/hooks/workspace-provider";
-import { z } from "zod";
 import { User } from "@/db/schema";
 
 type Props = {

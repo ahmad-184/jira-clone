@@ -1,8 +1,9 @@
 "use client";
 
+import { useMemo } from "react";
+
 import { Role } from "@/db/schema";
 import { hasPermission, Permissions } from "@/lib/permission-system/";
-import { useMemo } from "react";
 
 export function usePermission<Resource extends keyof Permissions>(
   role: Role,

@@ -1,8 +1,9 @@
 import "server-only";
 
+import { eq } from "drizzle-orm";
+
 import { database } from "@/db";
 import { User, accounts, users } from "@/db/schema";
-import { eq } from "drizzle-orm";
 import { UserId } from "@/use-cases/types";
 import { getAccountByUserId } from "./accounts";
 import { hashPassword } from "./utils";

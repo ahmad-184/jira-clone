@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { TerminalIcon } from "lucide-react";
+
 import { LoaderButton } from "@/components/loader-button";
 import {
   Form,
@@ -10,8 +13,6 @@ import {
 import { useSignInWithPassword } from "../hooks/use-sign-in";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { TerminalIcon } from "lucide-react";
-import Link from "next/link";
 import { PasswordInput } from "@/components/ui/password-input";
 
 export default function SignInWithPassword() {

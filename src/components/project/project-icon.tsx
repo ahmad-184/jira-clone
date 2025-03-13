@@ -1,6 +1,7 @@
+import Image from "next/image";
+
 import { Project } from "@/db/schema";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 type Props = {
   project: Pick<Project, "imageUrl" | "name">;

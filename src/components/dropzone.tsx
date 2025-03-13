@@ -1,12 +1,13 @@
+import { useState } from "react";
+import { useDropzone } from "react-dropzone";
+import Image from "next/image";
+import { Trash2Icon } from "lucide-react";
+
 import { ACCEPTED_IMAGE_FILE_TYPE } from "@/app-config";
 import UploadIcon from "@/icons/upload-icon";
 import { cn } from "@/lib/utils";
 import { imageFileValidation } from "@/validations/index.validation";
-import Image from "next/image";
-import { useState } from "react";
-import { useDropzone } from "react-dropzone";
 import { Button } from "./ui/button";
-import { Trash2Icon } from "lucide-react";
 import { FileWithPreview } from "@/types";
 
 type DropzoneProps = {

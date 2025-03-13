@@ -1,6 +1,7 @@
+import Image from "next/image";
+
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 type Props = {
   title: string;

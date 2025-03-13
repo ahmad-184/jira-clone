@@ -1,9 +1,10 @@
-import { useCreateTagMutation } from "@/hooks/mutations/use-create-tag";
-import { useState } from "react";
-import { useWorkspace } from "../workspace-provider";
 import { useQueryClient } from "@tanstack/react-query";
-import { createTagSchema } from "@/validations/tag.validation";
 import { toast } from "sonner";
+import { useState } from "react";
+
+import { useCreateTagMutation } from "@/hooks/mutations/use-create-tag";
+import { useWorkspace } from "../workspace-provider";
+import { createTagSchema } from "@/validations/tag.validation";
 
 export const useCreateTag = () => {
   const [error, setError] = useState<string | undefined>(undefined);

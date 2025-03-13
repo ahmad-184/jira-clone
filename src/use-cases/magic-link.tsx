@@ -1,3 +1,6 @@
+import { animals, colors, uniqueNamesGenerator } from "unique-names-generator";
+import { render } from "@react-email/components";
+
 import { applicationName } from "@/app-config";
 import {
   deleteMagicToken,
@@ -12,8 +15,6 @@ import {
 } from "@/data-access/users";
 import { MagicLinkEmail } from "@/emails/magic-link";
 import { emailSender } from "@/lib/send-email";
-import { animals, colors, uniqueNamesGenerator } from "unique-names-generator";
-import { render } from "@react-email/components";
 import { PublicError } from "@/lib/errors";
 
 export async function sendMagicLinkUseCase(email: string) {

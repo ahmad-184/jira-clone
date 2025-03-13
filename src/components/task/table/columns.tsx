@@ -2,6 +2,8 @@
 
 import { ColumnDef, Row, SortingFn, Table } from "@tanstack/react-table";
 import { ArrowUpDown, MoreVerticalIcon } from "lucide-react";
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { GetTaskUseCaseReturn } from "@/use-cases/types";
@@ -12,7 +14,6 @@ import { TaskStatusArray } from "@/constants";
 import ActionsMenu from "../actions-menu";
 import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member";
 import { usePermission } from "@/hooks/use-permission";
-import Link from "next/link";
 import TaskStatusBadge from "../task-status-badge";
 
 const sortStatusFn: SortingFn<GetTaskUseCaseReturn> = (rowA, rowB) => {

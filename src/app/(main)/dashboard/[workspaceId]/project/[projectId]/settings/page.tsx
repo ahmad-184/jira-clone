@@ -1,5 +1,6 @@
-import { getCurrentUser } from "@/lib/session";
 import { redirect } from "next/navigation";
+
+import { getCurrentUser } from "@/lib/session";
 import ProjectSettings from "./_components/project-settings";
 
 type Props = {

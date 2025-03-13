@@ -1,7 +1,8 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+
 import { useResetInviteLink } from "./hooks/use-reset-invite-link";
 import { Form } from "@/components/ui/form";
 import { LoaderButton } from "@/components/loader-button";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 type Props = {
   workspaceId: string;

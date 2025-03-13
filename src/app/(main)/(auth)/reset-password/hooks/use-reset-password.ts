@@ -1,8 +1,9 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter, useSearchParams } from "next/navigation";
 import { z } from "zod";
+
 import { useResetPasswordMutation } from "./mutations/use-reset-password-mutation";
 import { resetPasswordSchema } from "@/validations/auth.validation";
 

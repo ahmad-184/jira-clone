@@ -1,5 +1,6 @@
-import { getCurrentUserUncached } from "@/lib/session";
 import { redirect } from "next/navigation";
+
+import { getCurrentUserUncached } from "@/lib/session";
 import ResetPassword from "./reset-password";
 
 export default async function Page() {

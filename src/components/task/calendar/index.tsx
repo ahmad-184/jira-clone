@@ -1,4 +1,4 @@
-import { GetTaskUseCaseReturn } from "@/use-cases/types";
+import { useEffect, useState } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { enUS } from "date-fns/locale";
 import {
@@ -9,10 +9,11 @@ import {
   addMonths,
   subMonths,
 } from "date-fns";
-import { useEffect, useState } from "react";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+
+import { GetTaskUseCaseReturn } from "@/use-cases/types";
 import EventCard from "./event-card";
 import { Button } from "@/components/ui/button";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import DatePickerPopover from "@/components/custom/date-picker-popover";
 
 const locales = {

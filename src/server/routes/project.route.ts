@@ -1,15 +1,16 @@
 import "server-only";
 
 import { Hono } from "hono";
-import { returnError } from "../utils";
 import { zValidator } from "@hono/zod-validator";
+import { z } from "zod";
+
+import { returnError } from "../utils";
 import {
   createProjectSchema,
   deleteProjectSchema,
   projectIdSchema,
   updateProjectSchema,
 } from "@/validations/project.validation";
-import { z } from "zod";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import { getMemberUseCase } from "@/use-cases/members";
 import {
@@ -51,7 +52,6 @@ const deleteProjectParamsValidator = zValidator(
 );
 
 const app = new Hono()
-  // GET Methods
   // GET /:projectId get a project by project id
   .get("/:projectId", authMiddleware, getProjectValidator, async c => {
     try {
@@ -127,7 +127,6 @@ const app = new Hono()
       }
     },
   )
-  // POST Methods
   // POST /create create a project
   .post("/create", authMiddleware, createProjectValidator, async c => {
     try {
@@ -159,7 +158,6 @@ const app = new Hono()
       return returnError(err, c);
     }
   })
-  // PUT API METHODS
   // PUT /update/:id update workspace
   .put(
     "/update/:id",
@@ -206,7 +204,6 @@ const app = new Hono()
       }
     },
   )
-  // DELETE API METHODS
   // DELETE /delete/:id delete workspace
   .delete(
     "/delete/:id",

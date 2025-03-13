@@ -1,5 +1,9 @@
 "use client";
 
+import { useState } from "react";
+import { CopyIcon } from "lucide-react";
+import { toast } from "sonner";
+
 import ResetInviteCodeForm from "@/components/forms/reset-invite-code-form";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -15,9 +19,6 @@ import { env } from "@/env";
 import { usePermission } from "@/hooks/use-permission";
 import { WarningIconFill } from "@/icons/warning-icon";
 import { cn } from "@/lib/utils";
-import { CopyIcon } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
 
 type Props = {
   workspace: Workspace;

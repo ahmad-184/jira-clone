@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 import CustomTooltip from "@/components/custom/tooltip";
 import CreateWorkspaceForm from "@/components/forms/create-workspace-form";
 import {
@@ -23,8 +26,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import WorkspaceIcon from "@/components/workspace/workspace-icon";
 import { User, Workspace } from "@/db/schema";
 import { PlusIconFill } from "@/icons/plus-icon";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 type Props = {
   workspaces: Workspace[] | undefined;

@@ -1,9 +1,10 @@
+import { z } from "zod";
+
 import {
   ACCEPTED_IMAGE_FILE_TYPE,
   MAX_UPLOAD_IMAGE_SIZE,
   MAX_UPLOAD_IMAGE_SIZE_IN_MB,
 } from "@/app-config";
-import { z } from "zod";
 
 export const imageFileValidation = z.object({
   name: z.string(),

@@ -1,5 +1,6 @@
-import { getCurrentUser } from "@/lib/session";
 import { redirect } from "next/navigation";
+
+import { getCurrentUser } from "@/lib/session";
 import WorkspaceSettings from "./workspace-settings";
 
 export default async function Page() {

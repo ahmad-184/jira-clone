@@ -1,11 +1,12 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { OAuth2RequestError } from "arctic";
+
 import { github } from "@/auth";
 import { createGithubUserUseCase } from "@/use-cases/users";
 import { getAccountByGithubIdUseCase } from "@/use-cases/accounts";
 import { afterLoginUrl } from "@/app-config";
 import { setSession } from "@/lib/session";
-import { redirect } from "next/navigation";
 import { GitHubUser } from "@/types/auth";
 
 interface Email {

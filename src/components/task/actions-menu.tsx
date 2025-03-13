@@ -1,3 +1,7 @@
+import { PencilIcon, SquareArrowOutUpRightIcon } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,10 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { PencilIcon, SquareArrowOutUpRightIcon } from "lucide-react";
-import { useState } from "react";
 import DeleteTaskModal from "../modals/delete-task-modal";
-import Link from "next/link";
 import { useWorkspace } from "@/hooks/workspace-provider";
 import { TrashIcon } from "@/icons/trash-icon";
 import UpdateTaskModal from "../modals/update-task-modal";

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -13,7 +15,6 @@ import { LoaderButton } from "@/components/loader-button";
 import { Role } from "@/db/schema";
 import { UsersIconFill } from "@/icons/users-icon";
 import { useUpdateMemberRole } from "./hooks/use-update-member-role";
-import { useState } from "react";
 import { DottedSeparator } from "@/components/ui/dotted-separator";
 
 type Props = {

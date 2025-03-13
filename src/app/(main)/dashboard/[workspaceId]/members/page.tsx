@@ -1,6 +1,7 @@
+import { redirect } from "next/navigation";
+
 import { getCurrentUser } from "@/lib/session";
 import { getMemberUseCase } from "@/use-cases/members";
-import { redirect } from "next/navigation";
 import MembersList from "./members-list";
 
 export default async function Page({

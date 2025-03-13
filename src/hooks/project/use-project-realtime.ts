@@ -1,17 +1,18 @@
-import { Project } from "@/db/schema";
-import { supabase } from "@/lib/supabase";
 import {
   RealtimeChannel,
   RealtimePostgresDeletePayload,
   RealtimePostgresUpdatePayload,
 } from "@supabase/supabase-js";
 import { useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect, useRef } from "react";
 import { validate } from "uuid";
 import { toast } from "sonner";
+import { useParams, useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef } from "react";
+
+import { Project } from "@/db/schema";
+import { supabase } from "@/lib/supabase";
 import useInternetConnection from "../use-connection";
 import { useWorkspace } from "../workspace-provider";
-import { useParams, useRouter } from "next/navigation";
 import { useGetWorkspaceProjectsQuery } from "../queries/use-get-workspace-projects";
 
 type DeletePayloadType = RealtimePostgresDeletePayload<{

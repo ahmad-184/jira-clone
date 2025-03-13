@@ -1,10 +1,11 @@
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { useState } from "react";
 import { toast } from "sonner";
-import { afterLoginUrl } from "@/app-config";
 import { useRouter } from "next/navigation";
+import { z } from "zod";
+
+import { afterLoginUrl } from "@/app-config";
 import { useSignInMutation } from "./mutations/use-sign-in-mutation";
 import { useMagicLinkMutation } from "./mutations/use-magic-link-mutation";
 import {

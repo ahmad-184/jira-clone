@@ -1,6 +1,9 @@
 "use client";
+
 import { LogOutIcon } from "lucide-react";
-import { useCurrentUserProfileQuery } from "@/hooks/queries/use-current-user-profile-query ";
+import { useState } from "react";
+
+import { useCurrentUserProfileQuery } from "@/hooks/queries/use-current-user-profile-query";
 import Avatar from "./avatar";
 import { useLogOutMutation } from "@/hooks/mutations/use-log-out-mutation";
 import { useQueryClient } from "@tanstack/react-query";
@@ -9,7 +12,6 @@ import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
 import { SettingIconFill } from "@/icons/setting-icon";
 import LoaderIcon from "./loader-icon";
-import { useState } from "react";
 import { LoaderButton } from "./loader-button";
 
 export default function UserButton() {

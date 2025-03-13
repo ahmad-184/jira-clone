@@ -1,9 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { AUTHENTICATION_ERROR_MESSAGE } from "@/lib/errors";
 import { TriangleAlertIcon } from "lucide-react";
 import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
+import { AUTHENTICATION_ERROR_MESSAGE } from "@/lib/errors";
 
 export default function ErrorPage({
   error,

@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { CalendarIcon, PlusIcon } from "lucide-react";
+
 import CreateTaskModal from "@/components/modals/create-task-modal";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,8 +10,6 @@ import { useGetTasksQuery } from "@/hooks/queries/use-get-tasks";
 import { useWorkspace } from "@/hooks/workspace-provider";
 import { fToNow } from "@/lib/format-time";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, PlusIcon } from "lucide-react";
-import Link from "next/link";
 
 type Props = {
   memberId: string;

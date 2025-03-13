@@ -1,8 +1,9 @@
 "use client";
 
+import { Fragment } from "react";
+
 import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member";
 import { useGetWorkspaceMembersQuery } from "@/hooks/queries/use-get-workspace-memebrs";
-import { Fragment } from "react";
 import Member from "./member";
 import { useCurrentUserQuery } from "@/hooks/queries/use-current-user-query";
 import { Separator } from "@/components/ui/separator";

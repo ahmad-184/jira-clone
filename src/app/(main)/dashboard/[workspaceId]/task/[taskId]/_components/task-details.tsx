@@ -1,5 +1,9 @@
 "use client";
 
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { PencilIcon } from "lucide-react";
+
 import LoaderIcon from "@/components/loader-icon";
 import { useGetTaskQuery } from "@/hooks/queries/use-get-task";
 import { useWorkspace } from "@/hooks/workspace-provider";
@@ -7,19 +11,16 @@ import TaskBreadcrumb from "./task-breadcrumb";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DeleteTaskModal from "@/components/modals/delete-task-modal";
 import { TrashIcon } from "@/icons/trash-icon";
-import { useRouter } from "next/navigation";
 import { buttonVariants } from "@/components/ui/button";
 import { DottedSeparator } from "@/components/ui/dotted-separator";
 import Avatar from "@/components/avatar";
 import { fDate } from "@/lib/format-time";
 import UpdateTaskModal from "@/components/modals/update-task-modal";
-import { PencilIcon } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { useGetCurrentMemberQuery } from "@/hooks/queries/use-get-current-member";
 import { usePermission } from "@/hooks/use-permission";
 import TaskTag from "@/components/task/task-tag";
 import TaskStatusBadge from "@/components/task/task-status-badge";
-import { useCallback, useEffect, useRef, useState } from "react";
 import { useUpdateTaskMutation } from "@/hooks/mutations/use-update-task-mutation";
 import { useTaskRealtime } from "@/providers/task-realtime-provider";
 

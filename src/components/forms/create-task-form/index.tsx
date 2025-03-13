@@ -1,3 +1,14 @@
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import {
+  CircleCheckIcon,
+  CircleDashedIcon,
+  CircleDotDashedIcon,
+  CircleDotIcon,
+  CircleIcon,
+} from "lucide-react";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+
 import {
   Form,
   FormControl,
@@ -8,7 +19,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useCreateTask } from "./hooks/use-create-task";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Input } from "@/components/ui/input";
 import { LoaderButton } from "@/components/loader-button";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,19 +35,10 @@ import Avatar from "@/components/avatar";
 import { TASK_STATUS } from "@/constants/forms";
 import { Member, Project, Tag, Task, TaskStatus } from "@/db/schema";
 import ProjectIcon from "@/components/project/project-icon";
-import { useEffect, useState } from "react";
 import { statusNames } from "@/constants/status";
-import {
-  CircleCheckIcon,
-  CircleDashedIcon,
-  CircleDotDashedIcon,
-  CircleDotIcon,
-  CircleIcon,
-} from "lucide-react";
 import MultiSelect from "@/components/custom/multi-select";
 import { createUUID } from "@/util/uuid";
 import { useCreateTag } from "@/hooks/tag/use-create-tag";
-import { toast } from "sonner";
 
 const statusIcons: Record<TaskStatus, React.ReactNode> = {
   BACKLOG: <CircleDashedIcon className="size-[15px] text-pink-400" />,

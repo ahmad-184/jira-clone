@@ -1,10 +1,11 @@
 "use client";
 
+import Link from "next/link";
+
 import { Form } from "@/components/ui/form";
 import { LoaderButton } from "@/components/loader-button";
 import { useJoinWorkspace } from "./hooks/use-join-workspace";
 import { buttonVariants } from "@/components/ui/button";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 type Props = {

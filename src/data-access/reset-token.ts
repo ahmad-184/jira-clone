@@ -1,11 +1,12 @@
 import "server-only";
 
+import { eq } from "drizzle-orm";
+
 import { TOKEN_LENGTH, TOKEN_TTL } from "@/app-config";
 import { generateRandomToken } from "./utils";
 import { database } from "@/db";
 import { resetTokens } from "@/db/schema";
 import { UserId } from "@/use-cases/types";
-import { eq } from "drizzle-orm";
 
 export async function createPasswordResetToken(userId: UserId) {
   const token = await generateRandomToken(TOKEN_LENGTH);

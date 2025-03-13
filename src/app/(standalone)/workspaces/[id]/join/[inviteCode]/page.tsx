@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { notFound, redirect } from "next/navigation";
+
 import JoinWorkspaceForm from "@/components/forms/join-worksoace-form";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -11,8 +14,6 @@ import { getCurrentUser } from "@/lib/session";
 import { cn } from "@/lib/utils";
 import { getMemberUseCase } from "@/use-cases/members";
 import { getWorkspaceUseCase } from "@/use-cases/workspaces";
-import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
 
 type Props = {
   params: Promise<{

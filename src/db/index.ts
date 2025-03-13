@@ -1,7 +1,8 @@
-import { env } from "@/env";
-import * as schema from "./schema";
 import { PostgresJsDatabase, drizzle } from "drizzle-orm/postgres-js";
 import postgres, { type Options } from "postgres";
+
+import { env } from "@/env";
+import * as schema from "./schema";
 
 const DATABASE_URL = env.SUPABASE_DATABASE_URL.replace(
   "[YOUR-PASSWORD]",

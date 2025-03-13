@@ -1,7 +1,8 @@
 import "dotenv/config";
 
-import { database, pg } from "./";
 import { sql } from "drizzle-orm";
+
+import { database, pg } from "./";
 
 async function main() {
   const tablesSchema = database._.schema;

@@ -1,3 +1,5 @@
+import { Terminal } from "lucide-react";
+
 import { useVerifyEmail } from "../hooks/use-sign-up";
 import {
   Form,
@@ -14,7 +16,6 @@ import {
 import { OTP_LENGTH } from "@/app-config";
 import { LoaderButton } from "@/components/loader-button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Terminal } from "lucide-react";
 
 export default function VerifyEmail() {
   const { form, onSubmit, loading, error } = useVerifyEmail();

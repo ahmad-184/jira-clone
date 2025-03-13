@@ -3,8 +3,9 @@ import {
   encodeBase32LowerCaseNoPadding,
   encodeHexLowerCase,
 } from "@oslojs/encoding";
-import { env } from "@/env";
 import { sha256 } from "@oslojs/crypto/sha2";
+
+import { env } from "@/env";
 import { getSessionToken } from "@/lib/session";
 import {
   SESSION_MAX_DURATION_MS,

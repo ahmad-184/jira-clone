@@ -1,8 +1,9 @@
 import "server-only";
 
+import { eq } from "drizzle-orm";
+
 import { database } from "@/db";
 import { Workspace, workspaces } from "@/db/schema";
-import { eq } from "drizzle-orm";
 import { GetWorkspacePropsType } from "./type";
 
 export async function createWorkspace(

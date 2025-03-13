@@ -1,9 +1,10 @@
 import "server-only";
 
+import { eq } from "drizzle-orm";
+
 import { database } from "@/db";
 import { Profile, profiles } from "@/db/schema";
 import { UserId } from "@/use-cases/types";
-import { eq } from "drizzle-orm";
 import { GetProfilePropsTypes } from "./type";
 
 export async function createProfile(

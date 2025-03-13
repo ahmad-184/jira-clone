@@ -1,7 +1,8 @@
+import { InferRequestType, InferResponseType } from "hono";
+import { useMutation } from "@tanstack/react-query";
+
 import { client } from "@/lib/rpc";
 import { UseMutationProps } from "@/types/mutation";
-import { useMutation } from "@tanstack/react-query";
-import { InferRequestType, InferResponseType } from "hono";
 
 type RequestType = InferRequestType<
   (typeof client.api.auth)["send-forgot-password"]["$post"]

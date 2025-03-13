@@ -1,10 +1,11 @@
 import "server-only";
 
+import { eq } from "drizzle-orm";
+
 import { TOKEN_LENGTH, TOKEN_TTL } from "@/app-config";
 import { generateRandomToken } from "./utils";
 import { database } from "@/db";
 import { magicLinks } from "@/db/schema";
-import { eq } from "drizzle-orm";
 
 export async function upsertMagicLink(email: string) {
   const token = await generateRandomToken(TOKEN_LENGTH);

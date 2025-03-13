@@ -1,7 +1,8 @@
-import { Badge } from "../ui/badge";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, XCircleIcon } from "lucide-react";
+
+import { Badge } from "../ui/badge";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { getTextColor, nameToColor } from "@/util/colors";
 import {
   Command,

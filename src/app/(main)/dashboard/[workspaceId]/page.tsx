@@ -1,5 +1,6 @@
-import { getCurrentUser } from "@/lib/session";
 import { redirect } from "next/navigation";
+
+import { getCurrentUser } from "@/lib/session";
 import WorkspaceDashboard from "./_components/workspace-dashboard";
 
 export default async function Page() {

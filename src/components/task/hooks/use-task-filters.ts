@@ -1,9 +1,10 @@
 "use client";
 
+import { useRef, useState } from "react";
+import { parseAsStringEnum, useQueryState, parseAsIsoDateTime } from "nuqs";
+
 import { useWorkspace } from "@/hooks/workspace-provider";
 import { TaskStatusEnum } from "@/types/task";
-import { parseAsStringEnum, useQueryState, parseAsIsoDateTime } from "nuqs";
-import { useRef, useState } from "react";
 
 type StatusQuery = TaskStatusEnum;
 

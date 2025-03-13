@@ -1,4 +1,3 @@
-import { createUUID } from "@/util/uuid";
 import { relations } from "drizzle-orm";
 import {
   index,
@@ -11,6 +10,8 @@ import {
   timestamp,
   unique,
 } from "drizzle-orm/pg-core";
+
+import { createUUID } from "@/util/uuid";
 
 export const accountTypeEnum = pgEnum("account_type", [
   "EMAIL",

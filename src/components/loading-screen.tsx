@@ -1,5 +1,6 @@
-import Logo from "@/icons/logo";
 import { LoaderIcon } from "lucide-react";
+
+import Logo from "@/icons/logo";
 
 export default function LoadingScreen() {
   return (

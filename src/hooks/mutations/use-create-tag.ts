@@ -1,7 +1,8 @@
-import { client } from "@/lib/rpc";
-import { UseMutationProps } from "@/types/mutation";
 import { useMutation } from "@tanstack/react-query";
 import { InferRequestType, InferResponseType } from "hono";
+
+import { client } from "@/lib/rpc";
+import { UseMutationProps } from "@/types/mutation";
 
 type RequestType = InferRequestType<(typeof client.api.tag)["create"]["$post"]>;
 type ResponseType = InferResponseType<

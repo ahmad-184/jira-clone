@@ -1,5 +1,7 @@
 "use client";
 
+import { ListChecksIcon } from "lucide-react";
+
 import { useGetWorkspaceMembersQuery } from "@/hooks/queries/use-get-workspace-memebrs";
 import { useGetWorkspaceProjectsQuery } from "@/hooks/queries/use-get-workspace-projects";
 import { useWorkspace } from "@/hooks/workspace-provider";
@@ -12,7 +14,6 @@ import {
   SelectValue,
 } from "../ui/select";
 import { TASK_STATUS } from "@/constants/forms";
-import { ListChecksIcon } from "lucide-react";
 import { UserIcon } from "@/icons/user-icon";
 import { Skeleton } from "../ui/skeleton";
 import { FolderIcon } from "@/icons/folder-icon";

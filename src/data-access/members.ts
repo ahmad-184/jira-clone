@@ -1,8 +1,9 @@
 import "server-only";
 
+import { and, eq } from "drizzle-orm";
+
 import { database } from "@/db";
 import { Member, members } from "@/db/schema";
-import { and, eq } from "drizzle-orm";
 import { GetMemberPropsType } from "./type";
 
 export async function getMemberByUserId(

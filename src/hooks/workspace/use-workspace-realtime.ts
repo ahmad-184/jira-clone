@@ -1,15 +1,16 @@
-import { Workspace } from "@/db/schema";
-import { supabase } from "@/lib/supabase";
 import {
   RealtimeChannel,
   RealtimePostgresDeletePayload,
   RealtimePostgresUpdatePayload,
 } from "@supabase/supabase-js";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
 import { validate } from "uuid";
-import { useUserWorkspacesQuery } from "../queries/use-user-workspaces-query";
 import { toast } from "sonner";
+import { useEffect, useRef } from "react";
+
+import { Workspace } from "@/db/schema";
+import { supabase } from "@/lib/supabase";
+import { useUserWorkspacesQuery } from "../queries/use-user-workspaces-query";
 import useInternetConnection from "../use-connection";
 import { useWorkspace } from "../workspace-provider";
 

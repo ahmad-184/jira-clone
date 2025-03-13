@@ -1,3 +1,6 @@
+import { CheckCircleIcon } from "lucide-react";
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,8 +12,6 @@ import {
 } from "@/components/ui/card";
 import { SUBSCRIPTION_PLANS } from "@/constants/subscription";
 import { cn } from "@/lib/utils";
-import { CheckCircleIcon } from "lucide-react";
-import Link from "next/link";
 
 export default function PricingCards() {
   return (

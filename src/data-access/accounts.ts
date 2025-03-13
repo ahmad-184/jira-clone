@@ -1,10 +1,11 @@
 import "server-only";
 
+import { and, eq } from "drizzle-orm";
+import crypto from "node:crypto";
+
 import { database } from "@/db";
 import { accounts } from "@/db/schema";
 import { UserId } from "@/use-cases/types";
-import { and, eq } from "drizzle-orm";
-import crypto from "node:crypto";
 import { hashPassword } from "./utils";
 
 export async function createAccount(userId: UserId, password: string) {
