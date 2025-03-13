@@ -78,7 +78,7 @@ export default function ResetInviteCode({ workspace, currentMember }: Props) {
           )}
         </div>
       </div>
-      <DialogContent className="max-w-md py-0 !px-0 dark:bg-neutral-900 bg-neutral-100">
+      <DialogContent className="max-w-md py-0 !px-0 dark:bg-shark-900 bg-shark-100">
         <div className="w-full pt-5 pb-4">
           <div className="px-5 pb-4">
             <DialogTitle className="text-lg font-medium">
