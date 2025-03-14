@@ -72,6 +72,10 @@ export const useMemberRealtime = () => {
       await queryClient.invalidateQueries({
         queryKey: ["workspace-members", workspaceId],
       });
+      await queryClient.invalidateQueries({
+        queryKey: ["tasks"],
+        type: "active",
+      });
     }
   };
 
@@ -97,6 +101,10 @@ export const useMemberRealtime = () => {
     if (memberToUpdate) {
       await queryClient.invalidateQueries({
         queryKey: ["workspace-members", workspaceId],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["tasks"],
+        type: "active",
       });
     }
   };
