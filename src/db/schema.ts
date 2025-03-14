@@ -259,7 +259,7 @@ export const tasks = pgTable(
       .references(() => projects.id, { onDelete: "cascade" }),
     assignedToMemberId: text("assignedToMemberId")
       .notNull()
-      .references(() => members.id, { onDelete: "set null" }),
+      .references(() => members.id, { onDelete: "cascade" }),
     description: text("description"),
     dueDate: timestamp("dueDate", {
       withTimezone: true,
